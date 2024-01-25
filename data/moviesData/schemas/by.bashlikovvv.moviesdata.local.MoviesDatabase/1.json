@@ -1,0 +1,136 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "e3fcd45a7bf195093ee838411522451e",
+    "entities": [
+      {
+        "tableName": "movies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movies_id` INTEGER NOT NULL, `movies_name` TEXT NOT NULL, `movies_short_description` TEXT NOT NULL, `movies_poster` TEXT NOT NULL, `movies_age` INTEGER NOT NULL, PRIMARY KEY(`movies_id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "movies_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "movies_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shortDescription",
+            "columnName": "movies_short_description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "poster",
+            "columnName": "movies_poster",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "age",
+            "columnName": "movies_age",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "movies_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "movies_details",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`details_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `details_persons` TEXT NOT NULL, `details_description` TEXT NOT NULL, `details_similar_movies` TEXT NOT NULL, `details_watch_ability` TEXT NOT NULL, `details_trailers` TEXT NOT NULL, `details_key_movie_id` INTEGER NOT NULL, FOREIGN KEY(`details_key_movie_id`) REFERENCES `movies`(`movies_id`) ON UPDATE NO ACTION ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "details_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "persons",
+            "columnName": "details_persons",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "details_description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "similarMovies",
+            "columnName": "details_similar_movies",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "watchAbility",
+            "columnName": "details_watch_ability",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trailers",
+            "columnName": "details_trailers",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "keyMovieId",
+            "columnName": "details_key_movie_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "details_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_movies_details_details_key_movie_id",
+            "unique": false,
+            "columnNames": [
+              "details_key_movie_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_movies_details_details_key_movie_id` ON `${TABLE_NAME}` (`details_key_movie_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "movies",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "details_key_movie_id"
+            ],
+            "referencedColumns": [
+              "movies_id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e3fcd45a7bf195093ee838411522451e')"
+    ]
+  }
+}

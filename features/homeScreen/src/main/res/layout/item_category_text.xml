@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/category_item_background"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/categoryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAppearance="@style/item_category_text_style"
+        tools:text="Категория" />
+
+    <View
+        android:id="@+id/indicatorView"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        app:layout_constraintStart_toStartOf="@id/categoryText"
+        app:layout_constraintEnd_toEndOf="@id/categoryText"
+        app:layout_constraintTop_toBottomOf="@id/categoryText"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/category_indicator_background"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
