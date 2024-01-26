@@ -12,4 +12,8 @@ interface IMoviesRepository {
 
     suspend fun getMoviesByName(name: String): List<Movie>
 
+    suspend fun getMoviesByGenre(genre: String): List<Movie>
+
+    fun getPagedMoviesByGenre(genre: String): Flow<PagingData<Movie>>
+
 }

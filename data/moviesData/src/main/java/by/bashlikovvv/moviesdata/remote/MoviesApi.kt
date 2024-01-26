@@ -18,7 +18,9 @@ interface MoviesApi {
     @GET("movie")
     suspend fun getMovies(
         @Query("page") page: Int = 1,
-        @Query("limit") limit: Int = 10
+        @Query("limit") limit: Int = 10,
+        @Query("type") type: String = "movie",
+        @Query("isSeries") isSeries: Boolean = false
     ): Response<MoviesDto>
 
     @GET("movie/search")
@@ -26,8 +28,14 @@ interface MoviesApi {
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 10,
         @Query("query") query: String
-    ): Response<List<MovieDto>>
+    ): Response<MoviesDto>
 
-
+    @GET("movie")
+    suspend fun getMoviesByGenre(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("type") type: String = "movie",
+        @Query("genres.name") genre: String
+    ): Response<MoviesDto>
 
 }

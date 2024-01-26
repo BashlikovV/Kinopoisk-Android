@@ -7,12 +7,14 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import by.bashlikovvv.core.di.PagerOffline
 import by.bashlikovvv.core.di.PagerOnline
+import by.bashlikovvv.core.domain.model.EmptyBodyException
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.repository.IMoviesRepository
 import by.bashlikovvv.moviesdata.local.dao.MoviesDao
 import by.bashlikovvv.moviesdata.local.model.MovieEntity
 import by.bashlikovvv.moviesdata.mapper.MovieDtoToMovieMapper
 import by.bashlikovvv.moviesdata.mapper.MovieEntityToMovieMapper
+import by.bashlikovvv.moviesdata.mapper.MoviesDtoMapper
 import by.bashlikovvv.moviesdata.remote.MoviesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -28,7 +30,9 @@ class MoviesRepository(
     override suspend fun getMovieById(id: Int): Movie {
         return if (isConnected()) {
             MovieDtoToMovieMapper()
-                .mapFromEntity(moviesApi.getMovieById(id).body() ?: TODO())
+                .mapFromEntity(
+                    moviesApi.getMovieById(id).body() ?: throw EmptyBodyException
+                )
         } else {
             MovieEntityToMovieMapper()
                 .mapFromEntity(moviesDao.getMovieById(id))
@@ -44,8 +48,23 @@ class MoviesRepository(
     }
 
     override suspend fun getMoviesByName(name: String): List<Movie> {
-        val moviesDto = moviesApi.getMoviesByName(query = name)
-        TODO("Not yet implemented")
+        val moviesDto = moviesApi.getMoviesByName(query = name).body()
+        moviesDto ?: throw EmptyBodyException
+
+        return MoviesDtoMapper().mapFromEntity(moviesDto)
+    }
+
+    override suspend fun getMoviesByGenre(genre: String): List<Movie> {
+        return if (isConnected()) {
+            val moviesDto = moviesApi.getMoviesByGenre(genre = genre).body() ?: return listOf()
+            MoviesDtoMapper().mapFromEntity(moviesDto)
+        } else {
+            TODO()
+        }
+    }
+
+    override fun getPagedMoviesByGenre(genre: String): Flow<PagingData<Movie>> {
+        TODO()
     }
 
     private fun getMoviesOnline(): Flow<PagingData<Movie>> {

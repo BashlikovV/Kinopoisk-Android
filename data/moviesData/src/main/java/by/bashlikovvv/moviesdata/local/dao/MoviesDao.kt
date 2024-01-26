@@ -39,4 +39,24 @@ interface MoviesDao {
     @Insert(entity = MovieEntity::class, onConflict = OnConflictStrategy.REPLACE)
     fun insertMovies(movies: List<MovieEntity>)
 
+//    WHERE ${MoviesTable.COLUMN_GENRES} LIKE %:genre%
+    @Query(
+        "SELECT * " +
+        "FROM ${MoviesTable.TABLE_NAME} " +
+        "WHERE instr(${MoviesTable.COLUMN_GENRES}, :genre) > 0"
+    )
+    fun getMoviesByGenreOnline(genre: String): PagingSource<Int, MovieEntity>
+
+    @Query(
+        "SELECT * " +
+        "FROM ${MoviesTable.TABLE_NAME} " +
+        "WHERE ${MoviesTable.COLUMN_ID} " +
+        "IN (" +
+            "SELECT ${MoviesDetailsTable.COLUMN_ID} " +
+            "FROM ${MoviesDetailsTable.TABLE_NAME}" +
+        ") " +
+        "AND instr(${MoviesTable.COLUMN_GENRES}, :genre) > 0"
+    )
+    fun getMoviesByGenreOffline(genre: String): PagingSource<Int, MovieEntity>
+
 }

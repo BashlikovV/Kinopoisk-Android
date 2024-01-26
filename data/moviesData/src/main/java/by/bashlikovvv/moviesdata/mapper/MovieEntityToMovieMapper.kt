@@ -11,7 +11,8 @@ class MovieEntityToMovieMapper : IMapper<MovieEntity, Movie> {
             name = entity.name,
             description = entity.shortDescription,
             poster = entity.poster,
-            age = entity.age
+            age = entity.age,
+            genres = entity.genres
         )
     }
 
@@ -21,7 +22,8 @@ class MovieEntityToMovieMapper : IMapper<MovieEntity, Movie> {
             name = domain.name,
             shortDescription = domain.description,
             poster = domain.poster,
-            age = domain.age
+            age = domain.age,
+            genres = domain.genres
         )
     }
 }

@@ -8,21 +8,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import by.bashlikovvv.homescreen.R
 import by.bashlikovvv.homescreen.databinding.FragmentHomeScreenBinding
 import by.bashlikovvv.homescreen.di.HomeScreenComponentViewModel
+import by.bashlikovvv.homescreen.domain.model.Category
 import by.bashlikovvv.homescreen.domain.model.CategoryLogo
 import by.bashlikovvv.homescreen.domain.model.CategoryText
 import by.bashlikovvv.homescreen.presentation.adapter.categories.CategoriesListAdapter
 import by.bashlikovvv.homescreen.presentation.adapter.categories.CenterSnapHelper
 import by.bashlikovvv.homescreen.presentation.viewmodel.HomeScreenViewModel
 import dagger.Lazy
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 class HomeScreenFragment : Fragment() {
 
@@ -31,6 +29,8 @@ class HomeScreenFragment : Fragment() {
     private val viewModel: HomeScreenViewModel by viewModels({ requireActivity() }) {
         viewModelFactory.get()
     }
+
+    private lateinit var navController: NavController
 
     override fun onAttach(context: Context) {
         ViewModelProvider(this)[HomeScreenComponentViewModel::class.java]
@@ -45,9 +45,8 @@ class HomeScreenFragment : Fragment() {
     ): View {
         val binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
 
+        navController = getNavController()
         setUpCategoriesRecyclerView(binding)
-        setUpHomeScreenNavigation(binding)
-        collectViewModelStates()
 
         return binding.root
     }
@@ -57,22 +56,33 @@ class HomeScreenFragment : Fragment() {
             val centerSnapHelper = CenterSnapHelper()
             val categoriesAdapter = CategoriesListAdapter { category, position ->
                 centerSnapHelper.scrollTo(position, true)
-
+                navigateToCategory(category)
             }.apply { submitList(categories) }
             centerSnapHelper.attachToRecyclerView(categoriesRecyclerView)
             categoriesRecyclerView.onFlingListener = centerSnapHelper
-            categoriesRecyclerView.adapter = categoriesAdapter/*.withLoadStateFooter()*/
+            categoriesRecyclerView.adapter = categoriesAdapter
         }
     }
 
-    private fun setUpHomeScreenNavigation(binding: FragmentHomeScreenBinding) {
+    private fun getNavController(): NavController {
+        val navHostFragment = childFragmentManager
+            .findFragmentById(R.id.homeScreenFragmentContainer) as NavHostFragment
 
+        return navHostFragment.navController
     }
 
-    private fun collectViewModelStates() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.moviesPagedData.collectLatest { pagedData ->
-
+    private fun navigateToCategory(category: Category) {
+        when(category) {
+            CategoryText(R.string.all) -> {
+                if (navController.currentDestination?.id != R.id.allMoviesFragment) {
+                    navController.navigate(R.id.allMoviesFragment)
+                }
+            }
+            else -> {
+                if (navController.currentDestination?.id != R.id.moviesFragment) {
+                    navController.navigate(R.id.moviesFragment)
+                }
+                viewModel.setCategory(category)
             }
         }
     }

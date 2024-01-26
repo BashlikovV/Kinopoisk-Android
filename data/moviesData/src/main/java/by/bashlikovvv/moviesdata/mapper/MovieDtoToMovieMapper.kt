@@ -11,7 +11,8 @@ class MovieDtoToMovieMapper : IMapper<MovieDto, Movie> {
             name = entity.name,
             description = entity.shortDescription,
             poster = entity.poster.previewUrl,
-            age = entity.ageRating.toInt()
+            age = entity.ageRating.toInt(),
+            genres = (entity.genres ?: listOf()).map { it.name }
         )
     }
 

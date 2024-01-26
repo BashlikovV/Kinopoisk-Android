@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.activity.viewModels
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import by.bashlikovvv.core.domain.model.Destination
@@ -13,6 +14,7 @@ import by.bashlikovvv.kinopoisk_android.R
 import by.bashlikovvv.kinopoisk_android.databinding.ActivityMainBinding
 import by.bashlikovvv.kinopoisk_android.presentation.KinopoiskApplication
 import by.bashlikovvv.kinopoisk_android.presentation.viewmodel.MainActivityViewModel
+import by.bashlikovvv.moviedetailsscreen.presentation.view.MovieDetailsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,6 +62,12 @@ class MainActivity : AppCompatActivity() {
         when(destination) {
             is Destination.HomeScreen -> {
                 navController.navigate(R.id.homeScreenFragment)
+            }
+            is Destination.MovieDetailsScreen -> {
+                navController.navigate(
+                    R.id.movieDetailsFragment,
+                    bundleOf(MovieDetailsFragment.KEY_MOVIE_ID to destination.movieId)
+                )
             }
         }
     }

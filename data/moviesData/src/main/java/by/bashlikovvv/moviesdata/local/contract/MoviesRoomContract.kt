@@ -11,6 +11,7 @@ object MoviesRoomContract {
         const val COLUMN_SHORT_DESCRIPTION = "movies_short_description"
         const val COLUMN_POSTER = "movies_poster"
         const val COLUMN_AGE = "movies_age"
+        const val COLUMN_GENRES = "movies_genres"
     }
 
     object MoviesDetailsTable {

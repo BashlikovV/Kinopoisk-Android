@@ -41,6 +41,7 @@ class CategoriesListAdapter(
         return when(getItem(position)) {
             is CategoryLogo -> ViewTypes.TYPE_LOGO
             is CategoryText -> ViewTypes.TYPE_TEXT
+            else -> throw IllegalStateException()
         }
     }
 
