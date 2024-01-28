@@ -57,14 +57,22 @@ class MoviesRepository(
     override suspend fun getMoviesByGenre(genre: String): List<Movie> {
         return if (isConnected()) {
             val moviesDto = moviesApi.getMoviesByGenre(genre = genre).body() ?: return listOf()
+
             MoviesDtoMapper().mapFromEntity(moviesDto)
         } else {
-            TODO()
+            val movieEntities = moviesDao.getMoviesByGenreOffline(genre)
+
+            val mapper = MovieEntityToMovieMapper()
+            movieEntities.map { mapper.mapFromEntity(it) }
         }
     }
 
     override fun getPagedMoviesByGenre(genre: String): Flow<PagingData<Movie>> {
-        TODO()
+        return if (isConnected()) {
+            TODO()
+        } else {
+            TODO()
+        }
     }
 
     private fun getMoviesOnline(): Flow<PagingData<Movie>> {

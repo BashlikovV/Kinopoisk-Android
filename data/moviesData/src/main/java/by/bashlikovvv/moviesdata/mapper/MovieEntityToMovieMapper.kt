@@ -4,7 +4,9 @@ import by.bashlikovvv.core.domain.model.IMapper
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.moviesdata.local.model.MovieEntity
 
-class MovieEntityToMovieMapper : IMapper<MovieEntity, Movie> {
+class MovieEntityToMovieMapper(
+    private val page: Int? = null
+) : IMapper<MovieEntity, Movie> {
     override fun mapFromEntity(entity: MovieEntity): Movie {
         return Movie(
             id = entity.id,
@@ -23,7 +25,8 @@ class MovieEntityToMovieMapper : IMapper<MovieEntity, Movie> {
             shortDescription = domain.description,
             poster = domain.poster,
             age = domain.age,
-            genres = domain.genres
+            genres = domain.genres,
+            page = page ?: domain.page
         )
     }
 }

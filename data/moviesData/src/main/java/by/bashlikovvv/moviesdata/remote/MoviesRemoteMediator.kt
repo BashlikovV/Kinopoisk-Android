@@ -4,7 +4,6 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import by.bashlikovvv.core.Constants.PAGES_COUNT
 import by.bashlikovvv.core.Constants.PAGE_SIZE
 import by.bashlikovvv.moviesdata.local.dao.MoviesDao
 import by.bashlikovvv.moviesdata.local.model.MovieEntity
@@ -21,27 +20,25 @@ class MoviesRemoteMediator(
     private val moviesDao: MoviesDao
 ) : RemoteMediator<Int, MovieEntity>() {
 
-    private var pageCount = 0
-
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, MovieEntity>
     ): MediatorResult {
-        val offset = getPageIndex(loadType)
+        val offset = getPageIndex(loadType, state)
             ?: return MediatorResult.Success(endOfPaginationReached = true)
 
         return try {
-            val response = moviesApi.getMovies(offset, PAGE_SIZE)
+            val response = moviesApi.getMovies(page = offset, limit = PAGE_SIZE)
             if (response.isSuccessful) {
                 val movies = MoviesDtoMapper().mapFromEntity(
                     response.body() ?: return MediatorResult.Error(HttpException(response))
                 )
 
-                val mapper = MovieEntityToMovieMapper()
+                val mapper = MovieEntityToMovieMapper(offset)
                 withContext(Dispatchers.Default) {
                     moviesDao.insertMovies(movies.map { mapper.mapToEntity(it) })
                 }
-                MediatorResult.Success(endOfPaginationReached = movies.size < PAGES_COUNT)
+                MediatorResult.Success(endOfPaginationReached = movies.size < PAGE_SIZE)
             } else {
                 MediatorResult.Error(HttpException(response))
             }
@@ -53,14 +50,13 @@ class MoviesRemoteMediator(
     }
 
     private fun getPageIndex(
-        loadType: LoadType
+        loadType: LoadType,
+        state: PagingState<Int, MovieEntity>
     ): Int? = when (loadType) {
-        LoadType.REFRESH -> 0
-        LoadType.APPEND -> {
-            pageCount += PAGE_SIZE
-
-            pageCount
-        }
+        LoadType.REFRESH -> 1
+        LoadType.APPEND -> (state.pages.maxOfOrNull { pagingSource ->
+            pagingSource.data.maxOfOrNull { it.page } ?: 0
+        } ?: 0) + 1
         LoadType.PREPEND -> null
     }
 

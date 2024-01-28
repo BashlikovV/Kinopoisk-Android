@@ -45,7 +45,7 @@ interface MoviesDao {
         "FROM ${MoviesTable.TABLE_NAME} " +
         "WHERE instr(${MoviesTable.COLUMN_GENRES}, :genre) > 0"
     )
-    fun getMoviesByGenreOnline(genre: String): PagingSource<Int, MovieEntity>
+    fun getMoviesByGenreOnline(genre: String): List<MovieEntity>
 
     @Query(
         "SELECT * " +
@@ -57,6 +57,6 @@ interface MoviesDao {
         ") " +
         "AND instr(${MoviesTable.COLUMN_GENRES}, :genre) > 0"
     )
-    fun getMoviesByGenreOffline(genre: String): PagingSource<Int, MovieEntity>
+    fun getMoviesByGenreOffline(genre: String): List<MovieEntity>
 
 }

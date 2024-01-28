@@ -28,7 +28,6 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @Module
 class DataModule {
@@ -124,8 +123,8 @@ class DataModule {
     @[Provides Inject AppScope]
     fun provideMoviesRepository(
         @ApplicationQualifier context: Application,
-        @PagerOnline pagerOnline: Pager<Int, MovieEntity>,
-        @PagerOffline pagerOffline: Pager<Int, MovieEntity>,
+        @[PagerOnline] pagerOnline: Pager<Int, MovieEntity>,
+        @[PagerOffline] pagerOffline: Pager<Int, MovieEntity>,
         moviesApi: MoviesApi,
         moviesDao: MoviesDao
     ): IMoviesRepository {

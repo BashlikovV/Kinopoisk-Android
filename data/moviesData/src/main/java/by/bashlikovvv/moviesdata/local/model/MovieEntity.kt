@@ -15,5 +15,6 @@ data class MovieEntity(
     @ColumnInfo(name = MoviesTable.COLUMN_SHORT_DESCRIPTION) val shortDescription: String,
     @ColumnInfo(name = MoviesTable.COLUMN_POSTER) val poster: String,
     @ColumnInfo(name = MoviesTable.COLUMN_AGE) val age: Int,
-    @ColumnInfo(name = MoviesTable.COLUMN_GENRES) val genres: List<String>
+    @ColumnInfo(name = MoviesTable.COLUMN_GENRES) val genres: List<String>,
+    @ColumnInfo(name = MoviesTable.COLUMN_PAGE) val page: Int
 )
