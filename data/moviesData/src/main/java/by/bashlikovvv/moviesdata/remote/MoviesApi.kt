@@ -14,7 +14,6 @@ interface MoviesApi {
         @Path("id") id: Int
     ): Response<MovieDto>
 
-
     @GET("movie")
     suspend fun getMovies(
         @Query("page") page: Int = 1,
@@ -36,6 +35,14 @@ interface MoviesApi {
         @Query("limit") limit: Int = 10,
         @Query("type") type: String = "movie",
         @Query("genres.name") genre: String
+    ): Response<MoviesDto>
+
+    @GET("movie")
+    suspend fun getMoviesByCollection(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("type") type: String = "movie",
+        @Query("lasts") lists: String = "top250"
     ): Response<MoviesDto>
 
 }

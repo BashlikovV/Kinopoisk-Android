@@ -22,6 +22,7 @@ import by.bashlikovvv.homescreen.domain.model.CategoryTitle
 import by.bashlikovvv.homescreen.presentation.adapter.movies.MoviesListAdapter
 import by.bashlikovvv.homescreen.presentation.viewmodel.HomeScreenViewModel
 import dagger.Lazy
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -63,9 +64,15 @@ class MoviesFragment : Fragment() {
     }
 
     private fun collectViewModelStates() {
-        lifecycleScope.launch {
+        viewModel.makeMoviesData()
+        lifecycleScope.launch(Dispatchers.IO) {
             viewModel.currentCategory.collectLatest { category ->
                 smoothScrollToCategory(category as CategoryText)
+            }
+        }
+        lifecycleScope.launch(Dispatchers.IO) {
+            viewModel.moviesData.collectLatest { moviesCategory ->
+                adapter.submitList(moviesCategory)
             }
         }
     }

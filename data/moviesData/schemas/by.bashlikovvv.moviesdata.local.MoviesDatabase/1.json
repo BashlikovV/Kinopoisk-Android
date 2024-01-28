@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "eae3ed2c69c6304f5acb2766d4190c69",
+    "identityHash": "3a3e23ad16c756dad46ea9942ad72470",
     "entities": [
       {
         "tableName": "movies",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movies_id` INTEGER NOT NULL, `movies_name` TEXT NOT NULL, `movies_short_description` TEXT NOT NULL, `movies_poster` TEXT NOT NULL, `movies_age` INTEGER NOT NULL, `movies_genres` TEXT NOT NULL, `movies_page` INTEGER NOT NULL, PRIMARY KEY(`movies_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movies_id` INTEGER NOT NULL, `movies_name` TEXT NOT NULL, `movies_short_description` TEXT NOT NULL, `movies_poster` TEXT NOT NULL, `movies_age` INTEGER NOT NULL, `movies_genres` TEXT NOT NULL, `movies_page` INTEGER NOT NULL, `movies_collections` TEXT NOT NULL, PRIMARY KEY(`movies_id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -48,6 +48,12 @@
             "fieldPath": "page",
             "columnName": "movies_page",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "collections",
+            "columnName": "movies_collections",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -142,7 +148,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eae3ed2c69c6304f5acb2766d4190c69')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3a3e23ad16c756dad46ea9942ad72470')"
     ]
   }
 }

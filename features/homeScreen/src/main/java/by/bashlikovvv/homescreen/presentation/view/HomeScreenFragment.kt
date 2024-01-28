@@ -88,6 +88,29 @@ class HomeScreenFragment : Fragment() {
     }
 
     companion object {
+        val collections = listOf(
+            CategoryText(R.string.top_250),
+            CategoryText(R.string.top_500),
+            CategoryText(R.string.most_popular),
+            CategoryText(R.string.for_deaf)
+        )
+        val genres = listOf(
+            CategoryText(R.string.comedies),
+            CategoryText(R.string.cartoons),
+            CategoryText(R.string.horrors),
+            CategoryText(R.string.fantasy),
+            CategoryText(R.string.thrillers),
+            CategoryText(R.string.action_movies),
+            CategoryText(R.string.melodramas),
+            CategoryText(R.string.detectives),
+            CategoryText(R.string.adventures),
+            CategoryText(R.string.military),
+            CategoryText(R.string.family),
+            CategoryText(R.string.anime),
+            CategoryText(R.string.historical),
+            CategoryText(R.string.dramas)
+        )
+
         val categories = listOf(
             CategoryLogo(R.drawable.kinopoisk_icon),
             CategoryText(R.string.all),

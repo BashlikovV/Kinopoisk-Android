@@ -25,7 +25,7 @@ class MoviesRepository(
     @PagerOffline private val pagerOffline: Pager<Int, MovieEntity>,
     private val moviesApi: MoviesApi,
     private val moviesDao: MoviesDao
-) : IMoviesRepository{
+) : IMoviesRepository {
 
     override suspend fun getMovieById(id: Int): Movie {
         return if (isConnected()) {
@@ -73,6 +73,23 @@ class MoviesRepository(
         } else {
             TODO()
         }
+    }
+
+    override suspend fun getMoviesByCollection(collection: String): List<Movie> {
+        return if (isConnected()) {
+            val moviesDto = moviesApi
+                .getMoviesByCollection(lists = collection).body() ?: return listOf()
+
+            MoviesDtoMapper().mapFromEntity(moviesDto)
+        } else {
+            val moviesEntity = moviesDao.getMoviesByCollection(collection)
+
+            val mapper = MovieEntityToMovieMapper()
+            moviesEntity.map { entity ->
+                mapper.mapFromEntity(entity)
+            }
+        }
+
     }
 
     private fun getMoviesOnline(): Flow<PagingData<Movie>> {

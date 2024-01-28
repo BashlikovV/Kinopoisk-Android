@@ -13,6 +13,7 @@ object MoviesRoomContract {
         const val COLUMN_AGE = "movies_age"
         const val COLUMN_GENRES = "movies_genres"
         const val COLUMN_PAGE = "movies_page"
+        const val COLUMN_COLLECTIONS = "movies_collections"
     }
 
     object MoviesDetailsTable {

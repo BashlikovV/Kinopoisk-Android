@@ -7,5 +7,6 @@ data class Movie(
     val poster: String = "",
     val age: Int = 0,
     val genres: List<String> = listOf(),
-    val page: Int = 0
+    val page: Int = 0,
+    val collections: List<String> = listOf()
 )

@@ -42,7 +42,7 @@ class MoviesListAdapter(
 
     fun getCategoryPosition(category: CategoryTitle): Int {
         for (i in currentList.indices) {
-            if ((currentList[i] as CategoryTitle).itemText == category.itemText) {
+            if ((currentList[i] as? CategoryTitle)?.itemText == category.itemText) {
                 return i
             }
         }

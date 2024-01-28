@@ -6,6 +6,15 @@
     android:padding="5dp"
     android:background="@drawable/more_list_item_background">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/show_more"
+        android:textAppearance="@style/item_category_more_text_style"/>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,6 +22,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:contentDescription="@string/navigate_to_category"
-        android:src="@drawable/chevron_right"/>
+        android:src="@drawable/chevron_right" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

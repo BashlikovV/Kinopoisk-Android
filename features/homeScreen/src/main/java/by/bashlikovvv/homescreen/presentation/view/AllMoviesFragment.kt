@@ -19,6 +19,7 @@ import by.bashlikovvv.homescreen.presentation.adapter.allmovies.AllMoviesListAda
 import by.bashlikovvv.homescreen.presentation.adapter.allmovies.AllMoviesLoadStateAdapter
 import by.bashlikovvv.homescreen.presentation.viewmodel.HomeScreenViewModel
 import dagger.Lazy
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -60,7 +61,7 @@ class AllMoviesFragment : Fragment() {
     }
 
     private fun collectViewModelStates() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             viewModel.moviesPagedData.collectLatest { pagedData ->
                 adapter.submitData(pagedData)
             }

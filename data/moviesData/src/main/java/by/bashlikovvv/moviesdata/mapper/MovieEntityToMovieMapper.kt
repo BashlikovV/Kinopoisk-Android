@@ -14,7 +14,8 @@ class MovieEntityToMovieMapper(
             description = entity.shortDescription,
             poster = entity.poster,
             age = entity.age,
-            genres = entity.genres
+            genres = entity.genres,
+            collections = entity.collections
         )
     }
 
@@ -26,7 +27,8 @@ class MovieEntityToMovieMapper(
             poster = domain.poster,
             age = domain.age,
             genres = domain.genres,
-            page = page ?: domain.page
+            page = page ?: domain.page,
+            collections = domain.collections
         )
     }
 }

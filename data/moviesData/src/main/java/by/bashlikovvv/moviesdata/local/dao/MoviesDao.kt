@@ -59,4 +59,11 @@ interface MoviesDao {
     )
     fun getMoviesByGenreOffline(genre: String): List<MovieEntity>
 
+    @Query(
+        "SELECT * " +
+        "FROM ${MoviesTable.TABLE_NAME} " +
+        "WHERE instr(${MoviesTable.COLUMN_COLLECTIONS}, :collection) > 0"
+    )
+    fun getMoviesByCollection(collection: String): List<MovieEntity>
+
 }
