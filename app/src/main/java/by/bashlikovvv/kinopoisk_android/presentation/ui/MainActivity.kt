@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.util.setFragmentNavigationListener
 import by.bashlikovvv.kinopoisk_android.R
@@ -36,9 +37,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         addOnPreDrawListener()
-        supportFragmentManager.setFragmentNavigationListener(this) { destination ->
-            fragmentNavigationListener(destination)
-        }
+        setFragmentNavigationListener()
+        NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
     }
 
     private fun addOnPreDrawListener() {
@@ -56,6 +56,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
+    }
+
+    private fun setFragmentNavigationListener() {
+        supportFragmentManager.setFragmentNavigationListener(this) { destination ->
+            fragmentNavigationListener(destination)
+        }
     }
 
     private fun fragmentNavigationListener(destination: Destination) {
