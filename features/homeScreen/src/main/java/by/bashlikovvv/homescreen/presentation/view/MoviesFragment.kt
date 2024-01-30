@@ -65,7 +65,7 @@ class MoviesFragment : Fragment() {
 
     private fun collectViewModelStates() {
         viewModel.makeMoviesData()
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch {
             viewModel.currentCategory.collectLatest { category ->
                 smoothScrollToCategory(category as CategoryText)
             }
@@ -79,6 +79,14 @@ class MoviesFragment : Fragment() {
 
     private fun setUpMoviesRecyclerView() {
         binding.moviesRecyclerView.adapter = adapter
+        binding.moviesRecyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
+            val position = (binding.moviesRecyclerView.layoutManager as LinearLayoutManager)
+                .findFirstVisibleItemPosition()
+            val item = adapter.currentList.getOrNull(position)
+            if (item is CategoryTitle && item != viewModel.moviesCurrentCategory.value) {
+                viewModel.setMoviesCurrentCategory(item)
+            }
+        }
     }
 
     private fun smoothScrollToCategory(category: CategoryText) {

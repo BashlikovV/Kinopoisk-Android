@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.view.MainActivity"
+    tools:context=".presentation.ui.MainActivity"
     android:background="@color/main_background">
 
     <androidx.fragment.app.FragmentContainerView
@@ -14,9 +14,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         android:name="androidx.navigation.fragment.NavHostFragment"
         app:defaultNavHost="true"
         app:navGraph="@navigation/app_navigation"/>
+
+    <by.bashlikovvv.kinopoisk_android.presentation.view.CustomBottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu"
+        android:background="@drawable/nav_bar_background"
+        app:itemIconTint="@color/nav_bar_item_icon_tint"
+        app:itemTextColor="@color/nav_bar_item_text_color"
+        app:itemActiveIndicatorStyle="@style/bottom_nav_bar_active_indicator_style"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

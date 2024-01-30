@@ -4,7 +4,8 @@ import android.app.Application
 import by.bashlikovvv.core.di.AppScope
 import by.bashlikovvv.core.di.ApplicationQualifier
 import by.bashlikovvv.homescreen.di.HomeScreenDependencies
-import by.bashlikovvv.kinopoisk_android.presentation.view.MainActivity
+import by.bashlikovvv.kinopoisk_android.presentation.ui.MainActivity
+import by.bashlikovvv.moviedetailsscreen.di.MovieDetailsScreenDependencies
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -13,7 +14,8 @@ import javax.inject.Singleton
     modules = [DataModule::class, DomainModule::class]
 )]
 interface AppComponent
-    : HomeScreenDependencies {
+    : HomeScreenDependencies,
+    MovieDetailsScreenDependencies {
 
     fun inject(mainActivity: MainActivity)
 

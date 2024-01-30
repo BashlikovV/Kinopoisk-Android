@@ -31,7 +31,7 @@ class MoviesRepository(
         return if (isConnected()) {
             MovieDtoToMovieMapper()
                 .mapFromEntity(
-                    moviesApi.getMovieById(id).body() ?: throw EmptyBodyException
+                    moviesApi.getMovieById(id).body() ?: throw EmptyBodyException()
                 )
         } else {
             MovieEntityToMovieMapper()
@@ -49,7 +49,7 @@ class MoviesRepository(
 
     override suspend fun getMoviesByName(name: String): List<Movie> {
         val moviesDto = moviesApi.getMoviesByName(query = name).body()
-        moviesDto ?: throw EmptyBodyException
+        moviesDto ?: throw EmptyBodyException()
 
         return MoviesDtoMapper().mapFromEntity(moviesDto)
     }

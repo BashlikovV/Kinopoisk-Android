@@ -2,8 +2,10 @@ package by.bashlikovvv.core.domain.model
 
 sealed class KinopoiskExceptions : RuntimeException()
 
-data object NotImplementedException : KinopoiskExceptions()
+class NotImplementedException() : KinopoiskExceptions()
 
-data object ConnectionException : KinopoiskExceptions()
+class ConnectionException : KinopoiskExceptions()
 
-data object EmptyBodyException : KinopoiskExceptions()
+class EmptyBodyException(
+    override val cause: Throwable? = null
+) : KinopoiskExceptions()

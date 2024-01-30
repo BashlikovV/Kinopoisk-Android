@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.view.HomeScreenFragment">
 
-    <androidx.cardview.widget.CardView
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/categoriesCardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -21,9 +21,10 @@
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="horizontal"
-            tools:listitem=""/>
+            tools:listitem="@layout/item_category_text"
+            android:background="@color/main_background"/>
         
-    </androidx.cardview.widget.CardView>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/homeScreenFragmentContainer"

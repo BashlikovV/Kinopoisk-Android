@@ -2,7 +2,6 @@ package by.bashlikovvv.homescreen.presentation.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.map
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.util.navigateToDestination
 import by.bashlikovvv.homescreen.databinding.FragmentAllMoviesBinding
@@ -50,7 +48,7 @@ class AllMoviesFragment : Fragment() {
         val binding = FragmentAllMoviesBinding.inflate(inflater, container, false)
 
         setUpAllMoviesRecyclerView(binding)
-        collectViewModelStates()
+        collectViewModelStates(binding)
 
         return binding.root
     }
@@ -60,10 +58,21 @@ class AllMoviesFragment : Fragment() {
             .withLoadStateFooter(AllMoviesLoadStateAdapter())
     }
 
-    private fun collectViewModelStates() {
+    private fun collectViewModelStates(binding: FragmentAllMoviesBinding) {
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.moviesPagedData.collectLatest { pagedData ->
                 adapter.submitData(pagedData)
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.allMoviesUpdateState.collectLatest {
+                if (it) {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.allMoviesRecyclerView.visibility = View.GONE
+                } else {
+                    binding.progressBar.visibility = View.GONE
+                    binding.allMoviesRecyclerView.visibility = View.VISIBLE
+                }
             }
         }
     }

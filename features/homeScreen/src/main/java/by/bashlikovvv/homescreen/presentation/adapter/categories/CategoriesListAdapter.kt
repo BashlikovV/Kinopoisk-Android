@@ -1,6 +1,7 @@
 package by.bashlikovvv.homescreen.presentation.adapter.categories
 
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import by.bashlikovvv.homescreen.domain.model.Category
@@ -45,14 +46,30 @@ class CategoriesListAdapter(
         }
     }
 
+    fun chooseCategory(position: Int) {
+        val prevPosition = selectedItemPosition
+        selectedItemPosition = position
+        notifyItemChanged(prevPosition, false)
+        notifyItemChanged(position, true)
+    }
+
     private fun onCategoryTextClicked(position: Int, categoryText: CategoryText) {
         val prevPosition = selectedItemPosition
         selectedItemPosition = position
-        notifyItemChanged(prevPosition)
-        notifyItemChanged(position)
+        notifyItemChanged(prevPosition, false)
+        notifyItemChanged(position, true)
 
         notifyCategoryClicked(categoryText, position)
+    }
 
+    fun getCategoryPosition(@StringRes text: Int): Int {
+        for (i in currentList.indices) {
+            if ((currentList[i] as? CategoryText)?.itemText == text) {
+                return i
+            }
+        }
+
+        return 0
     }
 
     companion object {
