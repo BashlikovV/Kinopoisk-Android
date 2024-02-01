@@ -14,4 +14,6 @@ interface IBookmarksRepository {
 
     fun getPagedBookmarks(): Flow<PagingData<Movie>>
 
+    suspend fun isBookmark(movieId: Long): Boolean
+
 }

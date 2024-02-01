@@ -11,7 +11,7 @@ data class MovieDto(
     @SerializedName("typeNumber") val typeNumber: Int = 0,
     @SerializedName("logo") val logo: Logo,
     @SerializedName("top250") val top250: Int? = null,
-    @SerializedName("id") val id: Int = 0,
+    @SerializedName("id") val id: Long = 0,
     @SerializedName("watchability") val watchability: Watchability,
     @SerializedName("budget") val budget: Budget,
     @SerializedName("updatedAt") val updatedAt: String = "",

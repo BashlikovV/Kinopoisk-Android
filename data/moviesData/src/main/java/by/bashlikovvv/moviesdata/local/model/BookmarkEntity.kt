@@ -25,6 +25,6 @@ data class BookmarkEntity(
     @[
         PrimaryKey(autoGenerate = true)
         ColumnInfo(name = BookmarksTable.COLUMN_ID)
-    ] val id: Int,
-    @ColumnInfo(name = BookmarksTable.KEY_MOVIE_ID, index = true) val keyMovieId: Int
+    ] val id: Long,
+    @ColumnInfo(name = BookmarksTable.KEY_MOVIE_ID, index = true) val keyMovieId: Long
 )

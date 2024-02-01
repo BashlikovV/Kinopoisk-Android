@@ -10,8 +10,7 @@ import by.bashlikovvv.homescreen.domain.model.CategoryTitle
 import by.bashlikovvv.homescreen.domain.model.MoviesCategory
 
 class MoviesListAdapter(
-    private val notifyMovieClicked: (Movie) -> Unit,
-    private val notifyMoreClicked: (CategoryMore) -> Unit
+    private val clickListener: MoviesListAdapterClickListener
 ) : ListAdapter<MoviesCategory, RecyclerView.ViewHolder>(MoviesCategoryDiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
@@ -26,8 +25,21 @@ class MoviesListAdapter(
         val item = getItem(position)
         when(holder) {
             is TitleItemViewHolder -> holder.bind(item as CategoryTitle)
-            is MovieItemViewHolder -> holder.bind(item as CategoryMovie) { notifyMovieClicked(it) }
-            is MoreItemViewHolder -> holder.bind(item as CategoryMore) { notifyMoreClicked(it) }
+            is MovieItemViewHolder -> holder.bind(
+                item = item as CategoryMovie,
+                movieItemViewHolderClickListener = object : MovieItemViewHolder.MovieItemViewHolderClickListener {
+                    override fun onMovieClicked(movie: Movie) {
+                        clickListener.notifyMovieClicked(movie)
+                    }
+
+                    override fun onBookmarkClicked(movie: Movie) {
+                        clickListener.notifyBookmarkClicked(movie)
+                    }
+                }
+            )
+            is MoreItemViewHolder -> holder.bind(item as CategoryMore) {
+                clickListener.notifyMoreClicked(it)
+            }
         }
     }
 
@@ -54,6 +66,16 @@ class MoviesListAdapter(
         const val TYPE_TITLE = 0
         const val TYPE_MOVIE = 1
         const val TYPE_MORE = 2
+    }
+
+    interface MoviesListAdapterClickListener {
+
+        fun notifyMovieClicked(movie: Movie)
+
+        fun notifyMoreClicked(categoryMore: CategoryMore)
+
+        fun notifyBookmarkClicked(movie: Movie)
+
     }
 
 }

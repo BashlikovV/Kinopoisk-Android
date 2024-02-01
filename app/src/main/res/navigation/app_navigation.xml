@@ -14,6 +14,6 @@
         android:label="MovieDetailsFragment" />
     <fragment
         android:id="@+id/bookmarksFragment"
-        android:name="by.bashlikovvv.bookmarksscreen.presentation.view.BookmarksFragment"
+        android:name="by.bashlikovvv.bookmarksscreen.presentation.ui.BookmarksFragment"
         android:label="BookmarksFragment" />
 </navigation>

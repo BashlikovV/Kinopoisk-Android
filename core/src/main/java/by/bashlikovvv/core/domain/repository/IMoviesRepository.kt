@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface IMoviesRepository {
 
-    suspend fun getMovieById(id: Int): Movie
+    suspend fun getMovieById(id: Long): Movie
 
     fun getPagedMovies(): Flow<PagingData<Movie>>
 

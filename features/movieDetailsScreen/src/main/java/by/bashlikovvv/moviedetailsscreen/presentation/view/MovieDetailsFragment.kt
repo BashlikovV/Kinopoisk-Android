@@ -22,7 +22,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
     @Inject internal lateinit var viewModel: MovieDetailsScreenViewModel
 
-    private var movieId: Int? = null
+    private var movieId: Long? = null
 
     override fun onAttach(context: Context) {
         ViewModelProvider(this)[MovieDetailsScreenComponentViewModel::class.java]
@@ -33,7 +33,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        movieId = requireArguments().getInt(KEY_MOVIE_ID)
+        movieId = requireArguments().getLong(KEY_MOVIE_ID)
     }
 
     override fun onCreateView(

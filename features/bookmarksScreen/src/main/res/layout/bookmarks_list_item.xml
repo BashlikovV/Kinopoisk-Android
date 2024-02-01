@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:background="@drawable/bookmarks_list_item_background">
 
     <ImageView
         android:id="@+id/posterImageView"
@@ -13,44 +14,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/infoLinearLayout"
-        tools:src="@drawable/test_poster"
-        android:importantForAccessibility="no" />
+        android:importantForAccessibility="no"
+        tools:src="@drawable/test_poster"/>
 
     <LinearLayout
-        android:id="@+id/infoLinearLayout"
+        android:id="@+id/descriptionLinearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/posterImageView"
+        android:layout_marginStart="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/movieNameTextView"
+            android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            tools:text="Movie name"/>
+            tools:text="Test name"/>
 
         <TextView
-            android:id="@+id/movieDescriptionTextView"
+            android:id="@+id/descriptionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            tools:text="Movie name"/>
+            tools:text="Test description"/>
 
     </LinearLayout>
 
-    <by.bashlikovvv.homescreen.presentation.view.BookmarkView
-        android:id="@+id/bookmarkView"
+    <TextView
+        android:id="@+id/removeFromBookmarksTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/posterImageView"
-        app:layout_constraintBottom_toBottomOf="@id/posterImageView"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="5dp"/>
-
+        app:layout_constraintStart_toEndOf="@id/descriptionLinearLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="5dp"
+        android:text="@string/remove"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

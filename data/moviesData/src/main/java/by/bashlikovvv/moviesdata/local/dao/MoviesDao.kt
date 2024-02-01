@@ -17,7 +17,7 @@ interface MoviesDao {
         "FROM ${MoviesTable.TABLE_NAME} " +
         "WHERE ${MoviesTable.COLUMN_ID} = :id"
     )
-    suspend fun getMovieById(id: Int): MovieEntity
+    suspend fun getMovieById(id: Long): MovieEntity
 
     @Query(
         "SELECT * " +

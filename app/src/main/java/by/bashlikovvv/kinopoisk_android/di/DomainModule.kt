@@ -3,13 +3,17 @@ package by.bashlikovvv.kinopoisk_android.di
 import android.app.Application
 import by.bashlikovvv.core.di.AppScope
 import by.bashlikovvv.core.di.ApplicationQualifier
+import by.bashlikovvv.core.domain.repository.IBookmarksRepository
 import by.bashlikovvv.core.domain.repository.IMoviesRepository
+import by.bashlikovvv.core.domain.usecase.AddBookmarkUseCase
+import by.bashlikovvv.core.domain.usecase.GetBookmarksUseCase
 import by.bashlikovvv.core.domain.usecase.GetMovieByIdUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByCollectionUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByGenreUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByNameUseCase
 import by.bashlikovvv.core.domain.usecase.GetPagedMoviesUseCase
 import by.bashlikovvv.core.domain.usecase.GetStringUseCase
+import by.bashlikovvv.core.domain.usecase.RemoveBookmarkUseCase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Inject
@@ -57,6 +61,27 @@ class DomainModule {
         @ApplicationQualifier application: Application
     ): GetStringUseCase {
         return GetStringUseCase(application)
+    }
+
+    @[Provides Inject AppScope]
+    fun provideAddBookmarkUseCase(
+        bookmarksRepository: IBookmarksRepository
+    ): AddBookmarkUseCase {
+        return AddBookmarkUseCase(bookmarksRepository)
+    }
+
+    @[Provides Inject AppScope]
+    fun provideRemoveBookmarkUseCase(
+        bookmarksRepository: IBookmarksRepository
+    ): RemoveBookmarkUseCase {
+        return RemoveBookmarkUseCase(bookmarksRepository)
+    }
+
+    @[Provides Inject AppScope]
+    fun provideGetBookmarksUseCase(
+        bookmarksRepository: IBookmarksRepository
+    ): GetBookmarksUseCase {
+        return GetBookmarksUseCase(bookmarksRepository)
     }
 
 }

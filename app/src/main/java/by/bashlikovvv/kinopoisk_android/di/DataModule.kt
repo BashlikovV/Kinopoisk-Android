@@ -134,7 +134,8 @@ class DataModule {
         @[PagerOnline] pagerOnline: Pager<Int, MovieEntity>,
         @[PagerOffline] pagerOffline: Pager<Int, MovieEntity>,
         moviesApi: MoviesApi,
-        moviesDao: MoviesDao
+        moviesDao: MoviesDao,
+        bookmarksDao: BookmarksDao
     ): IMoviesRepository {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
 
@@ -143,7 +144,8 @@ class DataModule {
             pagerOnline = pagerOnline,
             pagerOffline = pagerOffline,
             moviesApi = moviesApi,
-            moviesDao = moviesDao
+            moviesDao = moviesDao,
+            bookmarksDao = bookmarksDao
         )
     }
 

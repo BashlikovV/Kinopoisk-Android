@@ -15,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import by.bashlikovvv.core.ext.dp
+import by.bashlikovvv.core.util.navigateToDestination
 import by.bashlikovvv.homescreen.R
 import by.bashlikovvv.homescreen.databinding.FragmentHomeScreenBinding
 import by.bashlikovvv.homescreen.di.HomeScreenComponentViewModel
@@ -104,6 +105,11 @@ class HomeScreenFragment : Fragment() {
                     )
                 }
                 viewModel.setCategory(category)
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
+                navigateToDestination(destination)
             }
         }
     }

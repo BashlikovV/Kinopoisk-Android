@@ -14,7 +14,7 @@ data class DocsItem(
     @SerializedName("enName") val enName: String = "",
     @SerializedName("logo") val logo: Logo,
     @SerializedName("top250") val top250: Int = 0,
-    @SerializedName("id") val id: Int = 0,
+    @SerializedName("id") val id: Long = 0,
     @SerializedName("alternativeName") val alternativeName: String = "",
     @SerializedName("ratingMpaa") val ratingMpaa: String = "",
     @SerializedName("top10") val top10: Int? = null,

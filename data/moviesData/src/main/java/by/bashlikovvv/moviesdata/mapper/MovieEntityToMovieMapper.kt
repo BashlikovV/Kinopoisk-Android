@@ -5,7 +5,8 @@ import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.moviesdata.local.model.MovieEntity
 
 class MovieEntityToMovieMapper(
-    private val page: Int? = null
+    private val page: Int? = null,
+    private val isBookmark: Boolean
 ) : IMapper<MovieEntity, Movie> {
     override fun mapFromEntity(entity: MovieEntity): Movie {
         return Movie(
@@ -15,7 +16,8 @@ class MovieEntityToMovieMapper(
             poster = entity.poster,
             age = entity.age,
             genres = entity.genres,
-            collections = entity.collections
+            collections = entity.collections,
+            isBookmark = isBookmark
         )
     }
 

@@ -34,7 +34,7 @@ class MoviesRemoteMediator(
                     response.body() ?: return MediatorResult.Error(HttpException(response))
                 )
 
-                val mapper = MovieEntityToMovieMapper(offset)
+                val mapper = MovieEntityToMovieMapper(offset, false)
                 withContext(Dispatchers.Default) {
                     moviesDao.insertMovies(movies.map { mapper.mapToEntity(it) })
                 }

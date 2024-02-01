@@ -12,18 +12,21 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.dp
-import by.bashlikovvv.core.util.navigateToDestination
 import by.bashlikovvv.homescreen.databinding.FragmentHomeScreenBinding
 import by.bashlikovvv.homescreen.databinding.FragmentMoviesBinding
 import by.bashlikovvv.homescreen.di.HomeScreenComponentViewModel
+import by.bashlikovvv.homescreen.domain.model.CategoryMore
 import by.bashlikovvv.homescreen.domain.model.CategoryText
 import by.bashlikovvv.homescreen.domain.model.CategoryTitle
 import by.bashlikovvv.homescreen.presentation.adapter.movies.MoviesListAdapter
 import by.bashlikovvv.homescreen.presentation.viewmodel.HomeScreenViewModel
 import dagger.Lazy
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,9 +41,18 @@ class MoviesFragment : Fragment() {
     private lateinit var binding: FragmentMoviesBinding
 
     private val adapter = MoviesListAdapter(
-        notifyMoreClicked = { categoryMore ->  },
-        notifyMovieClicked = { movie ->
-            navigateToDestination(Destination.MovieDetailsScreen(movie.id))
+        clickListener = object : MoviesListAdapter.MoviesListAdapterClickListener {
+            override fun notifyMovieClicked(movie: Movie) {
+                viewModel.navigateToDestination(Destination.MovieDetailsScreen(movie.id))
+            }
+
+            override fun notifyMoreClicked(categoryMore: CategoryMore) {
+                viewModel.onMoreClicked(categoryMore)
+            }
+
+            override fun notifyBookmarkClicked(movie: Movie) {
+                viewModel.onBookmarkClicked(movie)
+            }
         }
     )
 
@@ -63,8 +75,22 @@ class MoviesFragment : Fragment() {
         return binding.root
     }
 
+    @OptIn(FlowPreview::class)
     private fun collectViewModelStates() {
         viewModel.makeMoviesData()
+        lifecycleScope.launch {
+            viewModel.moviesUpdateState
+                .debounce(250)
+                .collectLatest {
+                    if (it) {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.moviesRecyclerView.visibility = View.GONE
+                    } else {
+                        binding.progressBar.visibility = View.GONE
+                        binding.moviesRecyclerView.visibility = View.VISIBLE
+                    }
+                }
+        }
         lifecycleScope.launch {
             viewModel.currentCategory.collectLatest { category ->
                 smoothScrollToCategory(category as CategoryText)

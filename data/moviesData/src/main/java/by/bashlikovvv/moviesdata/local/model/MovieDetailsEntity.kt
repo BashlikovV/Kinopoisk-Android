@@ -33,11 +33,11 @@ data class MovieDetailsEntity(
     @[
         PrimaryKey(autoGenerate = true)
         ColumnInfo(name = MoviesDetailsTable.COLUMN_ID)
-    ] val id: Int,
+    ] val id: Long,
     @ColumnInfo(name = MoviesDetailsTable.COLUMN_PERSONS) val persons: List<Int>,
     @ColumnInfo(name = MoviesDetailsTable.COLUMN_DESCRIPTION) val description: String,
-    @ColumnInfo(name = MoviesDetailsTable.COLUMN_SIMILAR_MOVIES) val similarMovies: List<Int>,
+    @ColumnInfo(name = MoviesDetailsTable.COLUMN_SIMILAR_MOVIES) val similarMovies: List<Long>,
     @ColumnInfo(name = MoviesDetailsTable.COLUMN_WATCH_ABILITY) val watchAbility : List<String>,
     @ColumnInfo(name = MoviesDetailsTable.COLUMN_TRAILERS) val trailers: List<String>,
-    @ColumnInfo(name = MoviesDetailsTable.KEY_MOVIE_ID) val keyMovieId: Int
+    @ColumnInfo(name = MoviesDetailsTable.KEY_MOVIE_ID) val keyMovieId: Long
 )

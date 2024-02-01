@@ -40,8 +40,12 @@ class BookmarkView : FrameLayout {
         binding.root.transitionToStart()
     }
 
-    private fun startMoveBookmark() {
+    fun startMoveBookmark() {
         binding.root.transitionToEnd()
+    }
+
+    fun setBookmarkClicked() {
+        binding.root.progress = 1f
     }
 
 }

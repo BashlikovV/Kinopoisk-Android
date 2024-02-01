@@ -18,7 +18,7 @@ class MovieDetailsScreenViewModel @Inject constructor(
     private var _movie = MutableStateFlow(Movie())
     val movie = _movie.asStateFlow()
 
-    fun getMovieById(id: Int) = viewModelScope.launch(Dispatchers.IO) {
+    fun getMovieById(id: Long) = viewModelScope.launch(Dispatchers.IO) {
         val result = getMovieByIdUseCase.execute(id)
         if (result is ResultCommon.Success<*>) {
             _movie.tryEmit(result.data as Movie)

@@ -11,7 +11,7 @@ interface MoviesApi {
 
     @GET("movie/{id}")
     suspend fun getMovieById(
-        @Path("id") id: Int
+        @Path("id") id: Long
     ): Response<MovieDto>
 
     @GET("movie")

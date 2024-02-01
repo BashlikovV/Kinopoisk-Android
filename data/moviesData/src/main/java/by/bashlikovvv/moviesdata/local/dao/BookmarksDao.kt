@@ -53,4 +53,11 @@ interface BookmarksDao {
     )
     fun getPagedBookmarksOffline(): PagingSource<Int, BookmarkAndMovieTuple>
 
+    @Query(
+        "SELECT count(*) " +
+        "FROM ${BookmarksTable.TABLE_NAME} " +
+        "WHERE ${BookmarksTable.KEY_MOVIE_ID} = :movieId"
+    )
+    fun isBookmark(movieId: Long): Int
+
 }

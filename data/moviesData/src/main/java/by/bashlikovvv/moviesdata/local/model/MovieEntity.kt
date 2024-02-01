@@ -10,7 +10,7 @@ data class MovieEntity(
     @[
         PrimaryKey(autoGenerate = false)
         ColumnInfo(name = MoviesTable.COLUMN_ID)
-    ] val id: Int,
+    ] val id: Long,
     @ColumnInfo(name = MoviesTable.COLUMN_NAME) val name: String,
     @ColumnInfo(name = MoviesTable.COLUMN_SHORT_DESCRIPTION) val shortDescription: String,
     @ColumnInfo(name = MoviesTable.COLUMN_POSTER) val poster: String,

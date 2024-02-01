@@ -7,7 +7,7 @@ import by.bashlikovvv.core.domain.repository.IMoviesRepository
 
 class GetMovieByIdUseCase(private val moviesRepository: IMoviesRepository) {
 
-    suspend fun execute(id: Int): ResultCommon {
+    suspend fun execute(id: Long): ResultCommon {
         return try {
             ResultCommon.Success(moviesRepository.getMovieById(id))
         } catch (e: EmptyBodyException) {

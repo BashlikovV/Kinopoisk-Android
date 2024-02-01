@@ -1,6 +1,7 @@
 package by.bashlikovvv.kinopoisk_android.presentation
 
 import android.app.Application
+import by.bashlikovvv.bookmarksscreen.di.BookmarksScreenDependenciesStore
 import by.bashlikovvv.homescreen.di.HomeScreenDependenciesStore
 import by.bashlikovvv.kinopoisk_android.di.AppComponent
 import by.bashlikovvv.kinopoisk_android.di.DaggerAppComponent
@@ -17,6 +18,7 @@ class KinopoiskApplication : Application() {
         super.onCreate()
         HomeScreenDependenciesStore.deps = appComponent
         MovieDetailsScreenDependenciesStore.deps = appComponent
+        BookmarksScreenDependenciesStore.deps = appComponent
     }
 
 }

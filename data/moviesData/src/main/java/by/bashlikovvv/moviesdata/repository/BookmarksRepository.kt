@@ -17,15 +17,25 @@ class BookmarksRepository(
     private val connectivityManager: ConnectivityManager?
 ) : IBookmarksRepository {
     override suspend fun addMovieToBookmarks(movie: Movie) {
-        bookmarksDao.addBookmark(BookmarkAndMovieTupleMapper().mapToEntity(movie).bookmark)
+        bookmarksDao
+            .addBookmark(
+                BookmarkAndMovieTupleMapper(true)
+                    .mapToEntity(movie)
+                    .bookmark
+            )
     }
 
     override suspend fun removeMovieFromBookmarks(movie: Movie) {
-        bookmarksDao.removeBookmark(BookmarkAndMovieTupleMapper().mapToEntity(movie).bookmark)
+        bookmarksDao
+            .removeBookmark(
+                BookmarkAndMovieTupleMapper(false)
+                    .mapToEntity(movie)
+                    .bookmark
+            )
     }
 
     override suspend fun getBookmarks(): List<Movie> {
-        val mapper = BookmarkAndMovieTupleMapper()
+        val mapper = BookmarkAndMovieTupleMapper(true)
 
         return bookmarksDao.getBookmarks().map { tuple ->
             mapper.mapFromEntity(tuple)
@@ -38,6 +48,10 @@ class BookmarksRepository(
         } else {
             TODO()
         }
+    }
+
+    override suspend fun isBookmark(movieId: Long): Boolean {
+        return bookmarksDao.isBookmark(movieId) > 0
     }
 
 }

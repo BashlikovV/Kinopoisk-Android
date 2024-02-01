@@ -9,8 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import by.bashlikovvv.core.domain.model.Destination
-import by.bashlikovvv.core.util.navigateToDestination
+import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.homescreen.databinding.FragmentAllMoviesBinding
 import by.bashlikovvv.homescreen.di.HomeScreenComponentViewModel
 import by.bashlikovvv.homescreen.presentation.adapter.allmovies.AllMoviesListAdapter
@@ -18,7 +19,9 @@ import by.bashlikovvv.homescreen.presentation.adapter.allmovies.AllMoviesLoadSta
 import by.bashlikovvv.homescreen.presentation.viewmodel.HomeScreenViewModel
 import dagger.Lazy
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,9 +33,17 @@ class AllMoviesFragment : Fragment() {
         viewModelFactory.get()
     }
 
-    private val adapter = AllMoviesListAdapter { movie ->
-        navigateToDestination(Destination.MovieDetailsScreen(movie.id))
-    }
+    private val adapter = AllMoviesListAdapter(
+        onClickListener = object : AllMoviesListAdapter.AllMoviesListAdapterClickListener {
+            override fun notifyMovieClicked(movie: Movie) {
+                viewModel.navigateToDestination(Destination.MovieDetailsScreen(movie.id))
+            }
+
+            override fun notifyBookmarkClicked(movie: Movie) {
+                viewModel.onBookmarkClicked(movie)
+            }
+        }
+    )
 
     override fun onAttach(context: Context) {
         ViewModelProvider(this)[HomeScreenComponentViewModel::class.java]
@@ -56,23 +67,35 @@ class AllMoviesFragment : Fragment() {
     private fun setUpAllMoviesRecyclerView(binding: FragmentAllMoviesBinding) {
         binding.allMoviesRecyclerView.adapter = adapter
             .withLoadStateFooter(AllMoviesLoadStateAdapter())
+        lifecycleScope.launch {
+            adapter.loadStateFlow.collectLatest {
+                if (it.prepend is LoadState.Loading) {
+                    viewModel.setAllMoviesProgress(true)
+                } else {
+                    viewModel.setAllMoviesProgress(false)
+                }
+            }
+        }
     }
 
+    @OptIn(FlowPreview::class)
     private fun collectViewModelStates(binding: FragmentAllMoviesBinding) {
+        lifecycleScope.launch {
+            viewModel.allMoviesUpdateState
+                .debounce(250)
+                .collectLatest {
+                    if (it) {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.allMoviesRecyclerView.visibility = View.GONE
+                    } else {
+                        binding.progressBar.visibility = View.GONE
+                        binding.allMoviesRecyclerView.visibility = View.VISIBLE
+                    }
+                }
+        }
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.moviesPagedData.collectLatest { pagedData ->
                 adapter.submitData(pagedData)
-            }
-        }
-        lifecycleScope.launch {
-            viewModel.allMoviesUpdateState.collectLatest {
-                if (it) {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.allMoviesRecyclerView.visibility = View.GONE
-                } else {
-                    binding.progressBar.visibility = View.GONE
-                    binding.allMoviesRecyclerView.visibility = View.VISIBLE
-                }
             }
         }
     }

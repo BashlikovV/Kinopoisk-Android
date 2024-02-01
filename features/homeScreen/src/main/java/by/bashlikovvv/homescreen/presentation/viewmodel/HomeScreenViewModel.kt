@@ -6,9 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import by.bashlikovvv.core.base.SingleLiveEvent
+import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.domain.model.Movie
+import by.bashlikovvv.core.domain.usecase.AddBookmarkUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByCollectionUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByGenreUseCase
 import by.bashlikovvv.core.domain.usecase.GetPagedMoviesUseCase
+import by.bashlikovvv.core.domain.usecase.RemoveBookmarkUseCase
 import by.bashlikovvv.homescreen.R
 import by.bashlikovvv.homescreen.domain.model.Category
 import by.bashlikovvv.homescreen.domain.model.CategoryMore
@@ -18,8 +22,10 @@ import by.bashlikovvv.homescreen.domain.model.CategoryTitle
 import by.bashlikovvv.homescreen.domain.model.MoviesCategory
 import by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,11 +34,16 @@ import javax.inject.Provider
 class HomeScreenViewModel(
     getPagedMoviesUseCase: GetPagedMoviesUseCase,
     private val getMoviesByGenreUseCase: GetMoviesByGenreUseCase,
-    private val getMoviesByCollectionUseCase: GetMoviesByCollectionUseCase
+    private val getMoviesByCollectionUseCase: GetMoviesByCollectionUseCase,
+    private val addBookmarkUseCase: AddBookmarkUseCase,
+    private val removeBookmarkUseCase: RemoveBookmarkUseCase
 ) : ViewModel() {
 
     private var _allMoviesUpdateState = MutableStateFlow(false)
     val allMoviesUpdateState = _allMoviesUpdateState.asStateFlow()
+
+    private var _moviesUpdateState = MutableStateFlow(false)
+    val moviesUpdateState = _moviesUpdateState.asStateFlow()
 
     var moviesPagedData = getPagedMoviesUseCase.execute()
         private set
@@ -49,6 +60,9 @@ class HomeScreenViewModel(
     private var _navigateToCategoryLiveEvent = SingleLiveEvent<Category>()
     val navigateToCategoryLiveEvent: LiveData<Category> = _navigateToCategoryLiveEvent
 
+    private var _navigationDestinationLiveEvent = SingleLiveEvent<Destination>()
+    val navigationDestinationLiveEvent: LiveData<Destination> = _navigationDestinationLiveEvent
+
     fun setCategory(category: Category) {
         _currentCategory.tryEmit(category)
     }
@@ -59,7 +73,6 @@ class HomeScreenViewModel(
     }
 
     fun makeMoviesData() = viewModelScope.launch(Dispatchers.IO) {
-        _allMoviesUpdateState.tryEmit(true)
         _moviesData.tryEmit(listOf())
         HomeScreenFragment.collections.forEach { category ->
             _moviesData.update { it + listOf(CategoryTitle(category.itemText)) }
@@ -79,10 +92,34 @@ class HomeScreenViewModel(
             }
             _moviesData.update { it + listOf(CategoryMore(category.itemText)) }
         }
-    }.invokeOnCompletion { _allMoviesUpdateState.tryEmit(false) }
+    }
 
     fun navigateToCategory(category: Category) {
         _navigateToCategoryLiveEvent.postValue(category)
+    }
+
+    fun setAllMoviesProgress(value: Boolean) {
+        _allMoviesUpdateState.tryEmit(value)
+    }
+
+    fun setMoviesProgress(value: Boolean) {
+        _moviesUpdateState.tryEmit(value)
+    }
+
+    fun onBookmarkClicked(movie: Movie) = viewModelScope.launch(Dispatchers.IO) {
+        if (movie.isBookmark) {
+            removeBookmarkUseCase.execute(movie)
+        } else {
+            addBookmarkUseCase.execute(movie)
+        }
+    }
+
+    fun onMoreClicked(categoryMore: CategoryMore) {
+
+    }
+
+    fun navigateToDestination(destination: Destination) {
+        _navigationDestinationLiveEvent.postValue(destination)
     }
 
     private fun getCollectionRequestNameByResId(@StringRes collection: Int) = when(collection) {
@@ -113,7 +150,9 @@ class HomeScreenViewModel(
     class Factory @Inject constructor(
         private val getPagedMoviesUseCase: Provider<GetPagedMoviesUseCase>,
         private val getMoviesByGenreUseCase: Provider<GetMoviesByGenreUseCase>,
-        private val getMoviesByCollectionUseCase: Provider<GetMoviesByCollectionUseCase>
+        private val getMoviesByCollectionUseCase: Provider<GetMoviesByCollectionUseCase>,
+        private val addBookmarkUseCase: Provider<AddBookmarkUseCase>,
+        private val removeBookmarkUseCase: Provider<RemoveBookmarkUseCase>
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -122,7 +161,9 @@ class HomeScreenViewModel(
             return HomeScreenViewModel(
                 getPagedMoviesUseCase.get(),
                 getMoviesByGenreUseCase.get(),
-                getMoviesByCollectionUseCase.get()
+                getMoviesByCollectionUseCase.get(),
+                addBookmarkUseCase.get(),
+                removeBookmarkUseCase.get()
             ) as T
         }
 

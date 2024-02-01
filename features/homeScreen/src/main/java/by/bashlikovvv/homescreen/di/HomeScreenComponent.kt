@@ -3,9 +3,11 @@ package by.bashlikovvv.homescreen.di
 import androidx.annotation.RestrictTo
 import androidx.lifecycle.ViewModel
 import by.bashlikovvv.core.di.Feature
+import by.bashlikovvv.core.domain.usecase.AddBookmarkUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByCollectionUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByGenreUseCase
 import by.bashlikovvv.core.domain.usecase.GetPagedMoviesUseCase
+import by.bashlikovvv.core.domain.usecase.RemoveBookmarkUseCase
 import by.bashlikovvv.homescreen.presentation.ui.AllMoviesFragment
 import by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment
 import by.bashlikovvv.homescreen.presentation.ui.MoviesFragment
@@ -43,6 +45,10 @@ interface HomeScreenDependencies {
     val getMoviesByGenreUseCase: GetMoviesByGenreUseCase
 
     val getMoviesByCollectionUseCase: GetMoviesByCollectionUseCase
+
+    val addBookmarkUseCase: AddBookmarkUseCase
+
+    val removeBookmarkUseCase: RemoveBookmarkUseCase
 
 }
 
