@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "3a3e23ad16c756dad46ea9942ad72470",
+    "identityHash": "fadf89f81ede0b7f066f22655d61956f",
     "entities": [
       {
         "tableName": "movies",
@@ -143,12 +143,60 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "bookmarks",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookmarks_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bookmarks_key_movie_id` INTEGER NOT NULL, FOREIGN KEY(`bookmarks_key_movie_id`) REFERENCES `movies`(`movies_id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "bookmarks_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "keyMovieId",
+            "columnName": "bookmarks_key_movie_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "bookmarks_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_bookmarks_bookmarks_key_movie_id",
+            "unique": false,
+            "columnNames": [
+              "bookmarks_key_movie_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_bookmarks_bookmarks_key_movie_id` ON `${TABLE_NAME}` (`bookmarks_key_movie_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "movies",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "bookmarks_key_movie_id"
+            ],
+            "referencedColumns": [
+              "movies_id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3a3e23ad16c756dad46ea9942ad72470')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fadf89f81ede0b7f066f22655d61956f')"
     ]
   }
 }

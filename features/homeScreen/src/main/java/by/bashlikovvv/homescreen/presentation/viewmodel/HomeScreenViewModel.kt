@@ -16,7 +16,7 @@ import by.bashlikovvv.homescreen.domain.model.CategoryMovie
 import by.bashlikovvv.homescreen.domain.model.CategoryText
 import by.bashlikovvv.homescreen.domain.model.CategoryTitle
 import by.bashlikovvv.homescreen.domain.model.MoviesCategory
-import by.bashlikovvv.homescreen.presentation.view.HomeScreenFragment
+import by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

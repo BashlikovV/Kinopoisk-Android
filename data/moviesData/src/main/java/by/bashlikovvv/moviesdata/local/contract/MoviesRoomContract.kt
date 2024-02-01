@@ -27,4 +27,10 @@ object MoviesRoomContract {
         const val COLUMN_TRAILERS = "details_trailers"
     }
 
+    object BookmarksTable {
+        const val TABLE_NAME = "bookmarks"
+        const val COLUMN_ID = "bookmarks_id"
+        const val KEY_MOVIE_ID = "bookmarks_key_movie_id"
+    }
+
 }

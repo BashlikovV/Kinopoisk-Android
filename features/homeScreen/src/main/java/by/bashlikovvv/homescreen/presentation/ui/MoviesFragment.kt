@@ -1,4 +1,4 @@
-package by.bashlikovvv.homescreen.presentation.view
+package by.bashlikovvv.homescreen.presentation.ui
 
 import android.content.Context
 import android.os.Bundle

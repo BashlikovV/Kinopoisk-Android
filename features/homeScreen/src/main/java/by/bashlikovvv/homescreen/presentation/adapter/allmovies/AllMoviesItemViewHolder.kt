@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.homescreen.databinding.AllMoviesListItemBinding
+import by.bashlikovvv.homescreen.presentation.view.BookmarkView
 import com.bumptech.glide.Glide
 
 class AllMoviesItemViewHolder(
@@ -16,6 +17,9 @@ class AllMoviesItemViewHolder(
         binding.let {
             setBitmapWithGlide(item.poster, it.movieImageView)
             it.movieNameTextView.text = item.name
+            it.bookamrkView.setOnClickListener { view ->
+                (view as BookmarkView).notifyViewCLicked()
+            }
             it.root.setOnClickListener { onClick(item) }
         }
 

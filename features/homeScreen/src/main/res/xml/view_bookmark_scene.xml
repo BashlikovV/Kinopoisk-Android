@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        android:id="@+id/transitionBookmark"
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="300"/>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@id/bookmarkAddedImageView">
+            <PropertySet android:visibility="gone" />
+        </Constraint>
+        <Constraint android:id="@id/bookmarkImageView">
+            <PropertySet android:visibility="visible" />
+            <CustomAttribute
+                motion:attributeName="tint"
+                motion:customColorValue="@color/category_indicator_not_selected"/>
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@id/bookmarkAddedImageView">
+            <PropertySet android:visibility="visible" />
+            <CustomAttribute
+                motion:attributeName="tint"
+                motion:customColorValue="@color/category_indicator_selected"/>
+        </Constraint>
+        <Constraint android:id="@id/bookmarkImageView">
+            <PropertySet android:visibility="gone" />
+        </Constraint>
+    </ConstraintSet>
+
+</MotionScene>

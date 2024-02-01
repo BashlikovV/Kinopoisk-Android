@@ -1,7 +1,6 @@
 package by.bashlikovvv.moviesdata.repository
 
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import androidx.paging.Pager
 import androidx.paging.PagingData
 import androidx.paging.map
@@ -18,6 +17,7 @@ import by.bashlikovvv.moviesdata.mapper.MoviesDtoMapper
 import by.bashlikovvv.moviesdata.remote.MoviesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import by.bashlikovvv.core.ext.isConnected
 
 class MoviesRepository(
     private val cm: ConnectivityManager?,
@@ -28,7 +28,7 @@ class MoviesRepository(
 ) : IMoviesRepository {
 
     override suspend fun getMovieById(id: Int): Movie {
-        return if (isConnected()) {
+        return if (cm.isConnected()) {
             MovieDtoToMovieMapper()
                 .mapFromEntity(
                     moviesApi.getMovieById(id).body() ?: throw EmptyBodyException()
@@ -40,7 +40,7 @@ class MoviesRepository(
     }
 
     override fun getPagedMovies(): Flow<PagingData<Movie>> {
-        return if (isConnected()) {
+        return if (cm.isConnected()) {
             getMoviesOnline()
         } else {
             getMoviesOffline()
@@ -55,7 +55,7 @@ class MoviesRepository(
     }
 
     override suspend fun getMoviesByGenre(genre: String): List<Movie> {
-        return if (isConnected()) {
+        return if (cm.isConnected()) {
             val moviesDto = moviesApi.getMoviesByGenre(genre = genre).body() ?: return listOf()
 
             MoviesDtoMapper().mapFromEntity(moviesDto)
@@ -68,7 +68,7 @@ class MoviesRepository(
     }
 
     override fun getPagedMoviesByGenre(genre: String): Flow<PagingData<Movie>> {
-        return if (isConnected()) {
+        return if (cm.isConnected()) {
             TODO()
         } else {
             TODO()
@@ -76,7 +76,7 @@ class MoviesRepository(
     }
 
     override suspend fun getMoviesByCollection(collection: String): List<Movie> {
-        return if (isConnected()) {
+        return if (cm.isConnected()) {
             val moviesDto = moviesApi
                 .getMoviesByCollection(lists = collection).body() ?: return listOf()
 
@@ -110,21 +110,6 @@ class MoviesRepository(
                 mapper.mapFromEntity(movieEntity)
             }
         }
-    }
-
-    private fun isConnected(): Boolean {
-        var isConnected = false
-        cm?.run {
-            cm.getNetworkCapabilities(cm.activeNetwork)?.run {
-                isConnected = when {
-                    hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                    hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                    hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                    else -> false
-                }
-            }
-        }
-        return isConnected
     }
 
 }

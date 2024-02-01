@@ -13,13 +13,16 @@ import by.bashlikovvv.core.di.ApplicationQualifier
 import by.bashlikovvv.core.di.PagerOffline
 import by.bashlikovvv.core.di.PagerOnline
 import by.bashlikovvv.core.domain.model.OkHttpConfig
+import by.bashlikovvv.core.domain.repository.IBookmarksRepository
 import by.bashlikovvv.core.domain.repository.IMoviesRepository
 import by.bashlikovvv.moviesdata.local.MoviesDatabase
 import by.bashlikovvv.moviesdata.local.contract.MoviesRoomContract
+import by.bashlikovvv.moviesdata.local.dao.BookmarksDao
 import by.bashlikovvv.moviesdata.local.dao.MoviesDao
 import by.bashlikovvv.moviesdata.local.model.MovieEntity
 import by.bashlikovvv.moviesdata.remote.MoviesApi
 import by.bashlikovvv.moviesdata.remote.MoviesRemoteMediator
+import by.bashlikovvv.moviesdata.repository.BookmarksRepository
 import by.bashlikovvv.moviesdata.repository.MoviesRepository
 import dagger.Module
 import dagger.Provides
@@ -83,6 +86,11 @@ class DataModule {
         return moviesDatabase.moviesDao
     }
 
+    @[Provides Inject AppScope]
+    fun provideBookmarksDao(moviesDatabase: MoviesDatabase): BookmarksDao {
+        return moviesDatabase.bookmarksDao
+    }
+
     @OptIn(ExperimentalPagingApi::class)
     @[Provides Inject PagerOnline AppScope]
     fun providePagerOnline(
@@ -138,4 +146,18 @@ class DataModule {
             moviesDao = moviesDao
         )
     }
+
+    @[Provides Inject AppScope]
+    fun provideBookmarksRepository(
+        @ApplicationQualifier context: Application,
+        bookmarksDao: BookmarksDao
+    ): IBookmarksRepository {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+
+        return BookmarksRepository(
+            bookmarksDao = bookmarksDao,
+            connectivityManager = connectivityManager
+        )
+    }
+
 }

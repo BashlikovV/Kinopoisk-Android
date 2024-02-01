@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeScreenFragment"
-        android:name="by.bashlikovvv.homescreen.presentation.view.HomeScreenFragment"
+        android:name="by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment"
         android:label="HomeScreenFragment" />
     <dialog
         android:id="@+id/movieDetailsFragment"

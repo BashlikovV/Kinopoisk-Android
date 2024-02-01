@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/allMoviesFragment"
-        android:name="by.bashlikovvv.homescreen.presentation.view.AllMoviesFragment"
+        android:name="by.bashlikovvv.homescreen.presentation.ui.AllMoviesFragment"
         android:label="fragment_all_movies"
         tools:layout="@layout/fragment_all_movies">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/moviesFragment"
-        android:name="by.bashlikovvv.homescreen.presentation.view.MoviesFragment"
+        android:name="by.bashlikovvv.homescreen.presentation.ui.MoviesFragment"
         android:label="fragment_movies"
         tools:layout="@layout/fragment_movies" >
         <action
