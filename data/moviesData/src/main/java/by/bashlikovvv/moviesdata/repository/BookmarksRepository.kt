@@ -1,14 +1,11 @@
 package by.bashlikovvv.moviesdata.repository
 
 import android.net.ConnectivityManager
-import androidx.paging.Pager
 import androidx.paging.PagingData
-import androidx.paging.PagingSource
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.repository.IBookmarksRepository
 import by.bashlikovvv.core.ext.isConnected
 import by.bashlikovvv.moviesdata.local.dao.BookmarksDao
-import by.bashlikovvv.moviesdata.local.tuple.BookmarkAndMovieTuple
 import by.bashlikovvv.moviesdata.mapper.BookmarkAndMovieTupleMapper
 import kotlinx.coroutines.flow.Flow
 
@@ -17,25 +14,30 @@ class BookmarksRepository(
     private val connectivityManager: ConnectivityManager?
 ) : IBookmarksRepository {
     override suspend fun addMovieToBookmarks(movie: Movie) {
-        bookmarksDao
-            .addBookmark(
-                BookmarkAndMovieTupleMapper(true)
-                    .mapToEntity(movie)
-                    .bookmark
-            )
+        if (bookmarksDao.isBookmark(movie.id) == 0) {
+            bookmarksDao
+                .addBookmark(
+                    BookmarkAndMovieTupleMapper()
+                        .mapToEntity(movie)
+                        .bookmark
+                )
+        }
     }
 
-    override suspend fun removeMovieFromBookmarks(movie: Movie) {
-        bookmarksDao
-            .removeBookmark(
-                BookmarkAndMovieTupleMapper(false)
-                    .mapToEntity(movie)
-                    .bookmark
-            )
+    override suspend fun removeMovieFromBookmarks(movie: Movie): Boolean {
+        val bookmarkEntity = bookmarksDao.getBookmarkByMovieId(movie.id)
+
+        return if (bookmarkEntity == null) {
+            false
+        } else {
+            bookmarksDao.removeBookmark(bookmarkEntity)
+
+            true
+        }
     }
 
     override suspend fun getBookmarks(): List<Movie> {
-        val mapper = BookmarkAndMovieTupleMapper(true)
+        val mapper = BookmarkAndMovieTupleMapper()
 
         return bookmarksDao.getBookmarks().map { tuple ->
             mapper.mapFromEntity(tuple)

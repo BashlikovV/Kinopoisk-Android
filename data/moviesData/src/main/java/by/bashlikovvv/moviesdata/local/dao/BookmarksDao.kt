@@ -60,4 +60,11 @@ interface BookmarksDao {
     )
     fun isBookmark(movieId: Long): Int
 
+    @Query(
+        "SELECT * " +
+        "FROM ${BookmarksTable.TABLE_NAME} " +
+        "WHERE ${BookmarksTable.KEY_MOVIE_ID} = :movieId"
+    )
+    suspend fun getBookmarkByMovieId(movieId: Long): BookmarkEntity?
+
 }

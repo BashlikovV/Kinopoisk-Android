@@ -8,7 +8,7 @@ interface IBookmarksRepository {
 
     suspend fun addMovieToBookmarks(movie: Movie)
 
-    suspend fun removeMovieFromBookmarks(movie: Movie)
+    suspend fun removeMovieFromBookmarks(movie: Movie): Boolean
 
     suspend fun getBookmarks(): List<Movie>
 

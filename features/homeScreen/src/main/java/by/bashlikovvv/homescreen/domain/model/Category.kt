@@ -2,7 +2,6 @@ package by.bashlikovvv.homescreen.domain.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import by.bashlikovvv.core.domain.model.Movie
 
 sealed class Category
 

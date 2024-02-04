@@ -5,9 +5,7 @@ import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.moviesdata.local.model.BookmarkEntity
 import by.bashlikovvv.moviesdata.local.tuple.BookmarkAndMovieTuple
 
-class BookmarkAndMovieTupleMapper(
-    private val isBookmark: Boolean
-) : IMapper<BookmarkAndMovieTuple, Movie> {
+class BookmarkAndMovieTupleMapper : IMapper<BookmarkAndMovieTuple, Movie> {
     override fun mapFromEntity(entity: BookmarkAndMovieTuple): Movie {
         return MovieEntityToMovieMapper(isBookmark = true).mapFromEntity(entity.movie)
     }

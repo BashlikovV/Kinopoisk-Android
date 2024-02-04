@@ -17,7 +17,9 @@ import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.util.navigateToDestination
 import dagger.Lazy
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,8 +56,9 @@ class BookmarksFragment : Fragment() {
     ): View {
         val binding = FragmentBookmarksBinding.inflate(inflater, container, false)
 
+        viewModel.loadBookmarks()
         setUpBookmarksRecyclerView(binding)
-        collectViewModelStates()
+        collectViewModelStates(binding)
 
         return binding.root
     }
@@ -64,7 +67,8 @@ class BookmarksFragment : Fragment() {
         binding.bookmarksRecyclerView.adapter = adapter
     }
 
-    private fun collectViewModelStates() {
+    @OptIn(FlowPreview::class)
+    private fun collectViewModelStates(binding: FragmentBookmarksBinding) {
         lifecycleScope.launch {
             viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
                 navigateToDestination(destination)
@@ -73,6 +77,19 @@ class BookmarksFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.bookmarksFlow.collectLatest { bookmarks ->
                 adapter.submitList(bookmarks)
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.isUpdating
+                .debounce(250)
+                .collectLatest {
+                if (it) {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.bookmarksRecyclerView.visibility = View.GONE
+                } else {
+                    binding.progressBar.visibility = View.GONE
+                    binding.bookmarksRecyclerView.visibility = View.VISIBLE
+                }
             }
         }
     }

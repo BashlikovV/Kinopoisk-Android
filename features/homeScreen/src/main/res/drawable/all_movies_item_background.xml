@@ -2,6 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <ripple android:color="@color/white"/>
-        <color android:color="@color/main_background"/>
     </item>
 </selector>

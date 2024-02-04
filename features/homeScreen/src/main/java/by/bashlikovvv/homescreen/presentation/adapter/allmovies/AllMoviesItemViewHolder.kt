@@ -1,6 +1,5 @@
 package by.bashlikovvv.homescreen.presentation.adapter.allmovies
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -19,9 +18,9 @@ class AllMoviesItemViewHolder(
             setBitmapWithGlide(item.poster, it.movieImageView)
             it.movieNameTextView.text = item.name
             if (item.isBookmark) {
-                it.bookamrkView.startMoveBookmark()
+                it.bookmarkView.startMoveBookmark()
             }
-            it.bookamrkView.setOnClickListener { view ->
+            it.bookmarkView.setOnClickListener { view ->
                 (view as BookmarkView).notifyViewCLicked()
                 onClickListener.onBookmarkClick(item)
             }

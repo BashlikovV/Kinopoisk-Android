@@ -105,14 +105,16 @@ class MoviesFragment : Fragment() {
 
     private fun setUpMoviesRecyclerView() {
         binding.moviesRecyclerView.adapter = adapter
-        binding.moviesRecyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
-            val position = (binding.moviesRecyclerView.layoutManager as LinearLayoutManager)
-                .findFirstVisibleItemPosition()
-            val item = adapter.currentList.getOrNull(position)
-            if (item is CategoryTitle && item != viewModel.moviesCurrentCategory.value) {
-                viewModel.setMoviesCurrentCategory(item)
+        binding.moviesRecyclerView
+            .setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+                val layoutManager = binding.moviesRecyclerView.layoutManager as LinearLayoutManager
+                val position = layoutManager.findLastVisibleItemPosition()
+                val categoryPosition = adapter.getCategoryPositionByPosition(position)
+                val item = adapter.currentList.getOrNull(categoryPosition ?: return@setOnScrollChangeListener)
+                if (item is CategoryTitle && item != viewModel.moviesCurrentCategory.value) {
+                    viewModel.setMoviesCurrentCategory(item)
+                }
             }
-        }
     }
 
     private fun smoothScrollToCategory(category: CategoryText) {

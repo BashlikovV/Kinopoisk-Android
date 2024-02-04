@@ -1,6 +1,5 @@
 package by.bashlikovvv.homescreen.presentation.adapter.categories
 
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.OrientationHelper
@@ -25,7 +24,6 @@ class CenterSnapHelper : LinearSnapHelper() {
                         val layoutManager = recyclerView.layoutManager
                         if (layoutManager != null) {
                             val out = calculateDistanceToFinalSnap(layoutManager, view)
-                            Log.i("MYTAG", "${out[0]}, ${out[1]}")
                             recyclerView.smoothScrollBy(out[0], out[1])
                         }
                     }

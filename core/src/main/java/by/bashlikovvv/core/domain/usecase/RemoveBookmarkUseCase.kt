@@ -5,8 +5,8 @@ import by.bashlikovvv.core.domain.repository.IBookmarksRepository
 
 class RemoveBookmarkUseCase(private val bookmarksRepository: IBookmarksRepository) {
 
-    suspend fun execute(movie: Movie) {
-        bookmarksRepository.removeMovieFromBookmarks(movie)
+    suspend fun execute(movie: Movie): Boolean {
+        return bookmarksRepository.removeMovieFromBookmarks(movie)
     }
 
 }

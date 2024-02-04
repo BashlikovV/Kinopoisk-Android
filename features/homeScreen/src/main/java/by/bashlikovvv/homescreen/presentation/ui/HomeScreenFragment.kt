@@ -27,6 +27,7 @@ import by.bashlikovvv.homescreen.presentation.viewmodel.HomeScreenViewModel
 import dagger.Lazy
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.IndexOutOfBoundsException
 
 class HomeScreenFragment : Fragment() {
 
@@ -125,7 +126,11 @@ class HomeScreenFragment : Fragment() {
         adapter: CategoriesListAdapter,
         binding: FragmentHomeScreenBinding
     ) {
-        val categoryMarginStart = binding.categoriesRecyclerView[0].width + 100.dp
+        val categoryMarginStart = try {
+            binding.categoriesRecyclerView[0].width
+        } catch (e: IndexOutOfBoundsException) {
+            0.dp
+        } + 100.dp
 
         val currentPos =
             (binding.categoriesRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()

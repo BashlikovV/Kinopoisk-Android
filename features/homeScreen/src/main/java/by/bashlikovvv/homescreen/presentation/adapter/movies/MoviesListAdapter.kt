@@ -68,6 +68,25 @@ class MoviesListAdapter(
         const val TYPE_MORE = 2
     }
 
+    fun getCategoryPositionByPosition(position: Int): Int? {
+        return when(currentList.getOrNull(position)) {
+            is CategoryMore -> {
+                position - 11
+            }
+            is CategoryMovie -> {
+                var i = position
+                while (getItem(i) as? CategoryTitle == null && i >= 0) {
+                    i--
+                }
+
+                i
+            }
+            is CategoryTitle -> position
+            null -> null
+            else -> null
+        }
+    }
+
     interface MoviesListAdapterClickListener {
 
         fun notifyMovieClicked(movie: Movie)

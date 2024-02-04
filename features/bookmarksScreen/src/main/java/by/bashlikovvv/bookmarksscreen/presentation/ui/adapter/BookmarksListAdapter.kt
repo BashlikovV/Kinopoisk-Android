@@ -16,7 +16,7 @@ class BookmarksListAdapter(
             item = getItem(position),
             onCLickListener = object : BookmarksListItemViewHolder.BookmarksListItemViewHolderClickListener {
                 override fun onBookmarkClicked(movie: Movie) {
-                       onCLickListener.notifyBookmarkClicked(movie)
+                    onCLickListener.notifyBookmarkClicked(movie)
                 }
 
                 override fun onRemoveBookmarkClicked(movie: Movie) {

@@ -6,7 +6,7 @@ import androidx.paging.LoadState
 import by.bashlikovvv.core.databinding.ItemProgressLayoutBinding
 import by.bashlikovvv.core.domain.model.ItemViewHolder
 
-class ItemProgressViewHolder constructor(
+class ItemProgressViewHolder(
     binding: ItemProgressLayoutBinding
 ) : ItemViewHolder(binding.root) {
     override fun bind(loadState: LoadState) {  }
