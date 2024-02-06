@@ -22,4 +22,6 @@
     <string name="documentaries">Documentaries</string>
     <string name="navigate_to_category">Navigate to category</string>
     <string name="show_more">Show more</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

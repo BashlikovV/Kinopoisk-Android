@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":features:homeScreen"))
     implementation(project(":features:movieDetailsScreen"))
     implementation(project(":features:bookmarksScreen"))
+    implementation(project(":features:moreScreen"))
     implementation(project(":data:moviesData"))
 
     implementation(Dependencies.AndroidX.Core.coreKTX)

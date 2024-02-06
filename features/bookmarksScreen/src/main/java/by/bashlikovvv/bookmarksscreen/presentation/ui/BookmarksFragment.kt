@@ -58,6 +58,7 @@ class BookmarksFragment : Fragment() {
 
         viewModel.loadBookmarks()
         setUpBookmarksRecyclerView(binding)
+        setUpSwipeRefreshLayout(binding)
         collectViewModelStates(binding)
 
         return binding.root
@@ -65,6 +66,14 @@ class BookmarksFragment : Fragment() {
 
     private fun setUpBookmarksRecyclerView(binding: FragmentBookmarksBinding) {
         binding.bookmarksRecyclerView.adapter = adapter
+    }
+
+    private fun setUpSwipeRefreshLayout(binding: FragmentBookmarksBinding) {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.loadBookmarks().invokeOnCompletion {
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
+        }
     }
 
     @OptIn(FlowPreview::class)
@@ -81,7 +90,7 @@ class BookmarksFragment : Fragment() {
         }
         lifecycleScope.launch {
             viewModel.isUpdating
-                .debounce(250)
+                .debounce(500)
                 .collectLatest {
                 if (it) {
                     binding.progressBar.visibility = View.VISIBLE

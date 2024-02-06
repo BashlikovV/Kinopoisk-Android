@@ -6,6 +6,7 @@ import by.bashlikovvv.core.di.AppScope
 import by.bashlikovvv.core.di.ApplicationQualifier
 import by.bashlikovvv.homescreen.di.HomeScreenDependencies
 import by.bashlikovvv.kinopoisk_android.presentation.ui.MainActivity
+import by.bashlikovvv.morescreen.di.MoreScreenDependencies
 import by.bashlikovvv.moviedetailsscreen.di.MovieDetailsScreenDependencies
 import dagger.BindsInstance
 import dagger.Component
@@ -17,7 +18,8 @@ import javax.inject.Singleton
 interface AppComponent
     : HomeScreenDependencies,
     MovieDetailsScreenDependencies,
-    BookmarksScreenDependencies {
+    BookmarksScreenDependencies,
+    MoreScreenDependencies {
 
     fun inject(mainActivity: MainActivity)
 

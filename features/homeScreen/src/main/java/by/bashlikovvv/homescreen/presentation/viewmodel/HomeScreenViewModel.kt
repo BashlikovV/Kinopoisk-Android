@@ -24,13 +24,14 @@ import by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
 class HomeScreenViewModel(
-    getPagedMoviesUseCase: GetPagedMoviesUseCase,
+    private val getPagedMoviesUseCase: GetPagedMoviesUseCase,
     private val getMoviesByGenreUseCase: GetMoviesByGenreUseCase,
     private val getMoviesByCollectionUseCase: GetMoviesByCollectionUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
@@ -60,6 +61,10 @@ class HomeScreenViewModel(
 
     private var _navigationDestinationLiveEvent = SingleLiveEvent<Destination>()
     val navigationDestinationLiveEvent: LiveData<Destination> = _navigationDestinationLiveEvent
+
+    init {
+        makeMoviesData()
+    }
 
     fun setCategory(category: Category) {
         _currentCategory.tryEmit(category)
@@ -92,6 +97,12 @@ class HomeScreenViewModel(
         }
     }
 
+    fun makeAllMoviesFata() = viewModelScope.launch(Dispatchers.IO) {
+        moviesPagedData.transform {
+            emit(getPagedMoviesUseCase.execute())
+        }
+    }
+
     fun navigateToCategory(category: Category) {
         _navigateToCategoryLiveEvent.postValue(category)
     }
@@ -100,20 +111,12 @@ class HomeScreenViewModel(
         _allMoviesUpdateState.tryEmit(value)
     }
 
-    fun setMoviesProgress(value: Boolean) {
-        _moviesUpdateState.tryEmit(value)
-    }
-
     fun onBookmarkClicked(movie: Movie) = viewModelScope.launch(Dispatchers.IO) {
         if (movie.isBookmark) {
             removeBookmarkUseCase.execute(movie)
         } else {
             addBookmarkUseCase.execute(movie)
         }
-    }
-
-    fun onMoreClicked(categoryMore: CategoryMore) {
-
     }
 
     fun navigateToDestination(destination: Destination) {

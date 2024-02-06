@@ -27,7 +27,6 @@ import by.bashlikovvv.homescreen.presentation.viewmodel.HomeScreenViewModel
 import dagger.Lazy
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.IndexOutOfBoundsException
 
 class HomeScreenFragment : Fragment() {
 
@@ -56,6 +55,7 @@ class HomeScreenFragment : Fragment() {
 
         navController = getNavController()
         setUpCategoriesRecyclerView(binding)
+        setUpSwipeRefreshLayout(binding)
         collectViewModelStates(categoriesAdapter, binding)
 
         return binding.root
@@ -71,6 +71,23 @@ class HomeScreenFragment : Fragment() {
             centerSnapHelper.attachToRecyclerView(categoriesRecyclerView)
             categoriesRecyclerView.onFlingListener = centerSnapHelper
             categoriesRecyclerView.adapter = categoriesAdapter
+        }
+    }
+
+    private fun setUpSwipeRefreshLayout(binding: FragmentHomeScreenBinding) {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            when(navController.currentDestination?.id) {
+                R.id.allMoviesFragment -> {
+                    viewModel.makeAllMoviesFata().invokeOnCompletion {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                    }
+                }
+                R.id.moviesFragment -> {
+                    viewModel.makeMoviesData().invokeOnCompletion {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                    }
+                }
+            }
         }
     }
 
@@ -94,13 +111,14 @@ class HomeScreenFragment : Fragment() {
         }
         viewModel.navigateToCategoryLiveEvent.observe(viewLifecycleOwner) { category ->
             if (category == CategoryText(R.string.all)) {
-                if (navController.currentDestination?.id != R.id.allMoviesFragment) {
+                val currentDestinationId = navController.currentDestination?.id
+                if (currentDestinationId == R.id.moviesFragment) {
                     navController.navigate(
                         R.id.action_moviesFragment_to_allMoviesFragment
                     )
                 }
             } else {
-                if (navController.currentDestination?.id != R.id.moviesFragment) {
+                if (navController.currentDestination?.id == R.id.allMoviesFragment) {
                     navController.navigate(
                         R.id.action_allMoviesFragment_to_moviesFragment
                     )

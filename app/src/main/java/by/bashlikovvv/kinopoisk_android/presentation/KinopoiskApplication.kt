@@ -5,6 +5,7 @@ import by.bashlikovvv.bookmarksscreen.di.BookmarksScreenDependenciesStore
 import by.bashlikovvv.homescreen.di.HomeScreenDependenciesStore
 import by.bashlikovvv.kinopoisk_android.di.AppComponent
 import by.bashlikovvv.kinopoisk_android.di.DaggerAppComponent
+import by.bashlikovvv.morescreen.di.MoreScreenDependenciesStore
 import by.bashlikovvv.moviedetailsscreen.di.MovieDetailsScreenDependenciesStore
 
 class KinopoiskApplication : Application() {
@@ -19,6 +20,7 @@ class KinopoiskApplication : Application() {
         HomeScreenDependenciesStore.deps = appComponent
         MovieDetailsScreenDependenciesStore.deps = appComponent
         BookmarksScreenDependenciesStore.deps = appComponent
+        MoreScreenDependenciesStore.deps = appComponent
     }
 
 }

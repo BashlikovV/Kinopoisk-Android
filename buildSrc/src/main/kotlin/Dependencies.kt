@@ -53,6 +53,10 @@ object Dependencies {
             private const val nameSpace = "androidx.paging"
             const val pagingRuntime = "$nameSpace:paging-runtime-ktx:3.2.0"
         }
+        object SwipeRefreshLayout {
+            private const val nameSpace = "androidx.swiperefreshlayout"
+            const val swipeRefreshLayout = "$nameSpace:swiperefreshlayout:1.1.0"
+        }
     }
     object Com {
         object Google {

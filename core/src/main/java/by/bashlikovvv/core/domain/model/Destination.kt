@@ -1,6 +1,7 @@
 package by.bashlikovvv.core.domain.model
 
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import kotlinx.parcelize.Parcelize
 
 sealed class Destination : Parcelable {
@@ -10,5 +11,8 @@ sealed class Destination : Parcelable {
 
     @Parcelize
     data class MovieDetailsScreen(val movieId: Long) : Destination()
+
+    @Parcelize
+    data class MoreScreen(@StringRes val categoryName: Int) : Destination()
 
 }

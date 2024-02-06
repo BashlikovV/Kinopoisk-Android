@@ -47,7 +47,7 @@ class MoviesFragment : Fragment() {
             }
 
             override fun notifyMoreClicked(categoryMore: CategoryMore) {
-                viewModel.onMoreClicked(categoryMore)
+                viewModel.navigateToDestination(Destination.MoreScreen(categoryMore.categoryName))
             }
 
             override fun notifyBookmarkClicked(movie: Movie) {
@@ -77,10 +77,9 @@ class MoviesFragment : Fragment() {
 
     @OptIn(FlowPreview::class)
     private fun collectViewModelStates() {
-        viewModel.makeMoviesData()
         lifecycleScope.launch {
             viewModel.moviesUpdateState
-                .debounce(250)
+                .debounce(500)
                 .collectLatest {
                     if (it) {
                         binding.progressBar.visibility = View.VISIBLE
@@ -106,7 +105,7 @@ class MoviesFragment : Fragment() {
     private fun setUpMoviesRecyclerView() {
         binding.moviesRecyclerView.adapter = adapter
         binding.moviesRecyclerView
-            .setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            .setOnScrollChangeListener { _, _, _, _, _ ->
                 val layoutManager = binding.moviesRecyclerView.layoutManager as LinearLayoutManager
                 val position = layoutManager.findLastVisibleItemPosition()
                 val categoryPosition = adapter.getCategoryPositionByPosition(position)

@@ -28,6 +28,13 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/allMoviesFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_moviesFragment_to_moreFragment"
+            app:destination="@id/moreFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/moreFragment"
+        android:name="by.bashlikovvv.morescreen.presentation.ui.MoreFragment"
+        android:label="MoreFragment" />
 
 </navigation>

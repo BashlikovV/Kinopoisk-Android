@@ -50,7 +50,8 @@ class BookmarksFragmentViewModel(
     fun loadBookmarks() = viewModelScope.launch(Dispatchers.IO) {
         _isUpdating.tryEmit(true)
         _bookmarksFlow.tryEmit(getBookmarksUseCase.execute())
-    }.invokeOnCompletion { _isUpdating.tryEmit(false) }
+        _isUpdating.tryEmit(false)
+    }
 
     class Factory @Inject constructor(
         private val getBookmarksUseCase: Provider<GetBookmarksUseCase>,

@@ -16,4 +16,8 @@
         android:id="@+id/bookmarksFragment"
         android:name="by.bashlikovvv.bookmarksscreen.presentation.ui.BookmarksFragment"
         android:label="BookmarksFragment" />
+    <dialog
+        android:id="@+id/moreFragment"
+        android:name="by.bashlikovvv.morescreen.presentation.ui.MoreFragment"
+        android:label="MoreFragment" />
 </navigation>

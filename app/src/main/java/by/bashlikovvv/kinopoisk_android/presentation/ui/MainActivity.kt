@@ -15,6 +15,7 @@ import by.bashlikovvv.kinopoisk_android.R
 import by.bashlikovvv.kinopoisk_android.databinding.ActivityMainBinding
 import by.bashlikovvv.kinopoisk_android.presentation.KinopoiskApplication
 import by.bashlikovvv.kinopoisk_android.presentation.viewmodel.MainActivityViewModel
+import by.bashlikovvv.morescreen.presentation.ui.MoreFragment
 import by.bashlikovvv.moviedetailsscreen.presentation.view.MovieDetailsFragment
 
 class MainActivity : AppCompatActivity() {
@@ -73,6 +74,12 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(
                     R.id.movieDetailsFragment,
                     bundleOf(MovieDetailsFragment.KEY_MOVIE_ID to destination.movieId)
+                )
+            }
+            is Destination.MoreScreen -> {
+                navController.navigate(
+                    R.id.moreFragment,
+                    bundleOf(MoreFragment.KEY_CATEGORY_NAME to destination.categoryName)
                 )
             }
         }

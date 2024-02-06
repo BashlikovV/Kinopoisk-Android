@@ -82,7 +82,7 @@ class AllMoviesFragment : Fragment() {
     private fun collectViewModelStates(binding: FragmentAllMoviesBinding) {
         lifecycleScope.launch {
             viewModel.allMoviesUpdateState
-                .debounce(250)
+                .debounce(500)
                 .collectLatest {
                     if (it) {
                         binding.progressBar.visibility = View.VISIBLE
