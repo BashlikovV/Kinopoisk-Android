@@ -1,7 +1,6 @@
 package by.bashlikovvv.moviesdata.repository
 
 import android.net.ConnectivityManager
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -11,6 +10,8 @@ import by.bashlikovvv.core.di.PagerOnline
 import by.bashlikovvv.core.domain.model.EmptyBodyException
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.repository.IMoviesRepository
+import by.bashlikovvv.core.ext.isConnected
+import by.bashlikovvv.moviesdata.local.dao.BookmarksDao
 import by.bashlikovvv.moviesdata.local.dao.MoviesDao
 import by.bashlikovvv.moviesdata.local.model.MovieEntity
 import by.bashlikovvv.moviesdata.mapper.MovieDtoToMovieMapper
@@ -19,8 +20,6 @@ import by.bashlikovvv.moviesdata.mapper.MoviesDtoMapper
 import by.bashlikovvv.moviesdata.remote.MoviesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import by.bashlikovvv.core.ext.isConnected
-import by.bashlikovvv.moviesdata.local.dao.BookmarksDao
 import kotlinx.coroutines.flow.transform
 
 class MoviesRepository(

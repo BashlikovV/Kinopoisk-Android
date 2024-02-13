@@ -1,7 +1,6 @@
 package by.bashlikovvv.core.domain.model
 
 import android.os.Parcelable
-import androidx.annotation.StringRes
 import kotlinx.parcelize.Parcelize
 
 sealed class Destination : Parcelable {

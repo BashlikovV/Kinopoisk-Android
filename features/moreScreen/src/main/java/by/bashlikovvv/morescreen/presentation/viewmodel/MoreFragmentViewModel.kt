@@ -1,12 +1,10 @@
 package by.bashlikovvv.morescreen.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.map
 import by.bashlikovvv.core.base.SingleLiveEvent
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
@@ -17,7 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider

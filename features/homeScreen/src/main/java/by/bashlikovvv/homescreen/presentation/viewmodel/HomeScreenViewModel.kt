@@ -22,7 +22,6 @@ import by.bashlikovvv.homescreen.domain.model.CategoryText
 import by.bashlikovvv.homescreen.domain.model.CategoryTitle
 import by.bashlikovvv.homescreen.domain.model.MoviesCategory
 import by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment
-import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
