@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import by.bashlikovvv.core.base.SingleLiveEvent
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
@@ -21,12 +22,15 @@ import by.bashlikovvv.homescreen.domain.model.CategoryText
 import by.bashlikovvv.homescreen.domain.model.CategoryTitle
 import by.bashlikovvv.homescreen.domain.model.MoviesCategory
 import by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -98,8 +102,10 @@ class HomeScreenViewModel(
     }
 
     fun makeAllMoviesFata() = viewModelScope.launch(Dispatchers.IO) {
-        moviesPagedData.transform {
-            emit(getPagedMoviesUseCase.execute())
+        suspendCancellableCoroutine<Flow<PagingData<Movie>>> {
+            moviesPagedData.transform {
+                emit(getPagedMoviesUseCase.execute())
+            }
         }
     }
 
@@ -121,6 +127,16 @@ class HomeScreenViewModel(
 
     fun navigateToDestination(destination: Destination) {
         _navigationDestinationLiveEvent.postValue(destination)
+    }
+
+    fun getGenreOrCollectionRequestNameByResId(@StringRes resId: Int): String {
+        val tmpRes = getCollectionRequestNameByResId(resId)
+
+        return if (tmpRes != "") {
+            tmpRes
+        } else {
+            getGenreRequestNameByResId(resId)
+        }
     }
 
     private fun getCollectionRequestNameByResId(@StringRes collection: Int) = when(collection) {

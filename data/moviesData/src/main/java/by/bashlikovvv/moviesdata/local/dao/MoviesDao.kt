@@ -66,4 +66,30 @@ interface MoviesDao {
     )
     fun getMoviesByCollection(collection: String): List<MovieEntity>
 
+    @Query(
+        "SELECT * " +
+        "FROM ${MoviesTable.TABLE_NAME} " +
+        "WHERE instr(${MoviesTable.COLUMN_GENRES}, :genre) > 0"
+    )
+    fun getPagedMoviesByGenreOnline(genre: String): PagingSource<Int, MovieEntity>
+
+    @Query(
+        "SELECT * " +
+        "FROM ${MoviesTable.TABLE_NAME} " +
+        "WHERE ${MoviesTable.COLUMN_ID} " +
+        "IN (" +
+            "SELECT ${MoviesDetailsTable.COLUMN_ID} " +
+            "FROM ${MoviesDetailsTable.TABLE_NAME}" +
+        ") " +
+        "AND instr(${MoviesTable.COLUMN_GENRES}, :genre) > 0"
+    )
+    fun getPagedMoviesByGenreOffline(genre: String): PagingSource<Int, MovieEntity>
+
+    @Query(
+        "SELECT * " +
+        "FROM ${MoviesTable.TABLE_NAME} " +
+        "WHERE instr(${MoviesTable.COLUMN_COLLECTIONS}, :collection) > 0"
+    )
+    fun getPagedMoviesByCollection(collection: String): PagingSource<Int, MovieEntity>
+
 }

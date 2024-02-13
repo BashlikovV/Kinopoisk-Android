@@ -13,6 +13,6 @@ sealed class Destination : Parcelable {
     data class MovieDetailsScreen(val movieId: Long) : Destination()
 
     @Parcelize
-    data class MoreScreen(@StringRes val categoryName: Int) : Destination()
+    data class MoreScreen(val categoryName: String) : Destination()
 
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.util.navigateToDestination
@@ -17,11 +18,13 @@ import by.bashlikovvv.morescreen.presentation.ui.adapter.MoviesListAdapter
 import by.bashlikovvv.morescreen.presentation.viewmodel.MoreFragmentViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.Lazy
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MoreFragment : BottomSheetDialogFragment() {
 
-    @StringRes private var categoryName: Int? = null
+    private var categoryName: String? = null
 
     @Inject internal lateinit var viewModelFactory: Lazy<MoreFragmentViewModel.Factory>
 
@@ -48,7 +51,7 @@ class MoreFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryName = requireArguments().getInt(KEY_CATEGORY_NAME)
+        categoryName = requireArguments().getString(KEY_CATEGORY_NAME)
     }
 
     override fun onCreateView(
@@ -57,20 +60,35 @@ class MoreFragment : BottomSheetDialogFragment() {
     ): View {
         val binding = FragmentMoreBinding.inflate(inflater, container, false)
 
-        setUpMoviesRecyclerView(binding)
         collectViewModelStates()
+        setUpMoviesRecyclerView(binding)
+        setUpSwipeRefreshLayout(binding)
 
         return binding.root
     }
 
     private fun collectViewModelStates() {
+        viewModel.updateMoviesState(categoryName ?: "")
         viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) {
             navigateToDestination(it)
+        }
+        lifecycleScope.launch {
+            viewModel.movies.collectLatest { pagingData ->
+                adapter.submitData(pagingData)
+            }
         }
     }
 
     private fun setUpMoviesRecyclerView(binding: FragmentMoreBinding) {
         binding.moviesRecyclerView.adapter = adapter
+    }
+
+    private fun setUpSwipeRefreshLayout(binding: FragmentMoreBinding) {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.updateMoviesState(categoryName ?: "").invokeOnCompletion {
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
+        }
     }
 
     companion object {

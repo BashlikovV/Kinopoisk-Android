@@ -46,12 +46,9 @@ dependencies {
     implementation(Dependencies.AndroidX.AppCompat.appCompat)
     implementation(Dependencies.Com.Google.Android.Material.material)
     implementation(Dependencies.AndroidX.ConstraintLayout.constraintlayout)
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.28.0")
+    implementation(Dependencies.AndroidX.SwipeRefreshLayout.swipeRefreshLayout)
     testImplementation(Dependencies.JUnit.jUnit)
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
-    testImplementation("junit:junit:4.13.2")
     androidTestImplementation(Dependencies.AndroidX.Test.Ext.jUnit)
     androidTestImplementation(Dependencies.AndroidX.Test.Espresso.espressoCore)
 
@@ -63,8 +60,6 @@ dependencies {
     implementation(Dependencies.Com.Google.Dagger.dagger)
     implementation(Dependencies.Com.Google.Dagger.daggerAndroid)
     implementation(Dependencies.Com.Google.Dagger.daggerAndroidSupport)
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     kapt(Dependencies.Com.Google.Dagger.daggerCompiler)
 
     implementation(Dependencies.AndroidX.LifeCycle.lifecycleExtencions)
@@ -72,6 +67,8 @@ dependencies {
     implementation(Dependencies.AndroidX.LifeCycle.lifecycleRuntime)
 
     implementation(Dependencies.Com.Github.BumpTech.Glide.glide)
+
+    implementation(Dependencies.AndroidX.Paging.pagingRuntime)
 }
 
 kapt {

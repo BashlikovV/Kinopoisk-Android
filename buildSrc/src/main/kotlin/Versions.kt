@@ -46,7 +46,7 @@ object Versions {
                     const val playServices = "20.1.3"
                 }
                 object Material {
-                    const val material = "1.10.0"
+                    const val material = "1.11.0"
                 }
             }
             object Dagger {

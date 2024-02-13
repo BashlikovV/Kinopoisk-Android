@@ -3,6 +3,7 @@ package by.bashlikovvv.moviesdata.repository
 import android.net.ConnectivityManager
 import android.util.Log
 import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import by.bashlikovvv.core.di.PagerOffline
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import by.bashlikovvv.core.ext.isConnected
 import by.bashlikovvv.moviesdata.local.dao.BookmarksDao
+import kotlinx.coroutines.flow.transform
 
 class MoviesRepository(
     private val cm: ConnectivityManager?,
@@ -77,9 +79,27 @@ class MoviesRepository(
 
     override fun getPagedMoviesByGenre(genre: String): Flow<PagingData<Movie>> {
         return if (cm.isConnected()) {
-            TODO()
+            val pager = getMoviesPagerByGenreOnline(genre)
+
+            val flow = pager.flow.transform<PagingData<MovieEntity>, PagingData<Movie>> { pagingData ->
+                pagingData.map {
+                    MovieEntityToMovieMapper(
+                        isBookmark = bookmarksDao.isBookmark(it.id) > 0
+                    ).mapFromEntity(it)
+                }
+            }
+
+            flow
         } else {
-            TODO()
+            val pager = getMoviesPagerByGenreOffline(genre)
+
+            pager.flow.transform { pagingData ->
+                pagingData.map {
+                    MovieEntityToMovieMapper(
+                        isBookmark = bookmarksDao.isBookmark(it.id) > 0
+                    ).mapFromEntity(it)
+                }
+            }
         }
     }
 
@@ -106,9 +126,6 @@ class MoviesRepository(
     private fun getMoviesOnline(): Flow<PagingData<Movie>> {
         return pagerOnline.flow.map { pagingData ->
             pagingData.map { movieEntity ->
-                if (bookmarksDao.isBookmark(movieEntity.id) > 0) {
-                    Log.i("MYTAG", "bookmark")
-                }
                 val mapper = MovieEntityToMovieMapper(
                     isBookmark = bookmarksDao.isBookmark(movieEntity.id) > 0
                 )
@@ -128,6 +145,33 @@ class MoviesRepository(
                 mapper.mapFromEntity(movieEntity)
             }
         }
+    }
+
+    private fun getMoviesPagerByGenreOnline(genre: String): Pager<Int, MovieEntity> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = MORE_MOVIES_PAGE_SIZE,
+                initialLoadSize = MORE_MOVIES_PAGE_SIZE,
+                maxSize = MORE_MOVIES_PAGE_SIZE * 10
+            )
+        ) {
+            moviesDao.getPagedMoviesByGenreOnline(genre)
+        }
+    }
+
+    private fun getMoviesPagerByGenreOffline(genre: String): Pager<Int, MovieEntity> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = MORE_MOVIES_PAGE_SIZE,
+                initialLoadSize = MORE_MOVIES_PAGE_SIZE
+            )
+        ) {
+            moviesDao.getPagedMoviesByGenreOffline(genre)
+        }
+    }
+
+    companion object {
+        const val MORE_MOVIES_PAGE_SIZE = 15
     }
 
 }

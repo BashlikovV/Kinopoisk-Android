@@ -11,6 +11,7 @@ import by.bashlikovvv.core.domain.usecase.GetMovieByIdUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByCollectionUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByGenreUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByNameUseCase
+import by.bashlikovvv.core.domain.usecase.GetPagedMoviesByGenreUseCase
 import by.bashlikovvv.core.domain.usecase.GetPagedMoviesUseCase
 import by.bashlikovvv.core.domain.usecase.GetStringUseCase
 import by.bashlikovvv.core.domain.usecase.RemoveBookmarkUseCase
@@ -82,6 +83,13 @@ class DomainModule {
         bookmarksRepository: IBookmarksRepository
     ): GetBookmarksUseCase {
         return GetBookmarksUseCase(bookmarksRepository)
+    }
+
+    @[Provides Inject AppScope]
+    fun provideGetPagedMoviesByGenreUseCase(
+        moviesRepository: IMoviesRepository
+    ): GetPagedMoviesByGenreUseCase {
+        return GetPagedMoviesByGenreUseCase(moviesRepository)
     }
 
 }

@@ -3,6 +3,8 @@ package by.bashlikovvv.morescreen.di
 import androidx.annotation.RestrictTo
 import androidx.lifecycle.ViewModel
 import by.bashlikovvv.core.di.Feature
+import by.bashlikovvv.core.domain.usecase.GetPagedMoviesByGenreUseCase
+import by.bashlikovvv.core.domain.usecase.GetStringUseCase
 import by.bashlikovvv.morescreen.presentation.ui.MoreFragment
 import dagger.Component
 import javax.inject.Scope
@@ -15,10 +17,8 @@ annotation class MoreScreenScope
     Feature
     MoreScreenScope
     Component(
-        dependencies = [MoreScreenDependencies::class],
-        modules = [MoreScreenModule::class]
+        dependencies = [MoreScreenDependencies::class]
     )
-
 ]
 interface MoreScreenComponent {
 
@@ -37,7 +37,9 @@ interface MoreScreenComponent {
 
 interface MoreScreenDependencies {
 
+    val getStringUseCase: GetStringUseCase
 
+    val getPagedMoviesByGenreUseCase: GetPagedMoviesByGenreUseCase
 
 }
 

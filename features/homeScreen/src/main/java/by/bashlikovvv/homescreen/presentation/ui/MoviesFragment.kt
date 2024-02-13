@@ -47,7 +47,11 @@ class MoviesFragment : Fragment() {
             }
 
             override fun notifyMoreClicked(categoryMore: CategoryMore) {
-                viewModel.navigateToDestination(Destination.MoreScreen(categoryMore.categoryName))
+                viewModel.navigateToDestination(
+                    Destination.MoreScreen(
+                        viewModel.getGenreOrCollectionRequestNameByResId(categoryMore.categoryName)
+                    )
+                )
             }
 
             override fun notifyBookmarkClicked(movie: Movie) {

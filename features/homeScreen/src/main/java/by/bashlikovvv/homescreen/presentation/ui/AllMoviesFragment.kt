@@ -58,6 +58,7 @@ class AllMoviesFragment : Fragment() {
     ): View {
         val binding = FragmentAllMoviesBinding.inflate(inflater, container, false)
 
+
         setUpAllMoviesRecyclerView(binding)
         collectViewModelStates(binding)
 
