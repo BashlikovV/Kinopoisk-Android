@@ -21,7 +21,7 @@ data class DocsItem(
     @SerializedName("totalSeriesLength") val totalSeriesLength: String? = null,
     @SerializedName("backdrop") val backdrop: Backdrop,
     @SerializedName("countries") val countries: List<CountriesItem>?,
-    @SerializedName("shortDescription") val shortDescription: String = "",
+    @SerializedName("shortDescription") val shortDescription: String? = "",
     @SerializedName("ageRating") val ageRating: Int = 0,
     @SerializedName("isSeries") val isSeries: Boolean = false,
     @SerializedName("names") val names: List<NamesItem>?,

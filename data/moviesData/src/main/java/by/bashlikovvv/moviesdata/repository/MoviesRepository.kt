@@ -1,6 +1,7 @@
 package by.bashlikovvv.moviesdata.repository
 
 import android.net.ConnectivityManager
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -11,6 +12,7 @@ import by.bashlikovvv.core.domain.model.EmptyBodyException
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.repository.IMoviesRepository
 import by.bashlikovvv.core.ext.isConnected
+import by.bashlikovvv.moviesdata.remote.GenreMoviesRemoteMediator
 import by.bashlikovvv.moviesdata.local.dao.BookmarksDao
 import by.bashlikovvv.moviesdata.local.dao.MoviesDao
 import by.bashlikovvv.moviesdata.local.model.MovieEntity
@@ -80,12 +82,14 @@ class MoviesRepository(
         return if (cm.isConnected()) {
             val pager = getMoviesPagerByGenreOnline(genre)
 
-            val flow = pager.flow.transform<PagingData<MovieEntity>, PagingData<Movie>> { pagingData ->
-                pagingData.map {
+            val flow = pager.flow.transform { pagingData ->
+                val list = pagingData.map {
                     MovieEntityToMovieMapper(
                         isBookmark = bookmarksDao.isBookmark(it.id) > 0
                     ).mapFromEntity(it)
                 }
+
+                emit(list)
             }
 
             flow
@@ -146,12 +150,18 @@ class MoviesRepository(
         }
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     private fun getMoviesPagerByGenreOnline(genre: String): Pager<Int, MovieEntity> {
         return Pager(
             config = PagingConfig(
                 pageSize = MORE_MOVIES_PAGE_SIZE,
                 initialLoadSize = MORE_MOVIES_PAGE_SIZE,
-                maxSize = MORE_MOVIES_PAGE_SIZE * 10
+                maxSize = MORE_MOVIES_PAGE_SIZE * 3
+            ),
+            remoteMediator = GenreMoviesRemoteMediator(
+                moviesApi = moviesApi,
+                moviesDao = moviesDao,
+                genre = genre
             )
         ) {
             moviesDao.getPagedMoviesByGenreOnline(genre)

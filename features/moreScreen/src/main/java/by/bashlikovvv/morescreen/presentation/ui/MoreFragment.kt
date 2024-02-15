@@ -17,6 +17,7 @@ import by.bashlikovvv.morescreen.presentation.ui.adapter.MoviesListAdapter
 import by.bashlikovvv.morescreen.presentation.viewmodel.MoreFragmentViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.Lazy
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -67,12 +68,11 @@ class MoreFragment : BottomSheetDialogFragment() {
     }
 
     private fun collectViewModelStates() {
-        viewModel.updateMoviesState(categoryName ?: "")
         viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) {
             navigateToDestination(it)
         }
-        lifecycleScope.launch {
-            viewModel.movies.collectLatest { pagingData ->
+        lifecycleScope.launch(Dispatchers.IO) {
+            viewModel.getMovies(categoryName ?: return@launch).collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
         }
@@ -84,9 +84,7 @@ class MoreFragment : BottomSheetDialogFragment() {
 
     private fun setUpSwipeRefreshLayout(binding: FragmentMoreBinding) {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.updateMoviesState(categoryName ?: "").invokeOnCompletion {
-                binding.swipeRefreshLayout.isRefreshing = false
-            }
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 

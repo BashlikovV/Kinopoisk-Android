@@ -10,7 +10,7 @@ class MoviesDtoMapper : IMapper<MoviesDto, List<Movie>> {
             Movie(
                 id = docsItem.id,
                 name = docsItem.name,
-                description = docsItem.shortDescription,
+                description = docsItem.shortDescription ?: "",
                 poster = docsItem.poster.previewUrl,
                 age = docsItem.ageRating,
                 genres = (docsItem.genres ?: listOf()).map { it.name }
