@@ -39,6 +39,7 @@ class CustomBottomNavigationView : BottomNavigationView {
 
     private val bottomOffset = 15f
     private var defaultSize = 5f
+    @Suppress("DEPRECATION")
     private val diff: Int by lazy {
         var lastViewRight = 0
         menu.forEach {

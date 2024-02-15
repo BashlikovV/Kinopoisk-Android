@@ -28,7 +28,7 @@ class CategoryTextViewHolder(
 
     companion object {
 
-        fun from(parent: ViewGroup): CategoryTextViewHolder {
+        operator fun invoke(parent: ViewGroup): CategoryTextViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
 
             return CategoryTextViewHolder(

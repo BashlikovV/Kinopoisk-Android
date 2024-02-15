@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -25,11 +26,13 @@ import javax.inject.Inject
 
 class BookmarksFragment : Fragment() {
 
-    @Inject internal lateinit var viewModelFactory: Lazy<BookmarksFragmentViewModel.Factory>
+//    @Inject internal lateinit var viewModelFactory: Lazy<BookmarksFragmentViewModel.Factory>
+//
+//    private val viewModel: BookmarksFragmentViewModel by viewModels({ requireActivity() }) {
+//        viewModelFactory.get()
+//    }
 
-    private val viewModel: BookmarksFragmentViewModel by viewModels({ requireActivity() }) {
-        viewModelFactory.get()
-    }
+    private val viewModel: BookmarksFragmentViewModel by viewModels({ requireActivity() })
 
     private val adapter = BookmarksListAdapter(
         onCLickListener = object : BookmarksListAdapter.BookmarksListAdapterClickListener {
@@ -60,8 +63,29 @@ class BookmarksFragment : Fragment() {
         setUpBookmarksRecyclerView(binding)
         setUpSwipeRefreshLayout(binding)
         collectViewModelStates(binding)
+        setUpSearchView(binding.searchView)
+
 
         return binding.root
+    }
+
+    private fun setUpSearchView(menuItem: SearchView) {
+        with(menuItem) {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    viewModel.onSearch(query ?: "")
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.onSearch(newText ?: "")
+                    return true
+                }
+            })
+            setOnSearchClickListener {
+                viewModel.onSearch("")
+            }
+        }
     }
 
     private fun setUpBookmarksRecyclerView(binding: FragmentBookmarksBinding) {

@@ -46,14 +46,6 @@ class AllMoviesItemViewHolder(
             )
         }
 
-        fun from(parent: ViewGroup): AllMoviesItemViewHolder {
-            val layoutInflater = LayoutInflater.from(parent.context)
-
-            return AllMoviesItemViewHolder(
-                AllMoviesListItemBinding.inflate(layoutInflater, parent, false)
-            )
-        }
-
         interface AllMoviesItemViewHolderClickListener {
 
             fun onMovieClick(movie: Movie)

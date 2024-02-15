@@ -15,13 +15,15 @@ class CategoryLogoViewHolder(
     }
 
     companion object {
-        fun from(parent: ViewGroup): CategoryLogoViewHolder {
+
+        operator fun invoke(parent: ViewGroup): CategoryLogoViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
 
             return CategoryLogoViewHolder(
                 ItemCategoryLogoBinding.inflate(layoutInflater, parent, false)
             )
         }
+
     }
 
 }

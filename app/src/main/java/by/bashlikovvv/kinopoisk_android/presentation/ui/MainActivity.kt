@@ -13,6 +13,7 @@ import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.util.setFragmentNavigationListener
 import by.bashlikovvv.kinopoisk_android.R
 import by.bashlikovvv.kinopoisk_android.databinding.ActivityMainBinding
+import by.bashlikovvv.kinopoisk_android.di.DaggerAppComponent
 import by.bashlikovvv.kinopoisk_android.presentation.KinopoiskApplication
 import by.bashlikovvv.kinopoisk_android.presentation.viewmodel.MainActivityViewModel
 import by.bashlikovvv.morescreen.presentation.ui.MoreFragment

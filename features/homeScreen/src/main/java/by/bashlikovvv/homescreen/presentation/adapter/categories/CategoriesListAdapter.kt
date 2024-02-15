@@ -16,8 +16,8 @@ class CategoriesListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
-            ViewTypes.TYPE_LOGO -> CategoryLogoViewHolder.from(parent)
-            ViewTypes.TYPE_TEXT -> CategoryTextViewHolder.from(parent)
+            ViewTypes.TYPE_LOGO -> CategoryLogoViewHolder(parent)
+            ViewTypes.TYPE_TEXT -> CategoryTextViewHolder(parent)
             else -> throw IllegalStateException()
         }
     }
