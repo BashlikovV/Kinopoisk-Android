@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import by.bashlikovvv.bookmarksscreen.databinding.FragmentBookmarksBinding
-import by.bashlikovvv.bookmarksscreen.di.BookmarksScreenComponentViewModel
+import by.bashlikovvv.bookmarksscreen.di.BookmarksScreenComponentProvider
 import by.bashlikovvv.bookmarksscreen.presentation.ui.adapter.BookmarksListAdapter
 import by.bashlikovvv.bookmarksscreen.presentation.viewmodel.BookmarksFragmentViewModel
 import by.bashlikovvv.core.domain.model.Destination
@@ -26,13 +25,11 @@ import javax.inject.Inject
 
 class BookmarksFragment : Fragment() {
 
-//    @Inject internal lateinit var viewModelFactory: Lazy<BookmarksFragmentViewModel.Factory>
-//
-//    private val viewModel: BookmarksFragmentViewModel by viewModels({ requireActivity() }) {
-//        viewModelFactory.get()
-//    }
+    @Inject internal lateinit var viewModelFactory: Lazy<BookmarksFragmentViewModel.Factory>
 
-    private val viewModel: BookmarksFragmentViewModel by viewModels({ requireActivity() })
+    private val viewModel: BookmarksFragmentViewModel by viewModels({ requireActivity() }) {
+        viewModelFactory.get()
+    }
 
     private val adapter = BookmarksListAdapter(
         onCLickListener = object : BookmarksListAdapter.BookmarksListAdapterClickListener {
@@ -47,8 +44,8 @@ class BookmarksFragment : Fragment() {
     )
 
     override fun onAttach(context: Context) {
-        ViewModelProvider(this)[BookmarksScreenComponentViewModel::class.java]
-            .bookmarksScreenComponent
+        (requireContext().applicationContext as BookmarksScreenComponentProvider)
+            .provideBookmarksScreenComponent()
             .inject(this)
         super.onAttach(context)
     }

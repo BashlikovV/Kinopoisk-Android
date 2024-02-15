@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -18,7 +17,7 @@ import by.bashlikovvv.core.ext.dp
 import by.bashlikovvv.core.util.navigateToDestination
 import by.bashlikovvv.homescreen.R
 import by.bashlikovvv.homescreen.databinding.FragmentHomeScreenBinding
-import by.bashlikovvv.homescreen.di.HomeScreenComponentViewModel
+import by.bashlikovvv.homescreen.di.HomeScreenComponentProvider
 import by.bashlikovvv.homescreen.domain.model.CategoryLogo
 import by.bashlikovvv.homescreen.domain.model.CategoryText
 import by.bashlikovvv.homescreen.presentation.adapter.categories.CategoriesListAdapter
@@ -41,8 +40,8 @@ class HomeScreenFragment : Fragment() {
     private lateinit var categoriesAdapter: CategoriesListAdapter
 
     override fun onAttach(context: Context) {
-        ViewModelProvider(this)[HomeScreenComponentViewModel::class.java]
-            .homeScreenComponent
+        (requireContext().applicationContext as HomeScreenComponentProvider)
+            .provideHomeScreenComponent()
             .inject(this)
         super.onAttach(context)
     }

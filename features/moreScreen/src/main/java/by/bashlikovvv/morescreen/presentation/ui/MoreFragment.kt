@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.util.navigateToDestination
 import by.bashlikovvv.morescreen.databinding.FragmentMoreBinding
-import by.bashlikovvv.morescreen.di.MoreScreenComponentViewModel
+import by.bashlikovvv.morescreen.di.MoreScreenComponentProvider
 import by.bashlikovvv.morescreen.presentation.ui.adapter.MoviesListAdapter
 import by.bashlikovvv.morescreen.presentation.viewmodel.MoreFragmentViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -43,8 +42,8 @@ class MoreFragment : BottomSheetDialogFragment() {
     }
 
     override fun onAttach(context: Context) {
-        ViewModelProvider(this)[MoreScreenComponentViewModel::class.java]
-            .moreScreenComponent
+        (requireContext().applicationContext as MoreScreenComponentProvider)
+            .provideMoreScreenComponent()
             .inject(this)
         super.onAttach(context)
     }

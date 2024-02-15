@@ -10,7 +10,7 @@
         android:label="HomeScreenFragment" />
     <dialog
         android:id="@+id/movieDetailsFragment"
-        android:name="by.bashlikovvv.moviedetailsscreen.presentation.view.MovieDetailsFragment"
+        android:name="by.bashlikovvv.moviedetailsscreen.presentation.ui.MovieDetailsFragment"
         android:label="MovieDetailsFragment" />
     <fragment
         android:id="@+id/bookmarksFragment"

@@ -1,4 +1,4 @@
-package by.bashlikovvv.moviedetailsscreen.presentation.view
+package by.bashlikovvv.moviedetailsscreen.presentation.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import by.bashlikovvv.moviedetailsscreen.databinding.FragmentMovieDetailsBinding
-import by.bashlikovvv.moviedetailsscreen.di.MovieDetailsScreenComponentViewModel
+import by.bashlikovvv.moviedetailsscreen.di.MovieDetailsScreenComponentProvider
 import by.bashlikovvv.moviedetailsscreen.presentation.viewmodel.MovieDetailsScreenViewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -25,8 +24,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     private var movieId: Long? = null
 
     override fun onAttach(context: Context) {
-        ViewModelProvider(this)[MovieDetailsScreenComponentViewModel::class.java]
-            .movieDetailsScreenComponent
+        (requireContext().applicationContext as MovieDetailsScreenComponentProvider)
+            .provideMovieDetailsScreenComponent()
             .inject(this)
         super.onAttach(context)
     }

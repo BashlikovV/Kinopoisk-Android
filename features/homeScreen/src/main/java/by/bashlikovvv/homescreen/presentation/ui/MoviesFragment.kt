@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -16,7 +15,7 @@ import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.dp
 import by.bashlikovvv.homescreen.databinding.FragmentHomeScreenBinding
 import by.bashlikovvv.homescreen.databinding.FragmentMoviesBinding
-import by.bashlikovvv.homescreen.di.HomeScreenComponentViewModel
+import by.bashlikovvv.homescreen.di.HomeScreenComponentProvider
 import by.bashlikovvv.homescreen.domain.model.CategoryMore
 import by.bashlikovvv.homescreen.domain.model.CategoryText
 import by.bashlikovvv.homescreen.domain.model.CategoryTitle
@@ -61,8 +60,8 @@ class MoviesFragment : Fragment() {
     )
 
     override fun onAttach(context: Context) {
-        ViewModelProvider(this)[HomeScreenComponentViewModel::class.java]
-            .homeScreenComponent
+        (requireContext().applicationContext as HomeScreenComponentProvider)
+            .provideHomeScreenComponent()
             .inject(this)
         super.onAttach(context)
     }

@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.homescreen.databinding.FragmentAllMoviesBinding
-import by.bashlikovvv.homescreen.di.HomeScreenComponentViewModel
+import by.bashlikovvv.homescreen.di.HomeScreenComponentProvider
 import by.bashlikovvv.homescreen.presentation.adapter.allmovies.AllMoviesListAdapter
 import by.bashlikovvv.homescreen.presentation.adapter.allmovies.AllMoviesLoadStateAdapter
 import by.bashlikovvv.homescreen.presentation.viewmodel.HomeScreenViewModel
@@ -46,8 +45,8 @@ class AllMoviesFragment : Fragment() {
     )
 
     override fun onAttach(context: Context) {
-        ViewModelProvider(this)[HomeScreenComponentViewModel::class.java]
-            .homeScreenComponent
+        (requireContext().applicationContext as HomeScreenComponentProvider)
+            .provideHomeScreenComponent()
             .inject(this)
         super.onAttach(context)
     }
