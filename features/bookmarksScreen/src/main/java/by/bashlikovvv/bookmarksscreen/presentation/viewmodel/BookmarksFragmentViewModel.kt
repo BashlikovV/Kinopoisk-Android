@@ -8,6 +8,7 @@ import by.bashlikovvv.bookmarksscreen.presentation.domain.LocalChanges
 import by.bashlikovvv.core.base.SingleLiveEvent
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
+import by.bashlikovvv.core.domain.usecase.GetBookmarksByNameUseCase
 import by.bashlikovvv.core.domain.usecase.GetBookmarksUseCase
 import by.bashlikovvv.core.domain.usecase.RemoveBookmarkUseCase
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,8 @@ import javax.inject.Provider
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class BookmarksFragmentViewModel @Inject constructor(
     private val getBookmarksUseCase: GetBookmarksUseCase,
-    private val removeBookmarkUseCase: RemoveBookmarkUseCase
+    private val removeBookmarkUseCase: RemoveBookmarkUseCase,
+    private val getBookmarksByNameUseCase: GetBookmarksByNameUseCase
 ) : ViewModel() {
 
     private var _isUpdating = MutableStateFlow(true)
@@ -50,14 +52,10 @@ class BookmarksFragmentViewModel @Inject constructor(
         val originFlow = _searchBy.asStateFlow()
             .debounce(500)
             .flatMapLatest { searchBy ->
-                val bookmarks = getBookmarksUseCase.execute()
-
                 if (searchBy.isEmpty()) {
-                    flowOf(bookmarks)
+                    flowOf(getBookmarksUseCase.execute())
                 } else {
-                    flowOf(bookmarks.filter {
-                        it.name.contains(searchBy, true)
-                    })
+                    flowOf(getBookmarksByNameUseCase.execute(searchBy))
                 }
             }
 
@@ -116,7 +114,8 @@ class BookmarksFragmentViewModel @Inject constructor(
 
     class Factory @Inject constructor(
         private val getBookmarksUseCase: Provider<GetBookmarksUseCase>,
-        private val removeBookmarkUseCase: Provider<RemoveBookmarkUseCase>
+        private val removeBookmarkUseCase: Provider<RemoveBookmarkUseCase>,
+        private val getBookmarksByNameUseCase: Provider<GetBookmarksByNameUseCase>
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -124,7 +123,8 @@ class BookmarksFragmentViewModel @Inject constructor(
             require(modelClass == BookmarksFragmentViewModel::class.java)
             return BookmarksFragmentViewModel(
                 getBookmarksUseCase.get(),
-                removeBookmarkUseCase.get()
+                removeBookmarkUseCase.get(),
+                getBookmarksByNameUseCase.get()
             ) as T
         }
 

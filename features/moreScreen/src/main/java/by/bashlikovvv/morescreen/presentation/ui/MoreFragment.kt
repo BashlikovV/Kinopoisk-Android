@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import by.bashlikovvv.core.domain.model.Destination
@@ -61,7 +62,7 @@ class MoreFragment : BottomSheetDialogFragment() {
 
         collectViewModelStates()
         setUpMoviesRecyclerView(binding)
-        setUpSwipeRefreshLayout(binding)
+        setUpSearchView(binding.searchView)
 
         return binding.root
     }
@@ -81,9 +82,22 @@ class MoreFragment : BottomSheetDialogFragment() {
         binding.moviesRecyclerView.adapter = adapter
     }
 
-    private fun setUpSwipeRefreshLayout(binding: FragmentMoreBinding) {
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            binding.swipeRefreshLayout.isRefreshing = false
+    private fun setUpSearchView(menuItem: SearchView) {
+        with(menuItem) {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    viewModel.onSearch(query ?: "")
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.onSearch(newText ?: "")
+                    return true
+                }
+            })
+            setOnSearchClickListener {
+                viewModel.onSearch("")
+            }
         }
     }
 

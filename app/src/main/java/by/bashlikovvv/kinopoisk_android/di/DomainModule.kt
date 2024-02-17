@@ -6,11 +6,13 @@ import by.bashlikovvv.core.di.ApplicationQualifier
 import by.bashlikovvv.core.domain.repository.IBookmarksRepository
 import by.bashlikovvv.core.domain.repository.IMoviesRepository
 import by.bashlikovvv.core.domain.usecase.AddBookmarkUseCase
+import by.bashlikovvv.core.domain.usecase.GetBookmarksByNameUseCase
 import by.bashlikovvv.core.domain.usecase.GetBookmarksUseCase
 import by.bashlikovvv.core.domain.usecase.GetMovieByIdUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByCollectionUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByGenreUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByNameUseCase
+import by.bashlikovvv.core.domain.usecase.GetPagedMoviesByGenreAndNameUseCase
 import by.bashlikovvv.core.domain.usecase.GetPagedMoviesByGenreUseCase
 import by.bashlikovvv.core.domain.usecase.GetPagedMoviesUseCase
 import by.bashlikovvv.core.domain.usecase.GetStringUseCase
@@ -86,10 +88,24 @@ class DomainModule {
     }
 
     @[Provides Inject AppScope]
+    fun provideGetBookmarksByNameUseCase(
+        bookmarksRepository: IBookmarksRepository
+    ): GetBookmarksByNameUseCase {
+        return GetBookmarksByNameUseCase(bookmarksRepository)
+    }
+
+    @[Provides Inject AppScope]
     fun provideGetPagedMoviesByGenreUseCase(
         moviesRepository: IMoviesRepository
     ): GetPagedMoviesByGenreUseCase {
         return GetPagedMoviesByGenreUseCase(moviesRepository)
+    }
+
+    @[Provides Inject AppScope]
+    fun provideGetPagedMoviesByGenreAndNameUseCase(
+        moviesRepository: IMoviesRepository
+    ): GetPagedMoviesByGenreAndNameUseCase {
+        return GetPagedMoviesByGenreAndNameUseCase(moviesRepository)
     }
 
 }

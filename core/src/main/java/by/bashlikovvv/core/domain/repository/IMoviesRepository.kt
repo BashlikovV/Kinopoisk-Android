@@ -16,6 +16,8 @@ interface IMoviesRepository {
 
     fun getPagedMoviesByGenre(genre: String): Flow<PagingData<Movie>>
 
+    fun getPagedMoviesByGenreAndName(genre: String, name: String): Flow<PagingData<Movie>>
+
     suspend fun getMoviesByCollection(collection: String): List<Movie>
 
 }

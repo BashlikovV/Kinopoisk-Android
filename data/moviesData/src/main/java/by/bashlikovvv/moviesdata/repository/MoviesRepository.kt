@@ -5,6 +5,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.filter
 import androidx.paging.map
 import by.bashlikovvv.core.di.PagerOffline
 import by.bashlikovvv.core.di.PagerOnline
@@ -97,11 +98,46 @@ class MoviesRepository(
             val pager = getMoviesPagerByGenreOffline(genre)
 
             pager.flow.transform { pagingData ->
-                pagingData.map {
+                val list = pagingData.map {
                     MovieEntityToMovieMapper(
                         isBookmark = bookmarksDao.isBookmark(it.id) > 0
                     ).mapFromEntity(it)
                 }
+
+                emit(list)
+            }
+        }
+    }
+
+    override fun getPagedMoviesByGenreAndName(
+        genre: String,
+        name: String
+    ): Flow<PagingData<Movie>> {
+        return if (cm.isConnected()) {
+            val pager = getMoviesPagerByGenreOnline(genre)
+
+            val flow = pager.flow.transform { pagingData ->
+                val list = pagingData.map {
+                    MovieEntityToMovieMapper(
+                        isBookmark = bookmarksDao.isBookmark(it.id) > 0
+                    ).mapFromEntity(it)
+                }.filter { it.name.contains(name, true) }
+
+                emit(list)
+            }
+
+            flow
+        } else {
+            val pager = getMoviesPagerByGenreOffline(genre)
+
+            pager.flow.transform { pagingData ->
+                val list = pagingData.map {
+                    MovieEntityToMovieMapper(
+                        isBookmark = bookmarksDao.isBookmark(it.id) > 0
+                    ).mapFromEntity(it)
+                }.filter { it.name.contains(name, true) }
+
+                emit(list)
             }
         }
     }

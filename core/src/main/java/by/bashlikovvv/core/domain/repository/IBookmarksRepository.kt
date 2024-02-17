@@ -12,6 +12,8 @@ interface IBookmarksRepository {
 
     suspend fun getBookmarks(): List<Movie>
 
+    suspend fun getBookmarksByName(name: String): List<Movie>
+
     fun getPagedBookmarks(): Flow<PagingData<Movie>>
 
     suspend fun isBookmark(movieId: Long): Boolean

@@ -44,6 +44,14 @@ class BookmarksRepository(
         }
     }
 
+    override suspend fun getBookmarksByName(name: String): List<Movie> {
+        val mapper = BookmarkAndMovieTupleMapper()
+
+        return bookmarksDao.getBookmarks().map { tuple ->
+            mapper.mapFromEntity(tuple)
+        }.filter { it.name.contains(name, true) }
+    }
+
     override fun getPagedBookmarks(): Flow<PagingData<Movie>> {
         return if (connectivityManager.isConnected()) {
             TODO()
