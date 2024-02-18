@@ -14,7 +14,9 @@ class ItemErrorViewHolder (
             binding.errorMessage.text = loadState.error.message ?: "error"
         }
     }
+
     companion object {
+
         operator fun invoke(
             parent: ViewGroup
         ): ItemErrorViewHolder {
@@ -28,5 +30,7 @@ class ItemErrorViewHolder (
                 )
             )
         }
+        
     }
+
 }

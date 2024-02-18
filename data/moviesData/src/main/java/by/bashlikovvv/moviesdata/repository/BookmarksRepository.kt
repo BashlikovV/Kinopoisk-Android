@@ -13,6 +13,7 @@ class BookmarksRepository(
     private val bookmarksDao: BookmarksDao,
     private val connectivityManager: ConnectivityManager?
 ) : IBookmarksRepository {
+    
     override suspend fun addMovieToBookmarks(movie: Movie) {
         if (bookmarksDao.isBookmark(movie.id) == 0) {
             bookmarksDao

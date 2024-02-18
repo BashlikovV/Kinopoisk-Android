@@ -19,6 +19,7 @@ interface AppComponent {
 
     @Component.Factory
     interface Factory {
+
         fun create(@[BindsInstance ApplicationQualifier] application: Application): AppComponent
 
     }

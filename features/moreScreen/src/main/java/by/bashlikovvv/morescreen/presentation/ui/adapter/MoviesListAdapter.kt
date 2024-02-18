@@ -7,6 +7,7 @@ import by.bashlikovvv.core.domain.model.Movie
 class MoviesListAdapter(
     private val onClickListener: MoviesListAdapterClickListener
 ) : PagingDataAdapter<Movie, MovieItemViewHolder>(MovieDiffCallback) {
+    
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieItemViewHolder {
         return MovieItemViewHolder(parent)
     }

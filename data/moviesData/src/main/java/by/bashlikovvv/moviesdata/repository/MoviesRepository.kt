@@ -83,7 +83,7 @@ class MoviesRepository(
         return if (cm.isConnected()) {
             val pager = getMoviesPagerByGenreOnline(genre)
 
-            val flow = pager.flow.transform { pagingData ->
+            pager.flow.transform { pagingData ->
                 val list = pagingData.map {
                     MovieEntityToMovieMapper(
                         isBookmark = bookmarksDao.isBookmark(it.id) > 0
@@ -92,8 +92,6 @@ class MoviesRepository(
 
                 emit(list)
             }
-
-            flow
         } else {
             val pager = getMoviesPagerByGenreOffline(genre)
 
@@ -116,7 +114,7 @@ class MoviesRepository(
         return if (cm.isConnected()) {
             val pager = getMoviesPagerByGenreOnline(genre)
 
-            val flow = pager.flow.transform { pagingData ->
+            pager.flow.transform { pagingData ->
                 val list = pagingData.map {
                     MovieEntityToMovieMapper(
                         isBookmark = bookmarksDao.isBookmark(it.id) > 0
@@ -125,8 +123,6 @@ class MoviesRepository(
 
                 emit(list)
             }
-
-            flow
         } else {
             val pager = getMoviesPagerByGenreOffline(genre)
 

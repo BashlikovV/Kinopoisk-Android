@@ -10,7 +10,9 @@ class ItemProgressViewHolder(
     binding: ItemProgressLayoutBinding
 ) : ItemViewHolder(binding.root) {
     override fun bind(loadState: LoadState) {  }
+
     companion object {
+
         operator fun invoke(
             parent: ViewGroup
         ): ItemProgressViewHolder {
@@ -24,5 +26,6 @@ class ItemProgressViewHolder(
                 )
             )
         }
+
     }
 }

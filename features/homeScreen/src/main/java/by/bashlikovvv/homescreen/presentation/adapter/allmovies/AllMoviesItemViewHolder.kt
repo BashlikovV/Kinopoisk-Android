@@ -26,7 +26,6 @@ class AllMoviesItemViewHolder(
             }
             it.root.setOnClickListener { onClickListener.onMovieClick(item) }
         }
-
     }
 
     private fun setBitmapWithGlide(url: String, view: ImageView) {

@@ -7,6 +7,7 @@ import by.bashlikovvv.core.domain.model.Movie
 class BookmarksListAdapter(
     private val onCLickListener: BookmarksListAdapterClickListener
 ): ListAdapter<Movie, BookmarksListItemViewHolder>(BookmarksListItemDiffCallback) {
+    
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarksListItemViewHolder {
         return BookmarksListItemViewHolder(parent)
     }

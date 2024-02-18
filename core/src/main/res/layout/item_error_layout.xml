@@ -11,4 +11,5 @@
         android:layout_gravity="center"
         android:textSize="20sp"
         android:gravity="center"/>
+    
 </FrameLayout>

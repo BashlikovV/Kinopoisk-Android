@@ -16,5 +16,4 @@ class BookmarkAndMovieTupleMapper : IMapper<BookmarkAndMovieTuple, Movie> {
             movie = MovieEntityToMovieMapper(isBookmark = true).mapToEntity(domain)
         )
     }
-
 }

@@ -22,7 +22,6 @@ class CategoryTextViewHolder(
                 it.isSelected = false
             }
         }
-
         binding.root.setOnClickListener { onClick(item) }
     }
 
