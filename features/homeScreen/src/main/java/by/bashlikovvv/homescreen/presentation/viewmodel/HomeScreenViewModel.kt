@@ -53,8 +53,8 @@ class HomeScreenViewModel(
     private var _currentCategory = MutableStateFlow<Category>(defaultCategory)
     val currentCategory = _currentCategory.asStateFlow()
 
-    private var _moviesCurrentCategory = SingleLiveEvent<Category>()
-    val moviesCurrentCategory: LiveData<Category> = _moviesCurrentCategory
+    private var _moviesCurrentCategory = MutableStateFlow<Category>(defaultCategory)
+    val moviesCurrentCategory = _moviesCurrentCategory.asStateFlow()
 
     private var _moviesData = MutableStateFlow<List<MoviesCategory>>(defaultMoviesCategory)
     val moviesData = _moviesData.asStateFlow()
@@ -75,7 +75,7 @@ class HomeScreenViewModel(
 
     fun setMoviesCurrentCategory(category: MoviesCategory) {
         val categoryText = CategoryText((category as CategoryTitle).itemText)
-        _moviesCurrentCategory.postValue(categoryText)
+        _moviesCurrentCategory.tryEmit(categoryText)
     }
 
     fun makeMoviesData() = viewModelScope.launch(Dispatchers.IO) {

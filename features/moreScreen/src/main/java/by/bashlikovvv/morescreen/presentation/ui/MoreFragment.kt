@@ -72,9 +72,11 @@ class MoreFragment : BottomSheetDialogFragment() {
             navigateToDestination(it)
         }
         lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.getMovies(categoryName ?: return@launch).collectLatest { pagingData ->
-                adapter.submitData(pagingData)
-            }
+            viewModel
+                .getMovies(categoryName ?: return@launch)
+                .collectLatest { pagingData ->
+                    adapter.submitData(pagingData)
+                }
         }
     }
 

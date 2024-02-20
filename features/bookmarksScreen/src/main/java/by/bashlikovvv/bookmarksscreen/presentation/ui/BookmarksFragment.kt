@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import by.bashlikovvv.bookmarksscreen.databinding.FragmentBookmarksBinding
 import by.bashlikovvv.bookmarksscreen.di.BookmarksScreenComponentProvider
@@ -100,27 +101,26 @@ class BookmarksFragment : Fragment() {
     @OptIn(FlowPreview::class)
     private fun collectViewModelStates(binding: FragmentBookmarksBinding) {
         lifecycleScope.launch {
-            viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
-                navigateToDestination(destination)
-            }
-        }
-        lifecycleScope.launch {
             viewModel.bookmarksFlow.collectLatest { bookmarks ->
                 adapter.submitList(bookmarks)
             }
         }
+        viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
+            navigateToDestination(destination)
+        }
         lifecycleScope.launch {
             viewModel.isUpdating
                 .debounce(500)
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest {
-                if (it) {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.bookmarksRecyclerView.visibility = View.GONE
-                } else {
-                    binding.progressBar.visibility = View.GONE
-                    binding.bookmarksRecyclerView.visibility = View.VISIBLE
+                    if (it) {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.bookmarksRecyclerView.visibility = View.GONE
+                    } else {
+                        binding.progressBar.visibility = View.GONE
+                        binding.bookmarksRecyclerView.visibility = View.VISIBLE
+                    }
                 }
-            }
         }
     }
 

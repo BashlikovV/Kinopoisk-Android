@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -24,6 +25,9 @@ import by.bashlikovvv.homescreen.presentation.adapter.categories.CategoriesListA
 import by.bashlikovvv.homescreen.presentation.adapter.categories.CenterSnapHelper
 import by.bashlikovvv.homescreen.presentation.viewmodel.HomeScreenViewModel
 import dagger.Lazy
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -90,23 +94,27 @@ class HomeScreenFragment : Fragment() {
         }
     }
 
+    @OptIn(FlowPreview::class)
     private fun collectViewModelStates(
         categoriesAdapter: CategoriesListAdapter,
         binding: FragmentHomeScreenBinding
     ) {
         lifecycleScope.launch {
-            viewModel.moviesCurrentCategory.observe(viewLifecycleOwner) { category ->
-                if (category is CategoryText) {
-                    categoriesAdapter.chooseCategory(
-                        categoriesAdapter.getCategoryPosition(category.itemText)
-                    )
-                    smoothScrollToCategory(
-                        category = category,
-                        adapter = categoriesAdapter,
-                        binding = binding
-                    )
+            viewModel.moviesCurrentCategory
+                .debounce(500)
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { category ->
+                    if (category is CategoryText) {
+                        categoriesAdapter.chooseCategory(
+                            categoriesAdapter.getCategoryPosition(category.itemText)
+                        )
+                        smoothScrollToCategory(
+                            category = category,
+                            adapter = categoriesAdapter,
+                            binding = binding
+                        )
+                    }
                 }
-            }
         }
         viewModel.navigateToCategoryLiveEvent.observe(viewLifecycleOwner) { category ->
             if (category == CategoryText(R.string.all)) {
@@ -125,10 +133,8 @@ class HomeScreenFragment : Fragment() {
                 viewModel.setCategory(category)
             }
         }
-        lifecycleScope.launch {
-            viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
-                navigateToDestination(destination)
-            }
+        viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
+            navigateToDestination(destination)
         }
     }
 
@@ -138,6 +144,7 @@ class HomeScreenFragment : Fragment() {
 
         return navHostFragment.navController
     }
+
     private fun smoothScrollToCategory(
         category: CategoryText,
         adapter: CategoriesListAdapter,

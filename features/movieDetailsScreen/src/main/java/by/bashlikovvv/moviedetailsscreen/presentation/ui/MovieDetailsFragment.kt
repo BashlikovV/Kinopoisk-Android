@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import by.bashlikovvv.moviedetailsscreen.databinding.FragmentMovieDetailsBinding
 import by.bashlikovvv.moviedetailsscreen.di.MovieDetailsScreenComponentProvider
 import by.bashlikovvv.moviedetailsscreen.presentation.viewmodel.MovieDetailsScreenViewModel
@@ -48,16 +48,16 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     }
 
     private fun loadMovie() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.RESUMED) {
-                viewModel.getMovieById(movieId ?: 0)
-            }
+        lifecycleScope.launch {
+            viewModel.getMovieById(movieId ?: 0)
         }
     }
 
     private fun collectViewModelStates(binding: FragmentMovieDetailsBinding) {
         lifecycleScope.launch {
-            viewModel.movie.collectLatest { movie ->
+            viewModel.movie
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { movie ->
                 setBitmapWithGlide(movie.poster, binding.posterImageView)
                 binding.descriptionImageView.text = movie.description
             }

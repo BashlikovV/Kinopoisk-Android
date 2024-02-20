@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -22,7 +23,6 @@ import by.bashlikovvv.homescreen.domain.model.CategoryTitle
 import by.bashlikovvv.homescreen.presentation.adapter.movies.MoviesListAdapter
 import by.bashlikovvv.homescreen.presentation.viewmodel.HomeScreenViewModel
 import dagger.Lazy
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -83,6 +83,7 @@ class MoviesFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.moviesUpdateState
                 .debounce(500)
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest {
                     if (it) {
                         binding.progressBar.visibility = View.VISIBLE
@@ -94,11 +95,13 @@ class MoviesFragment : Fragment() {
                 }
         }
         lifecycleScope.launch {
-            viewModel.currentCategory.collectLatest { category ->
-                smoothScrollToCategory(category as CategoryText)
-            }
+            viewModel.currentCategory
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { category ->
+                    smoothScrollToCategory(category as CategoryText)
+                }
         }
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch {
             viewModel.moviesData.collectLatest { moviesCategory ->
                 adapter.submitList(moviesCategory)
             }

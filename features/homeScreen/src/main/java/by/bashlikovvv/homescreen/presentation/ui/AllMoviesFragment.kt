@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import by.bashlikovvv.core.domain.model.Destination
@@ -67,15 +68,6 @@ class AllMoviesFragment : Fragment() {
     private fun setUpAllMoviesRecyclerView(binding: FragmentAllMoviesBinding) {
         binding.allMoviesRecyclerView.adapter = adapter
             .withLoadStateFooter(AllMoviesLoadStateAdapter())
-        lifecycleScope.launch {
-            adapter.loadStateFlow.collectLatest {
-                if (it.prepend is LoadState.Loading) {
-                    viewModel.setAllMoviesProgress(true)
-                } else {
-                    viewModel.setAllMoviesProgress(false)
-                }
-            }
-        }
     }
 
     @OptIn(FlowPreview::class)
@@ -83,6 +75,7 @@ class AllMoviesFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.allMoviesUpdateState
                 .debounce(500)
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest {
                     if (it) {
                         binding.progressBar.visibility = View.VISIBLE
@@ -96,6 +89,17 @@ class AllMoviesFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.moviesPagedData.collectLatest { pagedData ->
                 adapter.submitData(pagedData)
+            }
+        }
+        lifecycleScope.launch {
+            adapter.loadStateFlow
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest {
+                if (it.prepend is LoadState.Loading) {
+                    viewModel.setAllMoviesProgress(true)
+                } else {
+                    viewModel.setAllMoviesProgress(false)
+                }
             }
         }
     }
