@@ -58,7 +58,6 @@ class AllMoviesFragment : Fragment() {
     ): View {
         val binding = FragmentAllMoviesBinding.inflate(inflater, container, false)
 
-
         setUpAllMoviesRecyclerView(binding)
         collectViewModelStates(binding)
 
@@ -95,7 +94,7 @@ class AllMoviesFragment : Fragment() {
             adapter.loadStateFlow
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest {
-                if (it.prepend is LoadState.Loading) {
+                if (it.append is LoadState.Loading && adapter.itemCount > 0) {
                     viewModel.setAllMoviesProgress(true)
                 } else {
                     viewModel.setAllMoviesProgress(false)

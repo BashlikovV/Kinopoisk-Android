@@ -33,7 +33,7 @@ interface MoviesApi {
     suspend fun getMoviesByGenre(
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 10,
-        @Query("type") type: String = "movie",
+        @Query("type") type: List<String> = listOf("movie", "cartoon"),
         @Query("genres.name") genre: String
     ): Response<MoviesDto>
 
