@@ -19,13 +19,13 @@ class PersonDtoToPersonMapper : IMapper<PersonsItemDto, Person> {
 
     override fun mapToEntity(domain: Person): PersonsItemDto {
         return PersonsItemDto(
-            profession = domain.profession,
-            name = domain.name,
-            enName = domain.enName,
-            photo = domain.photo,
-            description = domain.description,
-            id = domain.id,
-            enProfession = domain.enProfession
+            profession = domain.profession ?: "",
+            name = domain.name ?: "",
+            enName = domain.enName ?: "",
+            photo = domain.photo ?: "",
+            description = domain.description ?: "",
+            id = domain.id ?: 0,
+            enProfession = domain.enProfession ?: ""
         )
     }
 }

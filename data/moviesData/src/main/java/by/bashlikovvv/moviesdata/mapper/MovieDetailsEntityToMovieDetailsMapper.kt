@@ -22,7 +22,7 @@ class MovieDetailsEntityToMovieDetailsMapper(
     override fun mapToEntity(domain: MovieDetails): MovieDetailsEntity {
         return MovieDetailsEntity(
             id = domain.id,
-            persons = domain.persons?.map { it.id } ?: listOf(),
+            persons = domain.persons?.map { it.id ?: 0 } ?: listOf(),
             description = domain.shortDescription,
             similarMovies = domain.similarMovies?.map { it.id } ?: listOf(),
             watchAbility = domain.watchAbility,

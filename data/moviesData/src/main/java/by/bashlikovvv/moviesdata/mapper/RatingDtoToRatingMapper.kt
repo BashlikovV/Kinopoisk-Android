@@ -17,11 +17,11 @@ class RatingDtoToRatingMapper : IMapper<RatingDto, Rating> {
 
     override fun mapToEntity(domain: Rating): RatingDto {
         return RatingDto(
-            imdb = domain.imdb,
-            kp = domain.kp,
+            imdb = domain.imdb ?: 0.0,
+            kp = domain.kp ?: 0.0,
             await = domain.await,
-            russianFilmCritics = domain.russianFilmCritics,
-            filmCritics = domain.filmCritics
+            russianFilmCritics = domain.russianFilmCritics ?: 0.0,
+            filmCritics = domain.filmCritics ?: 0.0
         )
     }
 }

@@ -14,8 +14,8 @@ class BudgetDtoToBudgetMapper : IMapper<BudgetDto, Budget> {
 
     override fun mapToEntity(domain: Budget): BudgetDto {
         return BudgetDto(
-            currency = domain.currency,
-            value = domain.value
+            currency = domain.currency ?: "",
+            value = domain.value ?: 0
         )
     }
 }
