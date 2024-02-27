@@ -52,7 +52,6 @@ dependencies {
     implementation(Dependencies.Com.Google.Android.Material.material)
     implementation(Dependencies.AndroidX.ConstraintLayout.constraintlayout)
     testImplementation(Dependencies.JUnit.jUnit)
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     androidTestImplementation(Dependencies.AndroidX.Test.Ext.jUnit)
     androidTestImplementation(Dependencies.AndroidX.Test.Espresso.espressoCore)
 

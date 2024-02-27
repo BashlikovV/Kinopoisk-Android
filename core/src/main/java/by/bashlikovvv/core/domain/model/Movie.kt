@@ -1,5 +1,9 @@
 package by.bashlikovvv.core.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Movie(
     val id: Long = 0,
     val name: String = "",
@@ -10,4 +14,4 @@ data class Movie(
     val page: Int = 0,
     val collections: List<String> = listOf(),
     val isBookmark: Boolean = false
-)
+) : Parcelable

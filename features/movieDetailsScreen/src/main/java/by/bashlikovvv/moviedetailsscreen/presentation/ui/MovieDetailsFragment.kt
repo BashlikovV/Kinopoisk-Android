@@ -59,8 +59,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { movie ->
                 setBitmapWithGlide(movie.poster, binding.posterImageView)
-                binding.descriptionImageView.text = movie.description
+                binding.descriptionImageView.text = movie.shortDescription
             }
+        }
+        viewModel.exceptions.observe(viewLifecycleOwner) { exception ->
+            binding.descriptionImageView.text = exception
         }
     }
 

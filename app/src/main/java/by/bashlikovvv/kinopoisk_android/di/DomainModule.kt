@@ -4,11 +4,13 @@ import android.app.Application
 import by.bashlikovvv.core.di.AppScope
 import by.bashlikovvv.core.di.ApplicationQualifier
 import by.bashlikovvv.core.domain.repository.IBookmarksRepository
+import by.bashlikovvv.core.domain.repository.IMoviesDetailsRepository
 import by.bashlikovvv.core.domain.repository.IMoviesRepository
 import by.bashlikovvv.core.domain.usecase.AddBookmarkUseCase
 import by.bashlikovvv.core.domain.usecase.GetBookmarksByNameUseCase
 import by.bashlikovvv.core.domain.usecase.GetBookmarksUseCase
 import by.bashlikovvv.core.domain.usecase.GetMovieByIdUseCase
+import by.bashlikovvv.core.domain.usecase.GetMovieDetailsByIdUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByCollectionUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByGenreUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByNameUseCase
@@ -106,6 +108,13 @@ class DomainModule {
         moviesRepository: IMoviesRepository
     ): GetPagedMoviesByGenreAndNameUseCase {
         return GetPagedMoviesByGenreAndNameUseCase(moviesRepository)
+    }
+
+    @[Provides Inject AppScope]
+    fun provideGetMovieDetailsByIdUseCase(
+        moviesDetailsRepository: IMoviesDetailsRepository
+    ): GetMovieDetailsByIdUseCase {
+        return GetMovieDetailsByIdUseCase(moviesDetailsRepository)
     }
 
 }

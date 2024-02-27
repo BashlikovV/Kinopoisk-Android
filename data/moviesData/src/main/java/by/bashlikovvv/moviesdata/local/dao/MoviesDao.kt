@@ -55,7 +55,7 @@ interface MoviesDao {
             "SELECT ${MoviesDetailsTable.COLUMN_ID} " +
             "FROM ${MoviesDetailsTable.TABLE_NAME}" +
         ") " +
-        "AND instr(${MoviesTable.COLUMN_GENRES}, :genre) > 0"
+        "AND ${MoviesTable.COLUMN_GENRES} LIKE :genre"
     )
     fun getMoviesByGenreOffline(genre: String): List<MovieEntity>
 

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class DocsItem(
     @SerializedName("year") val year: Int = 0,
-    @SerializedName("rating") val rating: Rating,
+    @SerializedName("rating") val ratingDto: RatingDto,
     @SerializedName("description") val description: String = "",
     @SerializedName("type") val type: String = "",
     @SerializedName("movieLength") val movieLength: Int = 0,

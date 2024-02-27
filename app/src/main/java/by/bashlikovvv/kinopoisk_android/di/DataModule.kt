@@ -14,15 +14,18 @@ import by.bashlikovvv.core.di.PagerOffline
 import by.bashlikovvv.core.di.PagerOnline
 import by.bashlikovvv.core.domain.model.OkHttpConfig
 import by.bashlikovvv.core.domain.repository.IBookmarksRepository
+import by.bashlikovvv.core.domain.repository.IMoviesDetailsRepository
 import by.bashlikovvv.core.domain.repository.IMoviesRepository
 import by.bashlikovvv.moviesdata.local.MoviesDatabase
 import by.bashlikovvv.moviesdata.local.contract.MoviesRoomContract
 import by.bashlikovvv.moviesdata.local.dao.BookmarksDao
 import by.bashlikovvv.moviesdata.local.dao.MoviesDao
+import by.bashlikovvv.moviesdata.local.dao.MoviesDetailsDao
 import by.bashlikovvv.moviesdata.local.model.MovieEntity
 import by.bashlikovvv.moviesdata.remote.MoviesApi
 import by.bashlikovvv.moviesdata.remote.MoviesRemoteMediator
 import by.bashlikovvv.moviesdata.repository.BookmarksRepository
+import by.bashlikovvv.moviesdata.repository.MoviesDetailsRepository
 import by.bashlikovvv.moviesdata.repository.MoviesRepository
 import dagger.Module
 import dagger.Provides
@@ -89,6 +92,11 @@ class DataModule {
     @[Provides Inject AppScope]
     fun provideBookmarksDao(moviesDatabase: MoviesDatabase): BookmarksDao {
         return moviesDatabase.bookmarksDao
+    }
+
+    @[Provides Inject AppScope]
+    fun provideMoviesDetailsDao(moviesDatabase: MoviesDatabase): MoviesDetailsDao {
+        return moviesDatabase.moviesDetailsDao
     }
 
     @OptIn(ExperimentalPagingApi::class)
@@ -160,6 +168,17 @@ class DataModule {
             bookmarksDao = bookmarksDao,
             connectivityManager = connectivityManager
         )
+    }
+
+    @[Provides Inject AppScope]
+    fun provideMoviesDetailsRepository(
+        @ApplicationQualifier context: Application,
+        moviesApi: MoviesApi,
+        moviesDetailsDao: MoviesDetailsDao
+    ): IMoviesDetailsRepository {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+
+        return MoviesDetailsRepository(connectivityManager, moviesApi, moviesDetailsDao)
     }
 
 }
