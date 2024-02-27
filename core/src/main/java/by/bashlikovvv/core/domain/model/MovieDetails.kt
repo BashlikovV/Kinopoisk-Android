@@ -1,8 +1,5 @@
 package by.bashlikovvv.core.domain.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
 data class MovieDetails(
     val id: Long = 0,
     val year: Int? = null,

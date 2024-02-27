@@ -1,6 +1,5 @@
 package by.bashlikovvv.core.domain.usecase
 
-import by.bashlikovvv.core.domain.model.MovieDetails
 import by.bashlikovvv.core.domain.model.ResultCommon
 import by.bashlikovvv.core.domain.repository.IMoviesDetailsRepository
 

@@ -70,9 +70,10 @@ class DomainModule {
 
     @[Provides Inject AppScope]
     fun provideAddBookmarkUseCase(
-        bookmarksRepository: IBookmarksRepository
+        bookmarksRepository: IBookmarksRepository,
+        moviesDetailsRepository: IMoviesDetailsRepository
     ): AddBookmarkUseCase {
-        return AddBookmarkUseCase(bookmarksRepository)
+        return AddBookmarkUseCase(bookmarksRepository, moviesDetailsRepository)
     }
 
     @[Provides Inject AppScope]

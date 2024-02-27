@@ -5,10 +5,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import by.bashlikovvv.core.domain.model.MovieDetails
-import by.bashlikovvv.moviesdata.local.model.MovieDetailsEntity
 import by.bashlikovvv.moviesdata.local.contract.MoviesRoomContract.MoviesDetailsTable
 import by.bashlikovvv.moviesdata.local.contract.MoviesRoomContract.MoviesTable
+import by.bashlikovvv.moviesdata.local.model.MovieDetailsEntity
 import by.bashlikovvv.moviesdata.local.tuple.MovieDetailsAndMovieTuple
 
 

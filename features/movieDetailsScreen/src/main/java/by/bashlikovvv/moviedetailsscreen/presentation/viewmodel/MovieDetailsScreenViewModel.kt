@@ -4,10 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.model.MovieDetails
 import by.bashlikovvv.core.domain.model.ResultCommon
-import by.bashlikovvv.core.domain.usecase.GetMovieByIdUseCase
 import by.bashlikovvv.core.domain.usecase.GetMovieDetailsByIdUseCase
 import by.bashlikovvv.core.domain.usecase.GetStringUseCase
 import by.bashlikovvv.moviedetailsscreen.R

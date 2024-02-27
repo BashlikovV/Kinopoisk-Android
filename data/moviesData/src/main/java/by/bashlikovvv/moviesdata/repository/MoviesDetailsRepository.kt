@@ -1,6 +1,7 @@
 package by.bashlikovvv.moviesdata.repository
 
 import android.net.ConnectivityManager
+import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.model.MovieDetails
 import by.bashlikovvv.core.domain.repository.IMoviesDetailsRepository
 import by.bashlikovvv.core.ext.isConnected
@@ -38,6 +39,18 @@ class MoviesDetailsRepository(
 
             return MovieDetailsEntityToMovieDetailsMapper(movie)
                 .mapFromEntity(movieDetailsAndMovieTuple.movieDetailsEntity)
+        }
+    }
+
+    override suspend fun addMovieToDetails(movie: Movie) {
+        if (connectivityManager.isConnected()) {
+            val movieDto = moviesApi.getMovieById(movie.id).body() ?: return
+            moviesDetailsDao.insertMovieDetails(
+                MovieDetailsEntityToMovieDetailsMapper(movie)
+                    .mapToEntity(
+                        MovieDtoToMovieDetailsMapper().mapFromEntity(movieDto)
+                    )
+            )
         }
     }
 }

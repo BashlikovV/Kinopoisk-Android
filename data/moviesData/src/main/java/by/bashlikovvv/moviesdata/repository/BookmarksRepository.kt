@@ -3,7 +3,6 @@ package by.bashlikovvv.moviesdata.repository
 import android.net.ConnectivityManager
 import androidx.paging.PagingData
 import by.bashlikovvv.core.domain.model.Movie
-import by.bashlikovvv.core.domain.model.ResultCommon
 import by.bashlikovvv.core.domain.repository.IBookmarksRepository
 import by.bashlikovvv.core.ext.isConnected
 import by.bashlikovvv.moviesdata.local.dao.BookmarksDao
