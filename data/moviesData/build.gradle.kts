@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "by.bashlikovvv.moviesdata"
+    namespace = "by.bashlikovvv.kinopoiskapi"
     compileSdk = 34
 
     defaultConfig {
