@@ -6,7 +6,7 @@
 
 - Providing dependencies for the feature modules;
 - Navigation between feature modules
-  using [NavigationUtil](../core/src/main/java/by/bashlikovvv/core/util/NavigationUtil.kt);
+  using [NavigationUtil](../core/src/main/java/by/bashlikovvv/core/ext/NavigationUtil.kt);
 - Setting splash screen.
 
 ## Description:

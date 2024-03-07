@@ -9,5 +9,5 @@
 
 ## Description:
 
-- [moviesData module](../moviesData) - a module containing all the data about movies (movies,
+- [moviesData module](../data/moviesData) - a module containing all the data about movies (movies,
   details and bookmarks);
