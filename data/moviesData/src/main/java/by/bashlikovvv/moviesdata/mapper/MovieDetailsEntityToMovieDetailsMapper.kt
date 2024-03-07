@@ -1,6 +1,6 @@
 package by.bashlikovvv.moviesdata.mapper
 
-import by.bashlikovvv.core.domain.model.IMapper
+import by.bashlikovvv.core.base.IMapper
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.model.MovieDetails
 import by.bashlikovvv.moviesdata.local.model.MovieDetailsEntity

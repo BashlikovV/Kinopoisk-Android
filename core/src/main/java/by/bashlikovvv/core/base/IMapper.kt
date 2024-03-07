@@ -1,4 +1,4 @@
-package by.bashlikovvv.core.domain.model
+package by.bashlikovvv.core.base
 
 interface IMapper<Entity, Domain> {
 

@@ -1,4 +1,4 @@
-package by.bashlikovvv.core.domain.model
+package by.bashlikovvv.core.base
 
 import android.view.View
 import androidx.paging.LoadState

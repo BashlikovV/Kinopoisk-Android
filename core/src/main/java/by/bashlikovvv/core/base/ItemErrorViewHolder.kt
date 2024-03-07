@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import by.bashlikovvv.core.databinding.ItemErrorLayoutBinding
-import by.bashlikovvv.core.domain.model.ItemViewHolder
 
 class ItemErrorViewHolder (
     private val binding: ItemErrorLayoutBinding

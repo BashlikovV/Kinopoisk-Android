@@ -5,7 +5,7 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import by.bashlikovvv.core.base.ItemErrorViewHolder
 import by.bashlikovvv.core.base.ItemProgressViewHolder
-import by.bashlikovvv.core.domain.model.ItemViewHolder
+import by.bashlikovvv.core.base.ItemViewHolder
 
 class AllMoviesLoadStateAdapter : LoadStateAdapter<ItemViewHolder>() {
     override fun onBindViewHolder(holder: ItemViewHolder, loadState: LoadState) {

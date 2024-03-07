@@ -1,4 +1,4 @@
-package by.bashlikovvv.core.util
+package by.bashlikovvv.core.ext
 
 import android.os.Build
 import androidx.core.os.bundleOf

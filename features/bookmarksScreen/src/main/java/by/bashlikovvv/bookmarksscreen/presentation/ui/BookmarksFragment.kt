@@ -16,7 +16,7 @@ import by.bashlikovvv.bookmarksscreen.presentation.ui.adapter.BookmarksListAdapt
 import by.bashlikovvv.bookmarksscreen.presentation.viewmodel.BookmarksFragmentViewModel
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
-import by.bashlikovvv.core.util.navigateToDestination
+import by.bashlikovvv.core.ext.navigateToDestination
 import dagger.Lazy
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest

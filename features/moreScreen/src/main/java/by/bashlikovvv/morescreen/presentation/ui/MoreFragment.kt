@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
-import by.bashlikovvv.core.util.navigateToDestination
+import by.bashlikovvv.core.ext.navigateToDestination
 import by.bashlikovvv.morescreen.databinding.FragmentMoreBinding
 import by.bashlikovvv.morescreen.di.MoreScreenComponentProvider
 import by.bashlikovvv.morescreen.presentation.ui.adapter.MoviesListAdapter

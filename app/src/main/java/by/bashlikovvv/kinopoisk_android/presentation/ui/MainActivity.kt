@@ -10,7 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import by.bashlikovvv.core.domain.model.Destination
-import by.bashlikovvv.core.util.setFragmentNavigationListener
+import by.bashlikovvv.core.ext.setFragmentNavigationListener
 import by.bashlikovvv.kinopoisk_android.R
 import by.bashlikovvv.kinopoisk_android.databinding.ActivityMainBinding
 import by.bashlikovvv.kinopoisk_android.presentation.KinopoiskApplication
