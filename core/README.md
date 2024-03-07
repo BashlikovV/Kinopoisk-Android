@@ -9,7 +9,7 @@
    base mapper class for mapping data from data layer to domain layer;
    - [ItemViewHolder](../core/src/main/java/by/bashlikovvv/core/base/ItemViewHolder.kt) - base view holder;
    - [ItemErrorViewHolder](../core/src/main/java/by/bashlikovvv/core/base/ItemErrorViewHolder.kt), 
-   [ItemProgressViewHolder](core/src/main/java/by/bashlikovvv/core/base/ItemProgressViewHolder.kt) -
+   [ItemProgressViewHolder](../core/src/main/java/by/bashlikovvv/core/base/ItemProgressViewHolder.kt) -
    base view holders with different progress states;
    - [SingleLiveEvent](../core/src/main/java/by/bashlikovvv/core/base/SingleLiveEvent.kt) -
    a live event that can only be called once until the value changes;
