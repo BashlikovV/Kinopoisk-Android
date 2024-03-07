@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "by.bashlikovvv.kinopoiskapi"
+    namespace = "by.bashlikovvv.features"
     compileSdk = 34
 
     defaultConfig {
