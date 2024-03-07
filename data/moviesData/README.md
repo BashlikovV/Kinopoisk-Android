@@ -10,9 +10,7 @@
 
 ## Description:
 
-- ### [schemas package](../moviesData/schemas) - stores json descriptions all version of the
-
-application database with the designation of versions.
+- ### [schemas package](../moviesData/schemas) - stores json descriptions all version of the application database with the designation of versions.
 
 - ### [local package](../moviesData/src/main/java/by/bashlikovvv/moviesdata/local) - describe local data sources:
     - [Contract](../moviesData/src/main/java/by/bashlikovvv/moviesdata/local/contract/MoviesRoomContract.kt) -
