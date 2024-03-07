@@ -15,7 +15,7 @@ class AllMoviesListAdapter(
     override fun onBindViewHolder(holder: AllMoviesItemViewHolder, position: Int) {
         holder.bind(
             item = getItem(position) ?: return,
-            onClickListener = object : AllMoviesItemViewHolder.Companion.AllMoviesItemViewHolderClickListener {
+            onClickListener = object : AllMoviesItemViewHolder.AllMoviesItemViewHolderClickListener {
                 override fun onMovieClick(movie: Movie) {
                     onClickListener.notifyMovieClicked(movie)
                 }

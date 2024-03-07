@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,7 @@ import by.bashlikovvv.morescreen.databinding.FragmentMoreBinding
 import by.bashlikovvv.morescreen.di.MoreScreenComponentProvider
 import by.bashlikovvv.morescreen.presentation.ui.adapter.MoviesListAdapter
 import by.bashlikovvv.morescreen.presentation.viewmodel.MoreFragmentViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.Lazy
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +33,8 @@ class MoreFragment : BottomSheetDialogFragment() {
     private val viewModel: MoreFragmentViewModel by viewModels {
         viewModelFactory.get()
     }
+
+    private lateinit var binding: FragmentMoreBinding
 
     private val adapter: MoviesListAdapter by lazy {
         MoviesListAdapter(
@@ -58,13 +62,52 @@ class MoreFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentMoreBinding.inflate(inflater, container, false)
+        binding = FragmentMoreBinding.inflate(inflater, container, false)
 
         collectViewModelStates()
-        setUpMoviesRecyclerView(binding)
+        setUpMoviesRecyclerView()
         setUpSearchView(binding.searchView)
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val density = requireContext().resources.displayMetrics.density
+        dialog?.let {
+            val bottomSheet = it
+                .findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val behavior = BottomSheetBehavior.from(bottomSheet)
+
+            behavior.peekHeight = (COLLAPSED_HEIGHT * density).toInt()
+            behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+//            behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+//                override fun onStateChanged(bottomSheet: View, newState: Int) {  }
+//
+//                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+//                    val params = MarginLayoutParams(binding.moviesRecyclerView.layoutParams)
+//
+//                    if (slideOffset > 0) {
+//                        params.setMargins(
+//                            params.leftMargin,
+//                            params.topMargin - 25,
+//                            params.rightMargin,
+//                            params.bottomMargin
+//                        )
+//                    } else {
+//                        params.setMargins(
+//                            params.leftMargin,
+//                            params.topMargin + 25,
+//                            params.rightMargin,
+//                            params.bottomMargin
+//                        )
+//                    }
+//
+//                    binding.moviesRecyclerView.layoutParams = params
+//                }
+//            })
+        }
     }
 
     private fun collectViewModelStates() {
@@ -80,12 +123,12 @@ class MoreFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setUpMoviesRecyclerView(binding: FragmentMoreBinding) {
+    private fun setUpMoviesRecyclerView() {
         binding.moviesRecyclerView.adapter = adapter
     }
 
-    private fun setUpSearchView(menuItem: SearchView) {
-        with(menuItem) {
+    private fun setUpSearchView(searchView: SearchView) {
+        with(searchView) {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     viewModel.onSearch(query ?: "")
@@ -97,9 +140,8 @@ class MoreFragment : BottomSheetDialogFragment() {
                     return true
                 }
             })
-            setOnSearchClickListener {
-                viewModel.onSearch("")
-            }
+            setOnSearchClickListener { viewModel.onSearch("") }
+            setOnClickListener { searchView.isIconified = false }
         }
     }
 
@@ -107,5 +149,7 @@ class MoreFragment : BottomSheetDialogFragment() {
 
         const val KEY_CATEGORY_NAME: String = "key_category_name"
 
+        // root padding (5dp) + searchView height (50dp) + searchView marginTop (15dp) + 5dp
+        const val COLLAPSED_HEIGHT = 105
     }
 }

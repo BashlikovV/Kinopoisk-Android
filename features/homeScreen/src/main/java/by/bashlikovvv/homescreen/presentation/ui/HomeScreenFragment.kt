@@ -41,7 +41,27 @@ class HomeScreenFragment : Fragment() {
 
     private lateinit var navController: NavController
 
-    private lateinit var categoriesAdapter: CategoriesListAdapter
+    private val categoriesAdapter: CategoriesListAdapter = CategoriesListAdapter { category, position ->
+        categoriesCenterSnapHelper.scrollTo(position, true)
+        viewModel.navigateToCategory(category)
+    }
+
+    private val categoriesCenterSnapHelper: CenterSnapHelper = CenterSnapHelper()
+
+    private val smoothScroller by lazy {
+        object : LinearSmoothScroller(requireContext()) {
+
+            var categoryMarginStart: Int = 0
+
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_START
+            }
+
+            override fun calculateDyToMakeVisible(view: View?, snapPreference: Int): Int {
+                return super.calculateDyToMakeVisible(view, snapPreference) + categoryMarginStart
+            }
+        }
+    }
 
     override fun onAttach(context: Context) {
         (requireContext().applicationContext as HomeScreenComponentProvider)
@@ -65,14 +85,10 @@ class HomeScreenFragment : Fragment() {
     }
 
     private fun setUpCategoriesRecyclerView(binding: FragmentHomeScreenBinding) {
-        val centerSnapHelper = CenterSnapHelper()
-        categoriesAdapter = CategoriesListAdapter { category, position ->
-            centerSnapHelper.scrollTo(position, true)
-            viewModel.navigateToCategory(category)
-        }.apply { submitList(categories) }
+        categoriesAdapter.submitList(categories)
         binding.categoriesRecyclerView.let { categoriesRecyclerView ->
-            centerSnapHelper.attachToRecyclerView(categoriesRecyclerView)
-            categoriesRecyclerView.onFlingListener = centerSnapHelper
+            categoriesCenterSnapHelper.attachToRecyclerView(categoriesRecyclerView)
+            categoriesRecyclerView.onFlingListener = categoriesCenterSnapHelper
             categoriesRecyclerView.adapter = categoriesAdapter
         }
     }
@@ -171,15 +187,7 @@ class HomeScreenFragment : Fragment() {
             )
         }
 
-        val smoothScroller = object : LinearSmoothScroller(requireContext()) {
-            override fun getVerticalSnapPreference(): Int {
-                return SNAP_TO_START
-            }
-
-            override fun calculateDyToMakeVisible(view: View?, snapPreference: Int): Int {
-                return super.calculateDyToMakeVisible(view, snapPreference) + categoryMarginStart
-            }
-        }
+        smoothScroller.categoryMarginStart = categoryMarginStart
         smoothScroller.targetPosition = targetPos
         binding.categoriesRecyclerView.layoutManager?.startSmoothScroll(smoothScroller)
     }

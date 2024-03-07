@@ -45,13 +45,13 @@ class AllMoviesItemViewHolder(
             )
         }
 
-        interface AllMoviesItemViewHolderClickListener {
+    }
 
-            fun onMovieClick(movie: Movie)
+    interface AllMoviesItemViewHolderClickListener {
 
-            fun onBookmarkClick(movie: Movie)
+        fun onMovieClick(movie: Movie)
 
-        }
+        fun onBookmarkClick(movie: Movie)
 
     }
 

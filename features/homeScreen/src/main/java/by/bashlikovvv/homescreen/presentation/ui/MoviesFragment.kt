@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 class MoviesFragment : Fragment() {
 
@@ -38,6 +39,21 @@ class MoviesFragment : Fragment() {
     }
 
     private lateinit var binding: FragmentMoviesBinding
+
+    private val smoothScroller by lazy {
+        object : LinearSmoothScroller(requireContext()) {
+
+            var categoryMarginTop: Int = 0
+
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_START
+            }
+
+            override fun calculateDyToMakeVisible(view: View?, snapPreference: Int): Int {
+                return super.calculateDyToMakeVisible(view, snapPreference) + categoryMarginTop
+            }
+        }
+    }
 
     private val adapter = MoviesListAdapter(
         clickListener = object : MoviesListAdapter.MoviesListAdapterClickListener {
@@ -116,7 +132,7 @@ class MoviesFragment : Fragment() {
                 val position = layoutManager.findLastVisibleItemPosition()
                 val categoryPosition = adapter.getCategoryPositionByPosition(position)
                 val item = adapter.currentList.getOrNull(categoryPosition ?: return@setOnScrollChangeListener)
-                if (item is CategoryTitle && item != viewModel.moviesCurrentCategory.value) {
+                if (!smoothScroller.isRunning && item is CategoryTitle && item != viewModel.moviesCurrentCategory.value) {
                     viewModel.setMoviesCurrentCategory(item)
                 }
             }
@@ -142,15 +158,7 @@ class MoviesFragment : Fragment() {
             )
         }
 
-        val smoothScroller = object : LinearSmoothScroller(requireContext()) {
-            override fun getVerticalSnapPreference(): Int {
-                return SNAP_TO_START
-            }
-
-            override fun calculateDyToMakeVisible(view: View?, snapPreference: Int): Int {
-                return super.calculateDyToMakeVisible(view, snapPreference) + categoryMarginTop
-            }
-        }
+        smoothScroller.categoryMarginTop = categoryMarginTop
         smoothScroller.targetPosition = targetPos
         binding.moviesRecyclerView.layoutManager?.startSmoothScroll(smoothScroller)
     }

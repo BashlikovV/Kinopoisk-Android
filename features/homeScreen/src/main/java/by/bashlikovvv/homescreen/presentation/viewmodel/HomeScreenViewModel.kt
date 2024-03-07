@@ -38,24 +38,31 @@ class HomeScreenViewModel(
     private val removeBookmarkUseCase: RemoveBookmarkUseCase
 ) : ViewModel() {
 
+    // AllMoviesFragment progress bar state
     private var _allMoviesUpdateState = MutableStateFlow(false)
     val allMoviesUpdateState = _allMoviesUpdateState.asStateFlow()
 
+    // MoviesFragment progress bar state
     private var _moviesUpdateState = MutableStateFlow(false)
     val moviesUpdateState = _moviesUpdateState.asStateFlow()
 
+    // Paged data with all movies for AllMoviesFragment
     var moviesPagedData = getPagedMoviesUseCase.execute()
         private set
 
+    // Flow with current visible category at MoviesFragment
     private var _currentCategory = MutableStateFlow<Category>(defaultCategory)
     val currentCategory = _currentCategory.asStateFlow()
 
+    // Flow with current selected category as HomeScreenFragment
     private var _moviesCurrentCategory = MutableStateFlow<Category>(defaultCategory)
     val moviesCurrentCategory = _moviesCurrentCategory.asStateFlow()
 
+    // Flow with mapped by categories movies for MoviesFragment
     private var _moviesData = MutableStateFlow<List<MoviesCategory>>(defaultMoviesCategory)
     val moviesData = _moviesData.asStateFlow()
 
+    // LiveData with Category to navigate between AllMoviesFragment and MoviesFragment
     private var _navigateToCategoryLiveEvent = SingleLiveEvent<Category>()
     val navigateToCategoryLiveEvent: LiveData<Category> = _navigateToCategoryLiveEvent
 
@@ -66,10 +73,12 @@ class HomeScreenViewModel(
         makeMoviesData()
     }
 
+    // Setting the current visible category for MoviesRecyclerView to the MoviesFragment
     fun setCategory(category: Category) {
         _currentCategory.tryEmit(category)
     }
 
+    // Setting the current selected category for the CategoriesListAdapter to the HomeScreenFragment
     fun setMoviesCurrentCategory(category: MoviesCategory) {
         val categoryText = CategoryText((category as CategoryTitle).itemText)
         _moviesCurrentCategory.tryEmit(categoryText)
@@ -103,14 +112,19 @@ class HomeScreenViewModel(
         }
     }
 
+    // Navigation between fragments:
+    //  CategoryText(R.string.all) -> AllMovieFragment
+    //  Other categories -> MoviesFragment
     fun navigateToCategory(category: Category) {
         _navigateToCategoryLiveEvent.postValue(category)
     }
 
+    // Set AllMoviesFragment progress bar visibility
     fun setAllMoviesProgress(value: Boolean) {
         _allMoviesUpdateState.tryEmit(value)
     }
 
+    // Bookmark view click processing
     fun onBookmarkClicked(movie: Movie) = viewModelScope.launch(Dispatchers.IO) {
         if (movie.isBookmark) {
             removeBookmarkUseCase.execute(movie)
@@ -119,6 +133,7 @@ class HomeScreenViewModel(
         }
     }
 
+    // Navigate between fragments at main activity
     fun navigateToDestination(destination: Destination) {
         _navigationDestinationLiveEvent.postValue(destination)
     }
