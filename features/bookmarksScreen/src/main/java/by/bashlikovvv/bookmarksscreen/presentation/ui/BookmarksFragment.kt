@@ -9,19 +9,18 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import by.bashlikovvv.bookmarksscreen.databinding.FragmentBookmarksBinding
 import by.bashlikovvv.bookmarksscreen.di.BookmarksScreenComponentProvider
 import by.bashlikovvv.bookmarksscreen.presentation.ui.adapter.BookmarksListAdapter
 import by.bashlikovvv.bookmarksscreen.presentation.viewmodel.BookmarksFragmentViewModel
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
+import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.core.ext.navigateToDestination
 import dagger.Lazy
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class BookmarksFragment : Fragment() {
@@ -63,7 +62,6 @@ class BookmarksFragment : Fragment() {
         collectViewModelStates(binding)
         setUpSearchView(binding.searchView)
 
-
         return binding.root
     }
 
@@ -100,28 +98,44 @@ class BookmarksFragment : Fragment() {
 
     @OptIn(FlowPreview::class)
     private fun collectViewModelStates(binding: FragmentBookmarksBinding) {
-        lifecycleScope.launch {
-            viewModel.bookmarksFlow.collectLatest { bookmarks ->
-                adapter.submitList(bookmarks)
-            }
-        }
+        launchMain(
+            safeAction = {
+                viewModel.bookmarksFlow.collectLatest { bookmarks ->
+                    adapter.submitList(bookmarks)
+                }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
         viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
             navigateToDestination(destination)
         }
-        lifecycleScope.launch {
-            viewModel.isUpdating
-                .debounce(500)
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest {
-                    if (it) {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.bookmarksRecyclerView.visibility = View.GONE
-                    } else {
-                        binding.progressBar.visibility = View.GONE
-                        binding.bookmarksRecyclerView.visibility = View.VISIBLE
+        launchMain(
+            safeAction = {
+                viewModel.isUpdating
+                    .debounce(500)
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collectLatest {
+                        if (it) {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.bookmarksRecyclerView.visibility = View.GONE
+                        } else {
+                            binding.progressBar.visibility = View.GONE
+                            binding.bookmarksRecyclerView.visibility = View.VISIBLE
+                        }
                     }
-                }
-        }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
+        launchMain(
+            safeAction = {
+                viewModel.exceptionsFlow
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collectLatest {
+
+                    }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
     }
 
 }

@@ -7,14 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.moviedetailsscreen.databinding.FragmentMovieDetailsBinding
 import by.bashlikovvv.moviedetailsscreen.di.MovieDetailsScreenComponentProvider
 import by.bashlikovvv.moviedetailsscreen.presentation.viewmodel.MovieDetailsScreenViewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MovieDetailsFragment : BottomSheetDialogFragment() {
@@ -48,20 +47,34 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     }
 
     private fun loadMovie() {
-        lifecycleScope.launch {
-            viewModel.getMovieById(movieId ?: 0)
-        }
+        launchMain(
+            safeAction = { viewModel.getMovieById(movieId ?: 0) },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
     }
 
     private fun collectViewModelStates(binding: FragmentMovieDetailsBinding) {
-        lifecycleScope.launch {
-            viewModel.movie
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { movie ->
-                setBitmapWithGlide(movie.poster, binding.posterImageView)
-                binding.descriptionImageView.text = movie.shortDescription
-            }
-        }
+        launchMain(
+            safeAction = {
+                viewModel.movie
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collectLatest { movie ->
+                        setBitmapWithGlide(movie.poster, binding.posterImageView)
+                        binding.descriptionImageView.text = movie.shortDescription
+                    }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
+        launchMain(
+            safeAction = {
+                viewModel.exceptionsFlow
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collectLatest {
+
+                    }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
         viewModel.exceptions.observe(viewLifecycleOwner) { exception ->
             binding.descriptionImageView.text = exception
         }

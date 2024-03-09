@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.dp
+import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.homescreen.databinding.FragmentHomeScreenBinding
 import by.bashlikovvv.homescreen.databinding.FragmentMoviesBinding
 import by.bashlikovvv.homescreen.di.HomeScreenComponentProvider
@@ -26,7 +26,6 @@ import dagger.Lazy
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MoviesFragment : Fragment() {
@@ -95,32 +94,41 @@ class MoviesFragment : Fragment() {
 
     @OptIn(FlowPreview::class)
     private fun collectViewModelStates() {
-        lifecycleScope.launch {
-            viewModel.moviesUpdateState
-                .debounce(500)
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest {
-                    if (it) {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.moviesRecyclerView.visibility = View.GONE
-                    } else {
-                        binding.progressBar.visibility = View.GONE
-                        binding.moviesRecyclerView.visibility = View.VISIBLE
+        launchMain(
+            safeAction = {
+                viewModel.moviesUpdateState
+                    .debounce(500)
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collectLatest {
+                        if (it) {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.moviesRecyclerView.visibility = View.GONE
+                        } else {
+                            binding.progressBar.visibility = View.GONE
+                            binding.moviesRecyclerView.visibility = View.VISIBLE
+                        }
                     }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
+        launchMain(
+            safeAction = {
+                viewModel.currentCategory
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collectLatest { category ->
+                        smoothScrollToCategory(category as CategoryText)
+                    }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
+        launchMain(
+            safeAction = {
+                viewModel.moviesData.collectLatest { moviesCategory ->
+                    adapter.submitList(moviesCategory)
                 }
-        }
-        lifecycleScope.launch {
-            viewModel.currentCategory
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { category ->
-                    smoothScrollToCategory(category as CategoryText)
-                }
-        }
-        lifecycleScope.launch {
-            viewModel.moviesData.collectLatest { moviesCategory ->
-                adapter.submitList(moviesCategory)
-            }
-        }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
     }
 
     private fun setUpMoviesRecyclerView() {

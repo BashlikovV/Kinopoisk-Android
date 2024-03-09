@@ -80,6 +80,7 @@ dependencies {
     implementation(Dependencies.AndroidX.Room.roomKTX)
     implementation(Dependencies.AndroidX.Room.roomRuntime)
 
+//    implementation("com.squareup.leakcanary:leakcanary-android:3.0-alpha-1")
 }
 
 kapt {

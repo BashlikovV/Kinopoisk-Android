@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.flowWithLifecycle
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
+import by.bashlikovvv.core.ext.launchIO
+import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.core.ext.navigateToDestination
 import by.bashlikovvv.morescreen.databinding.FragmentMoreBinding
 import by.bashlikovvv.morescreen.di.MoreScreenComponentProvider
@@ -19,9 +21,7 @@ import by.bashlikovvv.morescreen.presentation.viewmodel.MoreFragmentViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.Lazy
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MoreFragment : BottomSheetDialogFragment() {
@@ -114,13 +114,26 @@ class MoreFragment : BottomSheetDialogFragment() {
         viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) {
             navigateToDestination(it)
         }
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel
-                .getMovies(categoryName ?: return@launch)
-                .collectLatest { pagingData ->
-                    adapter.submitData(pagingData)
-                }
-        }
+        launchIO(
+            safeAction = {
+                viewModel
+                    .getMovies(categoryName ?: return@launchIO)
+                    .collectLatest { pagingData ->
+                        adapter.submitData(pagingData)
+                    }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
+        launchMain(
+            safeAction = {
+                viewModel.exceptionsFlow
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collectLatest {
+
+                    }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
     }
 
     private fun setUpMoviesRecyclerView() {

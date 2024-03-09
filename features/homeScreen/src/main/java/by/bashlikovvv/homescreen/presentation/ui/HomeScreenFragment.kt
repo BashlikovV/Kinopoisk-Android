@@ -1,5 +1,6 @@
 package by.bashlikovvv.homescreen.presentation.ui
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,12 +10,12 @@ import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import by.bashlikovvv.core.ext.dp
+import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.core.ext.navigateToDestination
 import by.bashlikovvv.homescreen.R
 import by.bashlikovvv.homescreen.databinding.FragmentHomeScreenBinding
@@ -28,7 +29,6 @@ import dagger.Lazy
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HomeScreenFragment : Fragment() {
@@ -102,9 +102,9 @@ class HomeScreenFragment : Fragment() {
                     }
                 }
                 R.id.moviesFragment -> {
-                    viewModel.makeMoviesData().invokeOnCompletion {
-                        binding.swipeRefreshLayout.isRefreshing = false
-                    }
+//                    viewModel.makeMoviesData().invokeOnCompletion {
+//                        binding.swipeRefreshLayout.isRefreshing = false
+//                    }
                 }
             }
         }
@@ -115,23 +115,26 @@ class HomeScreenFragment : Fragment() {
         categoriesAdapter: CategoriesListAdapter,
         binding: FragmentHomeScreenBinding
     ) {
-        lifecycleScope.launch {
-            viewModel.moviesCurrentCategory
-                .debounce(500)
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { category ->
-                    if (category is CategoryText) {
-                        categoriesAdapter.chooseCategory(
-                            categoriesAdapter.getCategoryPosition(category.itemText)
-                        )
-                        smoothScrollToCategory(
-                            category = category,
-                            adapter = categoriesAdapter,
-                            binding = binding
-                        )
+        launchMain(
+            safeAction = {
+                viewModel.moviesCurrentCategory
+                    .debounce(500)
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collectLatest { category ->
+                        if (category is CategoryText) {
+                            categoriesAdapter.chooseCategory(
+                                categoriesAdapter.getCategoryPosition(category.itemText)
+                            )
+                            smoothScrollToCategory(
+                                category = category,
+                                adapter = categoriesAdapter,
+                                binding = binding
+                            )
+                        }
                     }
-                }
-        }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
         viewModel.navigateToCategoryLiveEvent.observe(viewLifecycleOwner) { category ->
             if (category == CategoryText(R.string.all)) {
                 val currentDestinationId = navController.currentDestination?.id
@@ -149,6 +152,19 @@ class HomeScreenFragment : Fragment() {
                 viewModel.setCategory(category)
             }
         }
+        launchMain(
+            safeAction = {
+                viewModel.exceptionsFlow
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collectLatest {
+                        AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.smth_went_wrong)
+                            .setMessage(it.message)
+                            .show()
+                    }
+            },
+            exceptionHandler = viewModel.exceptionsHandler
+        )
         viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
             navigateToDestination(destination)
         }

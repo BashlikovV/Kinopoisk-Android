@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import by.bashlikovvv.core.base.BaseViewModel
 import by.bashlikovvv.core.base.SingleLiveEvent
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
@@ -21,14 +21,21 @@ import by.bashlikovvv.homescreen.domain.model.CategoryText
 import by.bashlikovvv.homescreen.domain.model.CategoryTitle
 import by.bashlikovvv.homescreen.domain.model.MoviesCategory
 import by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.coroutines.CoroutineContext
 
 class HomeScreenViewModel(
     private val getPagedMoviesUseCase: GetPagedMoviesUseCase,
@@ -36,7 +43,22 @@ class HomeScreenViewModel(
     private val getMoviesByCollectionUseCase: GetMoviesByCollectionUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
     private val removeBookmarkUseCase: RemoveBookmarkUseCase
-) : ViewModel() {
+) : BaseViewModel() {
+
+    private val job: Job = SupervisorJob()
+
+    override val coroutineContext: CoroutineContext = job
+
+    override val exceptionsHandler = CoroutineExceptionHandler { _, throwable ->
+        launch(Dispatchers.Main) { _exceptionsFlow.tryEmit(throwable) }
+    }
+
+    private val _exceptionsFlow = MutableSharedFlow<Throwable>(
+        replay = 1,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val exceptionsFlow = _exceptionsFlow.asSharedFlow()
 
     // AllMoviesFragment progress bar state
     private var _allMoviesUpdateState = MutableStateFlow(false)
@@ -84,7 +106,7 @@ class HomeScreenViewModel(
         _moviesCurrentCategory.tryEmit(categoryText)
     }
 
-    fun makeMoviesData() = viewModelScope.launch(Dispatchers.IO) {
+    private fun makeMoviesData() = launchIO {
         _moviesData.tryEmit(listOf())
         HomeScreenFragment.collections.forEach { category ->
             _moviesData.update { it + listOf(CategoryTitle(category.itemText)) }
@@ -106,7 +128,7 @@ class HomeScreenViewModel(
         }
     }
 
-    fun makeAllMoviesFata() = viewModelScope.launch(Dispatchers.IO) {
+    fun makeAllMoviesFata() = launchIO {
         moviesPagedData.transform {
             emit(getPagedMoviesUseCase.execute())
         }
@@ -125,7 +147,7 @@ class HomeScreenViewModel(
     }
 
     // Bookmark view click processing
-    fun onBookmarkClicked(movie: Movie) = viewModelScope.launch(Dispatchers.IO) {
+    fun onBookmarkClicked(movie: Movie) = launchIO {
         if (movie.isBookmark) {
             removeBookmarkUseCase.execute(movie)
         } else {
