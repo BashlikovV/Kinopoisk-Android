@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.get
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
+import by.bashlikovvv.core.base.BaseFragment
 import by.bashlikovvv.core.ext.dp
 import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.core.ext.navigateToDestination
@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import javax.inject.Inject
 
-class HomeScreenFragment : Fragment() {
+class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
 
     @Inject internal lateinit var viewModelFactory: Lazy<HomeScreenViewModel.Factory>
 
@@ -70,21 +70,28 @@ class HomeScreenFragment : Fragment() {
         super.onAttach(context)
     }
 
+    override fun setupViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentHomeScreenBinding {
+        return FragmentHomeScreenBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
 
         navController = getNavController()
-        setUpCategoriesRecyclerView(binding)
-        setUpSwipeRefreshLayout(binding)
-        collectViewModelStates(categoriesAdapter, binding)
+        setUpCategoriesRecyclerView()
+        setUpSwipeRefreshLayout()
+        collectViewModelStates(categoriesAdapter)
 
         return binding.root
     }
 
-    private fun setUpCategoriesRecyclerView(binding: FragmentHomeScreenBinding) {
+    private fun setUpCategoriesRecyclerView() {
         categoriesAdapter.submitList(categories)
         binding.categoriesRecyclerView.let { categoriesRecyclerView ->
             categoriesCenterSnapHelper.attachToRecyclerView(categoriesRecyclerView)
@@ -93,7 +100,7 @@ class HomeScreenFragment : Fragment() {
         }
     }
 
-    private fun setUpSwipeRefreshLayout(binding: FragmentHomeScreenBinding) {
+    private fun setUpSwipeRefreshLayout() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             when(navController.currentDestination?.id) {
                 R.id.allMoviesFragment -> {
@@ -112,8 +119,7 @@ class HomeScreenFragment : Fragment() {
 
     @OptIn(FlowPreview::class)
     private fun collectViewModelStates(
-        categoriesAdapter: CategoriesListAdapter,
-        binding: FragmentHomeScreenBinding
+        categoriesAdapter: CategoriesListAdapter
     ) {
         launchMain(
             safeAction = {

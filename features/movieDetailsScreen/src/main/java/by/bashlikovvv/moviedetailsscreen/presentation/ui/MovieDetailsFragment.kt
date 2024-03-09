@@ -7,16 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.flowWithLifecycle
+import by.bashlikovvv.core.base.BaseBottomSheetDialogFragment
 import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.moviedetailsscreen.databinding.FragmentMovieDetailsBinding
 import by.bashlikovvv.moviedetailsscreen.di.MovieDetailsScreenComponentProvider
 import by.bashlikovvv.moviedetailsscreen.presentation.viewmodel.MovieDetailsScreenViewModel
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
-class MovieDetailsFragment : BottomSheetDialogFragment() {
+class MovieDetailsFragment : BaseBottomSheetDialogFragment<FragmentMovieDetailsBinding>() {
 
     @Inject internal lateinit var viewModel: MovieDetailsScreenViewModel
 
@@ -34,14 +34,21 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         movieId = requireArguments().getLong(KEY_MOVIE_ID)
     }
 
+    override fun setupViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentMovieDetailsBinding {
+        return FragmentMovieDetailsBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
 
         loadMovie()
-        collectViewModelStates(binding)
+        collectViewModelStates()
 
         return binding.root
     }
@@ -53,7 +60,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         )
     }
 
-    private fun collectViewModelStates(binding: FragmentMovieDetailsBinding) {
+    private fun collectViewModelStates() {
         launchMain(
             safeAction = {
                 viewModel.movie

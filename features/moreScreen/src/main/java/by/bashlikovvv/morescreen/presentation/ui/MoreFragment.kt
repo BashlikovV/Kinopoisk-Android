@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import by.bashlikovvv.core.base.BaseBottomSheetDialogFragment
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.launchIO
@@ -19,12 +20,11 @@ import by.bashlikovvv.morescreen.di.MoreScreenComponentProvider
 import by.bashlikovvv.morescreen.presentation.ui.adapter.MoviesListAdapter
 import by.bashlikovvv.morescreen.presentation.viewmodel.MoreFragmentViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.Lazy
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
-class MoreFragment : BottomSheetDialogFragment() {
+class MoreFragment : BaseBottomSheetDialogFragment<FragmentMoreBinding>() {
 
     private var categoryName: String? = null
 
@@ -33,8 +33,6 @@ class MoreFragment : BottomSheetDialogFragment() {
     private val viewModel: MoreFragmentViewModel by viewModels {
         viewModelFactory.get()
     }
-
-    private lateinit var binding: FragmentMoreBinding
 
     private val adapter: MoviesListAdapter by lazy {
         MoviesListAdapter(
@@ -58,11 +56,18 @@ class MoreFragment : BottomSheetDialogFragment() {
         categoryName = requireArguments().getString(KEY_CATEGORY_NAME)
     }
 
+    override fun setupViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentMoreBinding {
+        return FragmentMoreBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMoreBinding.inflate(inflater, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
 
         collectViewModelStates()
         setUpMoviesRecyclerView()

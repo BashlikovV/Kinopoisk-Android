@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import by.bashlikovvv.bookmarksscreen.databinding.FragmentBookmarksBinding
 import by.bashlikovvv.bookmarksscreen.di.BookmarksScreenComponentProvider
 import by.bashlikovvv.bookmarksscreen.presentation.ui.adapter.BookmarksListAdapter
 import by.bashlikovvv.bookmarksscreen.presentation.viewmodel.BookmarksFragmentViewModel
+import by.bashlikovvv.core.base.BaseFragment
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.launchMain
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import javax.inject.Inject
 
-class BookmarksFragment : Fragment() {
+class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>() {
 
     @Inject internal lateinit var viewModelFactory: Lazy<BookmarksFragmentViewModel.Factory>
 
@@ -50,16 +50,23 @@ class BookmarksFragment : Fragment() {
         super.onAttach(context)
     }
 
+    override fun setupViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentBookmarksBinding {
+        return FragmentBookmarksBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentBookmarksBinding.inflate(inflater, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
 
         viewModel.loadBookmarks()
-        setUpBookmarksRecyclerView(binding)
-        setUpSwipeRefreshLayout(binding)
-        collectViewModelStates(binding)
+        setUpBookmarksRecyclerView()
+        setUpSwipeRefreshLayout()
+        collectViewModelStates()
         setUpSearchView(binding.searchView)
 
         return binding.root
@@ -84,11 +91,11 @@ class BookmarksFragment : Fragment() {
         }
     }
 
-    private fun setUpBookmarksRecyclerView(binding: FragmentBookmarksBinding) {
+    private fun setUpBookmarksRecyclerView() {
         binding.bookmarksRecyclerView.adapter = adapter
     }
 
-    private fun setUpSwipeRefreshLayout(binding: FragmentBookmarksBinding) {
+    private fun setUpSwipeRefreshLayout() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.loadBookmarks().invokeOnCompletion {
                 binding.swipeRefreshLayout.isRefreshing = false
@@ -97,7 +104,7 @@ class BookmarksFragment : Fragment() {
     }
 
     @OptIn(FlowPreview::class)
-    private fun collectViewModelStates(binding: FragmentBookmarksBinding) {
+    private fun collectViewModelStates() {
         launchMain(
             safeAction = {
                 viewModel.bookmarksFlow.collectLatest { bookmarks ->

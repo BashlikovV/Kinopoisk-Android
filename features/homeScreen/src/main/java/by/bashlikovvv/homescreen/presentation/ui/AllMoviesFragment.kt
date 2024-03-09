@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.paging.LoadState
+import by.bashlikovvv.core.base.BaseFragment
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.launchIO
@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import javax.inject.Inject
 
-class AllMoviesFragment : Fragment() {
+class AllMoviesFragment : BaseFragment<FragmentAllMoviesBinding>() {
 
     @Inject internal lateinit var viewModelFactory: Lazy<HomeScreenViewModel.Factory>
 
@@ -51,25 +51,32 @@ class AllMoviesFragment : Fragment() {
         super.onAttach(context)
     }
 
+    override fun setupViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentAllMoviesBinding {
+        return FragmentAllMoviesBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentAllMoviesBinding.inflate(inflater, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
 
-        setUpAllMoviesRecyclerView(binding)
-        collectViewModelStates(binding)
+        setUpAllMoviesRecyclerView()
+        collectViewModelStates()
 
         return binding.root
     }
 
-    private fun setUpAllMoviesRecyclerView(binding: FragmentAllMoviesBinding) {
+    private fun setUpAllMoviesRecyclerView() {
         binding.allMoviesRecyclerView.adapter = adapter
             .withLoadStateFooter(AllMoviesLoadStateAdapter())
     }
 
     @OptIn(FlowPreview::class)
-    private fun collectViewModelStates(binding: FragmentAllMoviesBinding) {
+    private fun collectViewModelStates() {
         launchMain(
             safeAction = {
                 viewModel.allMoviesUpdateState

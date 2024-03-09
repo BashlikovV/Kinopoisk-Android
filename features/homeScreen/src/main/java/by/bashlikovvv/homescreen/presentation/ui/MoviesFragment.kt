@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
+import by.bashlikovvv.core.base.BaseFragment
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.dp
@@ -28,15 +28,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import javax.inject.Inject
 
-class MoviesFragment : Fragment() {
+class MoviesFragment : BaseFragment<FragmentMoviesBinding>() {
 
     @Inject internal lateinit var viewModelFactory: Lazy<HomeScreenViewModel.Factory>
 
     private val viewModel: HomeScreenViewModel by viewModels({ requireActivity() }) {
         viewModelFactory.get()
     }
-
-    private lateinit var binding: FragmentMoviesBinding
 
     private val smoothScroller by lazy {
         object : LinearSmoothScroller(requireContext()) {
@@ -80,11 +78,18 @@ class MoviesFragment : Fragment() {
         super.onAttach(context)
     }
 
+    override fun setupViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentMoviesBinding {
+        return FragmentMoviesBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMoviesBinding.inflate(inflater, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
 
         collectViewModelStates()
         setUpMoviesRecyclerView()
