@@ -169,7 +169,7 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
                             .show()
                     }
             },
-            exceptionHandler = viewModel.exceptionsHandler
+            onError = { /*  */ }
         )
         viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
             navigateToDestination(destination)

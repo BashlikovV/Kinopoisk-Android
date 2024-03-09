@@ -1,22 +1,68 @@
+@file:Suppress("UNUSED")
 package by.bashlikovvv.core.ext
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-fun AppCompatActivity.launchOnLifecycle(
-    context: CoroutineContext = EmptyCoroutineContext,
-    repeatOn: Lifecycle.State,
-    function: suspend () -> Unit
+inline fun AppCompatActivity.launchIO(
+    crossinline safeAction: suspend () -> Unit,
+    exceptionHandler: CoroutineExceptionHandler
 ): Job {
-    return lifecycleScope.launch(context) {
-        repeatOnLifecycle(repeatOn) {
-            function()
-        }
+    return lifecycleScope.launch(exceptionHandler + Dispatchers.IO) {
+        safeAction.invoke()
+    }
+}
+
+inline fun AppCompatActivity.launchMain(
+    crossinline safeAction: suspend () -> Unit,
+    exceptionHandler: CoroutineExceptionHandler
+): Job {
+    return lifecycleScope.launch(exceptionHandler + Dispatchers.Main) {
+        safeAction.invoke()
+    }
+}
+
+inline fun AppCompatActivity.launchMain(
+    crossinline safeAction: suspend () -> Unit,
+    crossinline onError: (Throwable) -> Unit
+): Job {
+    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        onError.invoke(throwable)
+    }
+
+    return lifecycleScope.launch(exceptionHandler + Dispatchers.Main) {
+        safeAction.invoke()
+    }
+}
+
+inline fun AppCompatActivity.launchDefault(
+    crossinline safeAction: suspend () -> Unit,
+    exceptionHandler: CoroutineExceptionHandler
+): Job {
+    return lifecycleScope.launch(exceptionHandler + Dispatchers.Default) {
+        safeAction.invoke()
+    }
+}
+
+inline fun AppCompatActivity.launchUnconfined(
+    crossinline safeAction: suspend () -> Unit,
+    exceptionHandler: CoroutineExceptionHandler
+): Job {
+    return lifecycleScope.launch(exceptionHandler + Dispatchers.Unconfined) {
+        safeAction.invoke()
+    }
+}
+
+inline fun AppCompatActivity.launchEmpty(
+    crossinline safeAction: suspend () -> Unit,
+    exceptionHandler: CoroutineExceptionHandler
+): Job {
+    return lifecycleScope.launch(exceptionHandler + EmptyCoroutineContext) {
+        safeAction.invoke()
     }
 }

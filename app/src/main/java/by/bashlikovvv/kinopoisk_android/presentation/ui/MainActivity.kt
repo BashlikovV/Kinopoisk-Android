@@ -1,15 +1,19 @@
 package by.bashlikovvv.kinopoisk_android.presentation.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.core.ext.setFragmentNavigationListener
 import by.bashlikovvv.kinopoisk_android.R
 import by.bashlikovvv.kinopoisk_android.databinding.ActivityMainBinding
@@ -17,6 +21,7 @@ import by.bashlikovvv.kinopoisk_android.presentation.KinopoiskApplication
 import by.bashlikovvv.kinopoisk_android.presentation.viewmodel.MainActivityViewModel
 import by.bashlikovvv.morescreen.presentation.ui.MoreFragment
 import by.bashlikovvv.moviedetailsscreen.presentation.ui.MovieDetailsFragment
+import kotlinx.coroutines.flow.collectLatest
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         addOnPreDrawListener()
+        collectViewModelStates()
         setFragmentNavigationListener()
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
     }
@@ -56,6 +62,22 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        )
+    }
+
+    private fun collectViewModelStates() {
+        launchMain(
+            safeAction = {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.exceptionsFlow
+                        .collectLatest {
+                            AlertDialog.Builder(this@MainActivity)
+                                .setMessage(it.message)
+                                .show()
+                        }
+                }
+            },
+            onError = { /*  */ }
         )
     }
 

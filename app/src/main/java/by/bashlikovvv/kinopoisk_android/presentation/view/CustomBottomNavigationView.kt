@@ -48,9 +48,9 @@ class CustomBottomNavigationView : BottomNavigationView {
         val activity = getActivity()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val bouds = activity?.windowManager?.currentWindowMetrics?.bounds ?: Rect()
+            val bounds = activity?.windowManager?.currentWindowMetrics?.bounds ?: Rect()
 
-            bouds.right - bouds.left - lastViewRight
+            bounds.right - bounds.left - lastViewRight
         } else {
             val display = activity?.windowManager?.defaultDisplay
             val displayMetrics = DisplayMetrics()

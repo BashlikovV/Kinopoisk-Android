@@ -1,5 +1,6 @@
 package by.bashlikovvv.bookmarksscreen.presentation.ui
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import by.bashlikovvv.bookmarksscreen.R
 import by.bashlikovvv.bookmarksscreen.databinding.FragmentBookmarksBinding
 import by.bashlikovvv.bookmarksscreen.di.BookmarksScreenComponentProvider
 import by.bashlikovvv.bookmarksscreen.presentation.ui.adapter.BookmarksListAdapter
@@ -108,7 +110,14 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>() {
         launchMain(
             safeAction = {
                 viewModel.bookmarksFlow.collectLatest { bookmarks ->
-                    adapter.submitList(bookmarks)
+                    if (bookmarks.isEmpty()) {
+                        AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.you_do_not_have_bookmarks)
+                            .setMessage(R.string.add_bookmarks)
+                            .show()
+                    } else {
+                        adapter.submitList(bookmarks)
+                    }
                 }
             },
             exceptionHandler = viewModel.exceptionsHandler
@@ -138,10 +147,12 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>() {
                 viewModel.exceptionsFlow
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                     .collectLatest {
-
+                        AlertDialog.Builder(requireContext())
+                            .setMessage(it.message)
+                            .show()
                     }
             },
-            exceptionHandler = viewModel.exceptionsHandler
+            onError = { /*  */ }
         )
     }
 

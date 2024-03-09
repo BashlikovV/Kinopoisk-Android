@@ -33,7 +33,6 @@ import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Inject
 
 @Module
 class DataModule {
@@ -41,7 +40,7 @@ class DataModule {
     @[Provides AppScope]
     fun provideOkHttpConfig() = OkHttpConfig()
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideOkHttpClient(okHttpConfig: OkHttpConfig): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor { chain ->
@@ -59,7 +58,7 @@ class DataModule {
         return GsonConverterFactory.create()
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideRetrofit(
         okHttpConfig: OkHttpConfig,
         converterFactory: Converter.Factory,
@@ -70,7 +69,7 @@ class DataModule {
         .addConverterFactory(converterFactory)
         .build()
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideMoviesApi(retrofit: Retrofit): MoviesApi {
         return retrofit.create(MoviesApi::class.java)
     }
@@ -84,23 +83,23 @@ class DataModule {
         ).build()
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideMoviesDao(moviesDatabase: MoviesDatabase): MoviesDao {
         return moviesDatabase.moviesDao
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideBookmarksDao(moviesDatabase: MoviesDatabase): BookmarksDao {
         return moviesDatabase.bookmarksDao
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideMoviesDetailsDao(moviesDatabase: MoviesDatabase): MoviesDetailsDao {
         return moviesDatabase.moviesDetailsDao
     }
 
     @OptIn(ExperimentalPagingApi::class)
-    @[Provides Inject PagerOnline AppScope]
+    @[Provides PagerOnline AppScope]
     fun providePagerOnline(
         moviesDao: MoviesDao,
         moviesApi: MoviesApi
@@ -121,7 +120,7 @@ class DataModule {
         }
     }
 
-    @[Provides Inject PagerOffline AppScope]
+    @[Provides PagerOffline AppScope]
     fun providePagerOffline(
         moviesDao: MoviesDao
     ): Pager<Int, MovieEntity> {
@@ -136,7 +135,7 @@ class DataModule {
         }
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideMoviesRepository(
         @ApplicationQualifier context: Application,
         @[PagerOnline] pagerOnline: Pager<Int, MovieEntity>,
@@ -157,7 +156,7 @@ class DataModule {
         )
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideBookmarksRepository(
         @ApplicationQualifier context: Application,
         bookmarksDao: BookmarksDao
@@ -170,7 +169,7 @@ class DataModule {
         )
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideMoviesDetailsRepository(
         @ApplicationQualifier context: Application,
         moviesApi: MoviesApi,

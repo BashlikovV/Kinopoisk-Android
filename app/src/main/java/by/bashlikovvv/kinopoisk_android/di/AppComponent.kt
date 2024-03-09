@@ -12,9 +12,7 @@ import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
-@[AppScope Singleton Component(
-    modules = [DataModule::class, DomainModule::class]
-)]
+@[Component(modules = [DataModule::class, DomainModule::class]) AppScope Singleton]
 interface AppComponent {
 
     @Component.Factory

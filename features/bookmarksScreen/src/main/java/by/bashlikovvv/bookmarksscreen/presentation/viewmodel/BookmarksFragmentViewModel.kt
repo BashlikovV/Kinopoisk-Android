@@ -113,6 +113,7 @@ class BookmarksFragmentViewModel @Inject constructor(
     }
 
     private fun merge(bookmarks: List<Movie>, localChanges: LocalChanges): List<Movie> {
+        if (bookmarks.isEmpty()) return bookmarks
         _isUpdating.tryEmit(true)
 
         return bookmarks.map { bookmark ->

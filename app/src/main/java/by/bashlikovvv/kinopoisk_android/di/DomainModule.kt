@@ -21,54 +21,53 @@ import by.bashlikovvv.core.domain.usecase.GetStringUseCase
 import by.bashlikovvv.core.domain.usecase.RemoveBookmarkUseCase
 import dagger.Module
 import dagger.Provides
-import javax.inject.Inject
 
 @Module(includes = [DataModule::class])
 class DomainModule {
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetMovieByIdUseCaseUseCase(
         moviesRepository: IMoviesRepository
     ): GetMovieByIdUseCase {
         return GetMovieByIdUseCase(moviesRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetMoviesByNameUseCase(
         moviesRepository: IMoviesRepository
     ): GetMoviesByNameUseCase {
         return GetMoviesByNameUseCase(moviesRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetPagedMoviesUseCase(
         moviesRepository: IMoviesRepository
     ): GetPagedMoviesUseCase {
         return GetPagedMoviesUseCase(moviesRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetMoviesByGenreUseCase(
         moviesRepository: IMoviesRepository
     ): GetMoviesByGenreUseCase {
         return GetMoviesByGenreUseCase(moviesRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetMoviesByCollectionUseCase(
         moviesRepository: IMoviesRepository
     ): GetMoviesByCollectionUseCase {
         return GetMoviesByCollectionUseCase(moviesRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetStringUseCase(
         @ApplicationQualifier application: Application
     ): GetStringUseCase {
         return GetStringUseCase(application)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideAddBookmarkUseCase(
         bookmarksRepository: IBookmarksRepository,
         moviesDetailsRepository: IMoviesDetailsRepository
@@ -76,42 +75,42 @@ class DomainModule {
         return AddBookmarkUseCase(bookmarksRepository, moviesDetailsRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideRemoveBookmarkUseCase(
         bookmarksRepository: IBookmarksRepository
     ): RemoveBookmarkUseCase {
         return RemoveBookmarkUseCase(bookmarksRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetBookmarksUseCase(
         bookmarksRepository: IBookmarksRepository
     ): GetBookmarksUseCase {
         return GetBookmarksUseCase(bookmarksRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetBookmarksByNameUseCase(
         bookmarksRepository: IBookmarksRepository
     ): GetBookmarksByNameUseCase {
         return GetBookmarksByNameUseCase(bookmarksRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetPagedMoviesByGenreUseCase(
         moviesRepository: IMoviesRepository
     ): GetPagedMoviesByGenreUseCase {
         return GetPagedMoviesByGenreUseCase(moviesRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetPagedMoviesByGenreAndNameUseCase(
         moviesRepository: IMoviesRepository
     ): GetPagedMoviesByGenreAndNameUseCase {
         return GetPagedMoviesByGenreAndNameUseCase(moviesRepository)
     }
 
-    @[Provides Inject AppScope]
+    @[Provides AppScope]
     fun provideGetMovieDetailsByIdUseCase(
         moviesDetailsRepository: IMoviesDetailsRepository
     ): GetMovieDetailsByIdUseCase {

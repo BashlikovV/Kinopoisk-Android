@@ -27,6 +27,19 @@ inline fun Fragment.launchMain(
     }
 }
 
+inline fun Fragment.launchMain(
+    crossinline safeAction: suspend () -> Unit,
+    crossinline onError: (Throwable) -> Unit
+): Job {
+    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        onError.invoke(throwable)
+    }
+
+    return lifecycleScope.launch(exceptionHandler + Dispatchers.Main) {
+        safeAction.invoke()
+    }
+}
+
 inline fun Fragment.launchDefault(
     crossinline safeAction: suspend () -> Unit,
     exceptionHandler: CoroutineExceptionHandler
