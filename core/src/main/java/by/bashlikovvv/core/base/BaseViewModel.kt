@@ -83,8 +83,4 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope {
         super.onCleared()
     }
 
-    companion object {
-        const val DEFAULT_EXCEPTION_HANDLER = "default_exception_handler"
-    }
-
 }
