@@ -1,6 +1,5 @@
 package by.bashlikovvv.kinopoisk_android.presentation.ui
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
@@ -21,11 +20,17 @@ import by.bashlikovvv.kinopoisk_android.presentation.KinopoiskApplication
 import by.bashlikovvv.kinopoisk_android.presentation.viewmodel.MainActivityViewModel
 import by.bashlikovvv.morescreen.presentation.ui.MoreFragment
 import by.bashlikovvv.moviedetailsscreen.presentation.ui.MovieDetailsFragment
+import dagger.Lazy
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: MainActivityViewModel by viewModels()
+    @Inject internal lateinit var viewModelFactory: Lazy<MainActivityViewModel.Factory>
+
+    private val viewModel: MainActivityViewModel by viewModels {
+        viewModelFactory.get()
+    }
 
     private val navController: NavController by lazy(LazyThreadSafetyMode.NONE) {
         val navHostFragment = supportFragmentManager
@@ -71,13 +76,13 @@ class MainActivity : AppCompatActivity() {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.exceptionsFlow
                         .collectLatest {
-                            AlertDialog.Builder(this@MainActivity)
-                                .setMessage(it.message)
+                            it
+                                .getAlertDialog(this@MainActivity)
                                 .show()
                         }
                 }
             },
-            onError = { /*  */ }
+            exceptionHandler = viewModel.exceptionsHandler
         )
     }
 

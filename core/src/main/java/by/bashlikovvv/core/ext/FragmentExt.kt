@@ -49,6 +49,19 @@ inline fun Fragment.launchDefault(
     }
 }
 
+inline fun Fragment.launchDefault(
+    crossinline safeAction: suspend () -> Unit,
+    crossinline onError: (Throwable) -> Unit
+): Job {
+    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        onError.invoke(throwable)
+    }
+
+    return lifecycleScope.launch(exceptionHandler + Dispatchers.Default) {
+        safeAction.invoke()
+    }
+}
+
 inline fun Fragment.launchUnconfined(
     crossinline safeAction: suspend () -> Unit,
     exceptionHandler: CoroutineExceptionHandler
@@ -58,10 +71,36 @@ inline fun Fragment.launchUnconfined(
     }
 }
 
+inline fun Fragment.launchUnconfined(
+    crossinline safeAction: suspend () -> Unit,
+    crossinline onError: (Throwable) -> Unit
+): Job {
+    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        onError.invoke(throwable)
+    }
+
+    return lifecycleScope.launch(exceptionHandler + Dispatchers.Unconfined) {
+        safeAction.invoke()
+    }
+}
+
 inline fun Fragment.launchEmpty(
     crossinline safeAction: suspend () -> Unit,
     exceptionHandler: CoroutineExceptionHandler
 ): Job {
+    return lifecycleScope.launch(exceptionHandler + EmptyCoroutineContext) {
+        safeAction.invoke()
+    }
+}
+
+inline fun Fragment.launchEmpty(
+    crossinline safeAction: suspend () -> Unit,
+    crossinline onError: (Throwable) -> Unit
+): Job {
+    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        onError.invoke(throwable)
+    }
+
     return lifecycleScope.launch(exceptionHandler + EmptyCoroutineContext) {
         safeAction.invoke()
     }

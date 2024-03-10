@@ -4,15 +4,19 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import by.bashlikovvv.core.base.BaseViewModel
 import by.bashlikovvv.core.base.SingleLiveEvent
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
+import by.bashlikovvv.core.domain.model.ParsedException
 import by.bashlikovvv.core.domain.usecase.AddBookmarkUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByCollectionUseCase
 import by.bashlikovvv.core.domain.usecase.GetMoviesByGenreUseCase
 import by.bashlikovvv.core.domain.usecase.GetPagedMoviesUseCase
+import by.bashlikovvv.core.domain.usecase.GetStringUseCase
 import by.bashlikovvv.core.domain.usecase.RemoveBookmarkUseCase
+import by.bashlikovvv.core.ext.toParsedException
 import by.bashlikovvv.homescreen.R
 import by.bashlikovvv.homescreen.domain.model.Category
 import by.bashlikovvv.homescreen.domain.model.CategoryMore
@@ -23,8 +27,6 @@ import by.bashlikovvv.homescreen.domain.model.MoviesCategory
 import by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,18 +44,17 @@ class HomeScreenViewModel(
     private val getMoviesByGenreUseCase: GetMoviesByGenreUseCase,
     private val getMoviesByCollectionUseCase: GetMoviesByCollectionUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
-    private val removeBookmarkUseCase: RemoveBookmarkUseCase
+    private val removeBookmarkUseCase: RemoveBookmarkUseCase,
+    private val getStringUseCase: GetStringUseCase
 ) : BaseViewModel() {
 
-    private val job: Job = SupervisorJob()
+    override val coroutineContext: CoroutineContext = viewModelScope.coroutineContext
 
-    override val coroutineContext: CoroutineContext = job
-
-    override val exceptionsHandler = CoroutineExceptionHandler { _, throwable ->
-        launch(Dispatchers.Main) { _exceptionsFlow.tryEmit(throwable) }
+    val exceptionsHandler = CoroutineExceptionHandler { _, throwable ->
+        processException(throwable)
     }
 
-    private val _exceptionsFlow = MutableSharedFlow<Throwable>(
+    private val _exceptionsFlow = MutableSharedFlow<ParsedException>(
         replay = 1,
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
@@ -106,33 +107,39 @@ class HomeScreenViewModel(
         _moviesCurrentCategory.tryEmit(categoryText)
     }
 
-    private fun makeMoviesData() = launchIO {
-        _moviesData.tryEmit(listOf())
-        HomeScreenFragment.collections.forEach { category ->
-            _moviesData.update { it + listOf(CategoryTitle(category.itemText)) }
-            _moviesData.update { movieCategories ->
-                movieCategories + getMoviesByCollectionUseCase
-                    .execute(getCollectionRequestNameByResId(category.itemText))
-                    .map { movie -> CategoryMovie(movie) }
+    private fun makeMoviesData() = launchIO(
+        safeAction = {
+            _moviesData.tryEmit(listOf())
+            HomeScreenFragment.collections.forEach { category ->
+                _moviesData.update { it + listOf(CategoryTitle(category.itemText)) }
+                _moviesData.update { movieCategories ->
+                    movieCategories + getMoviesByCollectionUseCase
+                        .execute(getCollectionRequestNameByResId(category.itemText))
+                        .map { movie -> CategoryMovie(movie) }
+                }
+                _moviesData.update { it + listOf(CategoryMore(category.itemText)) }
             }
-            _moviesData.update { it + listOf(CategoryMore(category.itemText)) }
-        }
-        HomeScreenFragment.genres.forEach { category ->
-            _moviesData.update { it + listOf(CategoryTitle(category.itemText)) }
-            _moviesData.update { movieCategories ->
-                movieCategories + getMoviesByGenreUseCase
-                    .execute(getGenreRequestNameByResId(category.itemText))
-                    .map { movie -> CategoryMovie(movie) }
+            HomeScreenFragment.genres.forEach { category ->
+                _moviesData.update { it + listOf(CategoryTitle(category.itemText)) }
+                _moviesData.update { movieCategories ->
+                    movieCategories + getMoviesByGenreUseCase
+                        .execute(getGenreRequestNameByResId(category.itemText))
+                        .map { movie -> CategoryMovie(movie) }
+                }
+                _moviesData.update { it + listOf(CategoryMore(category.itemText)) }
             }
-            _moviesData.update { it + listOf(CategoryMore(category.itemText)) }
-        }
-    }
+        },
+        onError = { processException(it) }
+    )
 
-    fun makeAllMoviesFata() = launchIO {
-        moviesPagedData.transform {
-            emit(getPagedMoviesUseCase.execute())
-        }
-    }
+    fun makeAllMoviesFata() = launchIO(
+        safeAction = {
+            moviesPagedData.transform {
+                emit(getPagedMoviesUseCase.execute())
+            }
+        },
+        onError = { processException(it) }
+    )
 
     // Navigation between fragments:
     //  CategoryText(R.string.all) -> AllMovieFragment
@@ -147,13 +154,16 @@ class HomeScreenViewModel(
     }
 
     // Bookmark view click processing
-    fun onBookmarkClicked(movie: Movie) = launchIO {
-        if (movie.isBookmark) {
-            removeBookmarkUseCase.execute(movie)
-        } else {
-            addBookmarkUseCase.execute(movie)
-        }
-    }
+    fun onBookmarkClicked(movie: Movie) = launchIO(
+        safeAction = {
+            if (movie.isBookmark) {
+                removeBookmarkUseCase.execute(movie)
+            } else {
+                addBookmarkUseCase.execute(movie)
+            }
+        },
+        onError = { processException(it) }
+    )
 
     // Navigate between fragments at main activity
     fun navigateToDestination(destination: Destination) {
@@ -168,6 +178,19 @@ class HomeScreenViewModel(
         } else {
             getGenreRequestNameByResId(resId)
         }
+    }
+
+    private fun processException(throwable: Throwable) {
+        launch(Dispatchers.Main) {
+            _exceptionsFlow.tryEmit(
+                throwable.toParsedException(::titleBuilder)
+            )
+        }
+    }
+
+    private fun titleBuilder(throwable: Throwable): String {
+        return throwable.localizedMessage ?: getStringUseCase
+            .execute(by.bashlikovvv.core.R.string.smth_went_wrong)
     }
 
     private fun getCollectionRequestNameByResId(@StringRes collection: Int) = when(collection) {
@@ -201,7 +224,8 @@ class HomeScreenViewModel(
         private val getMoviesByGenreUseCase: Provider<GetMoviesByGenreUseCase>,
         private val getMoviesByCollectionUseCase: Provider<GetMoviesByCollectionUseCase>,
         private val addBookmarkUseCase: Provider<AddBookmarkUseCase>,
-        private val removeBookmarkUseCase: Provider<RemoveBookmarkUseCase>
+        private val removeBookmarkUseCase: Provider<RemoveBookmarkUseCase>,
+        private val getStringUseCase: Provider<GetStringUseCase>
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -212,7 +236,8 @@ class HomeScreenViewModel(
                 getMoviesByGenreUseCase.get(),
                 getMoviesByCollectionUseCase.get(),
                 addBookmarkUseCase.get(),
-                removeBookmarkUseCase.get()
+                removeBookmarkUseCase.get(),
+                getStringUseCase.get()
             ) as T
         }
 

@@ -1,6 +1,5 @@
 package by.bashlikovvv.morescreen.presentation.ui
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -135,12 +134,12 @@ class MoreFragment : BaseBottomSheetDialogFragment<FragmentMoreBinding>() {
                 viewModel.exceptionsFlow
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                     .collectLatest {
-                        AlertDialog.Builder(requireContext())
-                            .setMessage(it.message)
+                        it
+                            .getAlertDialog(requireContext())
                             .show()
                     }
             },
-            onError = { /*  */ }
+            exceptionHandler = viewModel.exceptionsHandler
         )
     }
 

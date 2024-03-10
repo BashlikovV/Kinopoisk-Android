@@ -1,6 +1,5 @@
 package by.bashlikovvv.moviedetailsscreen.presentation.ui
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -78,12 +77,12 @@ class MovieDetailsFragment : BaseBottomSheetDialogFragment<FragmentMovieDetailsB
                 viewModel.exceptionsFlow
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                     .collectLatest {
-                        AlertDialog.Builder(requireContext())
-                            .setMessage(it.message)
+                        it
+                            .getAlertDialog(requireContext())
                             .show()
                     }
             },
-            onError = { /*  */ }
+            exceptionHandler = viewModel.exceptionsHandler
         )
         viewModel.exceptions.observe(viewLifecycleOwner) { exception ->
             binding.descriptionImageView.text = exception

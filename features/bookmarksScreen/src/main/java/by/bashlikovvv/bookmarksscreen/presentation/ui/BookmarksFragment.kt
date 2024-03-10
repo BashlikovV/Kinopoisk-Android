@@ -147,12 +147,12 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>() {
                 viewModel.exceptionsFlow
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                     .collectLatest {
-                        AlertDialog.Builder(requireContext())
-                            .setMessage(it.message)
+                        it
+                            .getAlertDialog(requireContext())
                             .show()
                     }
             },
-            onError = { /*  */ }
+            exceptionHandler = viewModel.exceptionsHandler
         )
     }
 

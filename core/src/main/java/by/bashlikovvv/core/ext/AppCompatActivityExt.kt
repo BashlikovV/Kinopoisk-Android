@@ -27,18 +27,18 @@ inline fun AppCompatActivity.launchMain(
     }
 }
 
-inline fun AppCompatActivity.launchMain(
-    crossinline safeAction: suspend () -> Unit,
-    crossinline onError: (Throwable) -> Unit
-): Job {
-    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        onError.invoke(throwable)
-    }
-
-    return lifecycleScope.launch(exceptionHandler + Dispatchers.Main) {
-        safeAction.invoke()
-    }
-}
+//inline fun AppCompatActivity.launchMain(
+//    crossinline safeAction: suspend () -> Unit,
+//    crossinline onError: (Throwable) -> Unit
+//): Job {
+//    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+//        onError.invoke(throwable)
+//    }
+//
+//    return lifecycleScope.launch(exceptionHandler + Dispatchers.Main) {
+//        safeAction.invoke()
+//    }
+//}
 
 inline fun AppCompatActivity.launchDefault(
     crossinline safeAction: suspend () -> Unit,

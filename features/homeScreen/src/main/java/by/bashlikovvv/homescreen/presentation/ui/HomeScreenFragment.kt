@@ -1,6 +1,5 @@
 package by.bashlikovvv.homescreen.presentation.ui
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -163,13 +162,12 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
                 viewModel.exceptionsFlow
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                     .collectLatest {
-                        AlertDialog.Builder(requireContext())
-                            .setTitle(R.string.smth_went_wrong)
-                            .setMessage(it.message)
+                        it
+                            .getAlertDialog(requireContext())
                             .show()
                     }
             },
-            onError = { /*  */ }
+            exceptionHandler = viewModel.exceptionsHandler
         )
         viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
             navigateToDestination(destination)
