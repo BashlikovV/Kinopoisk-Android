@@ -86,10 +86,10 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
-//    arguments {
-//        arg("dagger.fastInit", "enabled")
-//
-//        arg("dagger.fullBindingGraphValidation", "WARNING")
-//        arg("dagger.fullBindingGraphValidation", "ERROR")
-//    }
+    arguments {
+        arg("dagger.fastInit", "enabled")
+
+        arg("dagger.fullBindingGraphValidation", "WARNING")
+        arg("dagger.fullBindingGraphValidation", "ERROR")
+    }
 }
