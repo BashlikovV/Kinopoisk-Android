@@ -10,7 +10,7 @@ import by.bashlikovvv.kinopoisk_android.R
 
 class HomeFlowFragment : BaseFlowFragment() {
 
-    override fun getLayoutResource(): Int = R.layout.home_flow_layout
+    override fun getLayoutResource(): Int = R.layout.home_flow_fragment
 
     override fun getContainerId(): Int = R.id.homeFlowFragmentContainer
 

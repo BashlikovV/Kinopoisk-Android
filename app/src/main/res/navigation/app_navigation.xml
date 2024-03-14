@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation"
     app:startDestination="@id/homeFlowFragment">
 
     <fragment
         android:id="@+id/homeFlowFragment"
         android:name="by.bashlikovvv.kinopoisk_android.presentation.flows.HomeFlowFragment"
-        android:label="HomeFlowFragment" />
+        android:label="HomeFlowFragment"
+        tools:layout="@layout/home_flow_fragment"/>
 
     <fragment
         android:id="@+id/moreFlowFragment"
         android:name="by.bashlikovvv.kinopoisk_android.presentation.flows.MoreFlowFragment"
-        android:label="MoreFlowFragment" />
+        android:label="MoreFlowFragment"
+        tools:layout="@layout/flow_fragment"/>
 
     <dialog
         android:id="@+id/movieDetailsFragment"
         android:name="by.bashlikovvv.moviedetailsscreen.presentation.ui.MovieDetailsFragment"
-        android:label="MovieDetailsFragment" >
+        android:label="MovieDetailsFragment"
+        tools:layout="@layout/fragment_movie_details">
 
         <argument
             android:name="movieId"
