@@ -5,7 +5,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
-import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.domain.model.FlowDestinations
 
 const val REQ_KEY_MAIN_DESTINATION = "mainNavigationResult"
 
@@ -13,12 +13,12 @@ private const val PARAM_DATA = "bundleData"
 /**
  * Indicates the desire to open a different destination
  */
-fun Fragment.navigateToDestination(destination : Destination) {
+fun Fragment.navigateToFlow(flowDestinations : FlowDestinations) {
     requireActivity()
         .supportFragmentManager
         .setFragmentResult(
             REQ_KEY_MAIN_DESTINATION,
-            bundleOf(PARAM_DATA to destination)
+            bundleOf(PARAM_DATA to flowDestinations)
         )
 }
 
@@ -28,14 +28,14 @@ fun Fragment.navigateToDestination(destination : Destination) {
  */
 fun FragmentManager.setFragmentNavigationListener(
     lifecycleOwner: LifecycleOwner,
-    listener: (destination : Destination) -> Any
+    listener: (flowDestinations : FlowDestinations) -> Any
 ) {
     setFragmentResultListener(REQ_KEY_MAIN_DESTINATION, lifecycleOwner) { _, bundle ->
-        val destination = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            bundle.getParcelable(PARAM_DATA, Destination::class.java)!!
+        val flowDestinations = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            bundle.getParcelable(PARAM_DATA, FlowDestinations::class.java)!!
         } else {
             bundle.getParcelable(PARAM_DATA)!!
         }
-        listener.invoke(destination)
+        listener.invoke(flowDestinations)
     }
 }

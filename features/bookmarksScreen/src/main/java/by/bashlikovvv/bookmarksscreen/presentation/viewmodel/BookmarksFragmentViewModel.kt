@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import by.bashlikovvv.bookmarksscreen.presentation.domain.LocalChanges
 import by.bashlikovvv.core.base.BaseViewModel
 import by.bashlikovvv.core.base.SingleLiveEvent
-import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.model.ParsedException
 import by.bashlikovvv.core.domain.usecase.GetBookmarksByNameUseCase
@@ -67,8 +66,8 @@ class BookmarksFragmentViewModel @Inject constructor(
     private var _bookmarksFlow: Flow<List<Movie>>
     val bookmarksFlow get() = _bookmarksFlow
 
-    private var _navigationFlowLiveEvent = SingleLiveEvent<Destination>()
-    val navigationFlowLiveEvent: LiveData<Destination> = _navigationFlowLiveEvent
+    private var _navigationFlowLiveEventDestinations = SingleLiveEvent<by.bashlikovvv.core.domain.model.FlowDestinations>()
+    val navigationFlowLiveEventDestinations: LiveData<by.bashlikovvv.core.domain.model.FlowDestinations> = _navigationFlowLiveEventDestinations
 
     init {
         loadBookmarks()
@@ -89,8 +88,8 @@ class BookmarksFragmentViewModel @Inject constructor(
         )
     }
 
-    fun navigateToFlow(destination: Destination) {
-        _navigationFlowLiveEvent.postValue(destination)
+    fun navigateToFlow(flowDestinations: by.bashlikovvv.core.domain.model.FlowDestinations) {
+        _navigationFlowLiveEventDestinations.postValue(flowDestinations)
     }
 
     fun removeBookmark(movie: Movie) = launchIO(

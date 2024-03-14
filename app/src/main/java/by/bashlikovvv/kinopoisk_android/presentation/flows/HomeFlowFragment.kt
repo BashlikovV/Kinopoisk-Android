@@ -18,7 +18,7 @@ class HomeFlowFragment : BaseFlowFragment() {
         val bottomNavBar = root
             .findViewById<CustomBottomNavigationView>(R.id.bottomNavigationView)
 
-        NavigationUI.setupWithNavController(bottomNavBar, navController)
+        NavigationUI.setupWithNavController(bottomNavBar, flowNavController)
     }
 
     override fun graphRes(): Int = R.navigation.home_navigation

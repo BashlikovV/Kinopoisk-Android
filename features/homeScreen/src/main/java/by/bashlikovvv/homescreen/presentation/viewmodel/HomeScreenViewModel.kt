@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import by.bashlikovvv.core.base.BaseViewModel
 import by.bashlikovvv.core.base.SingleLiveEvent
-import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.domain.model.FlowDestinations
 import by.bashlikovvv.core.domain.model.HomeFlowDestinations
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.model.ParsedException
@@ -90,8 +90,8 @@ class HomeScreenViewModel(
     private var _navigateToCategoryLiveEvent = SingleLiveEvent<Category>()
     val navigateToCategoryLiveEvent: LiveData<Category> = _navigateToCategoryLiveEvent
 
-    private var _navigationFlowLiveEvent = SingleLiveEvent<Destination>()
-    val navigationFlowLiveEvent: LiveData<Destination> = _navigationFlowLiveEvent
+    private var _navigationFlowLiveEventDestinations = SingleLiveEvent<FlowDestinations>()
+    val navigationFlowLiveEventDestinations: LiveData<FlowDestinations> = _navigationFlowLiveEventDestinations
 
     private var _navigateToLiveEvent = SingleLiveEvent<HomeFlowDestinations>()
     val navigateToLiveEvent: LiveData<HomeFlowDestinations> = _navigateToLiveEvent
@@ -170,8 +170,8 @@ class HomeScreenViewModel(
     )
 
     // Navigate between fragments at main activity
-    fun navigateToFlow(destination: Destination) {
-        _navigationFlowLiveEvent.postValue(destination)
+    fun navigateToFlow(flowDestinations: FlowDestinations) {
+        _navigationFlowLiveEventDestinations.postValue(flowDestinations)
     }
 
     fun navigateTo(homeFlowDestinations: HomeFlowDestinations) {

@@ -15,10 +15,10 @@ import by.bashlikovvv.bookmarksscreen.di.BookmarksScreenComponentProvider
 import by.bashlikovvv.bookmarksscreen.presentation.ui.adapter.BookmarksListAdapter
 import by.bashlikovvv.bookmarksscreen.presentation.viewmodel.BookmarksFragmentViewModel
 import by.bashlikovvv.core.base.BaseFragment
-import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.domain.model.FlowDestinations
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.launchMain
-import by.bashlikovvv.core.ext.navigateToDestination
+import by.bashlikovvv.core.ext.navigateToFlow
 import dagger.Lazy
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -36,7 +36,7 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>() {
     private val adapter = BookmarksListAdapter(
         onCLickListener = object : BookmarksListAdapter.BookmarksListAdapterClickListener {
             override fun notifyBookmarkClicked(movie: Movie) {
-                viewModel.navigateToFlow(Destination.DetailsScreen(movie.id))
+                viewModel.navigateToFlow(FlowDestinations.DetailsScreen(movie.id))
             }
 
             override fun notifyDeleteBookmarkClicked(movie: Movie) {
@@ -122,8 +122,8 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>() {
             },
             exceptionHandler = viewModel.exceptionsHandler
         )
-        viewModel.navigationFlowLiveEvent.observe(viewLifecycleOwner) { destination ->
-            navigateToDestination(destination)
+        viewModel.navigationFlowLiveEventDestinations.observe(viewLifecycleOwner) { destination ->
+            navigateToFlow(destination)
         }
         launchMain(
             safeAction = {

@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import by.bashlikovvv.core.base.BaseViewModel
 import by.bashlikovvv.core.base.SingleLiveEvent
-import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.model.ParsedException
 import by.bashlikovvv.core.domain.usecase.GetPagedMoviesByGenreAndNameUseCase
@@ -50,13 +49,13 @@ class MoreFragmentViewModel(
     )
     val exceptionsFlow = _exceptionsFlow.asSharedFlow()
 
-    private var _navigationFlowLiveEvent = SingleLiveEvent<Destination>()
-    val navigationFlowLiveEvent: LiveData<Destination> = _navigationFlowLiveEvent
+    private var _navigationFlowLiveEventDestinations = SingleLiveEvent<by.bashlikovvv.core.domain.model.FlowDestinations>()
+    val navigationFlowLiveEventDestinations: LiveData<by.bashlikovvv.core.domain.model.FlowDestinations> = _navigationFlowLiveEventDestinations
 
     private var _searchBy = MutableStateFlow("")
 
-    fun navigateToFlow(destination: Destination) {
-        _navigationFlowLiveEvent.postValue(destination)
+    fun navigateToFlow(flowDestinations: by.bashlikovvv.core.domain.model.FlowDestinations) {
+        _navigationFlowLiveEventDestinations.postValue(flowDestinations)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

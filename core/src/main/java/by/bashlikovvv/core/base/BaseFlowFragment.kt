@@ -18,7 +18,7 @@ abstract class BaseFlowFragment : Fragment() {
 
     private var _navController: NavController? = null
 
-    val navController: NavController
+    val flowNavController: NavController
         get() = requireNotNull(_navController)
 
     @LayoutRes
@@ -53,11 +53,11 @@ abstract class BaseFlowFragment : Fragment() {
         if (!isGraphAttached) {
             val args = flowArgs()
             isGraphAttached = if (args == null) {
-                navController.setGraph(graphRes())
+                flowNavController.setGraph(graphRes())
 
                 true
             } else {
-                navController.setGraph(graphRes(), args)
+                flowNavController.setGraph(graphRes(), args)
 
                 true
             }

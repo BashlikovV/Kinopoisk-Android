@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.paging.LoadState
 import by.bashlikovvv.core.base.BaseFragment
-import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.domain.model.FlowDestinations
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.launchIO
 import by.bashlikovvv.core.ext.launchMain
@@ -35,7 +35,7 @@ class AllMoviesFragment : BaseFragment<FragmentAllMoviesBinding>() {
     private val adapter = AllMoviesListAdapter(
         onClickListener = object : AllMoviesListAdapter.AllMoviesListAdapterClickListener {
             override fun notifyMovieClicked(movie: Movie) {
-                viewModel.navigateToFlow(Destination.DetailsScreen(movie.id))
+                viewModel.navigateToFlow(FlowDestinations.DetailsScreen(movie.id))
             }
 
             override fun notifyBookmarkClicked(movie: Movie) {

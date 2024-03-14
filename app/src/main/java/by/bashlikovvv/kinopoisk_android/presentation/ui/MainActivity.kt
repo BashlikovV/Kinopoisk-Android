@@ -9,7 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.domain.model.FlowDestinations
 import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.core.ext.setFragmentNavigationListener
 import by.bashlikovvv.kinopoisk_android.R
@@ -85,21 +85,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun fragmentNavigationListener(destination: Destination) {
-        when(destination) {
-            is Destination.HomeScreen -> {
+    private fun fragmentNavigationListener(flowDestination: FlowDestinations) {
+        when(flowDestination) {
+            is FlowDestinations.HomeScreenFlow -> {
                 navController.navigate(R.id.homeFlowFragment)
             }
-            is Destination.MoreScreen -> {
+            is FlowDestinations.MoreScreenFlow -> {
                 navController.navigate(
                     R.id.moreFlowFragment,
-                    MoreFragmentArgs(destination.categoryName).toBundle()
+                    MoreFragmentArgs(flowDestination.categoryName).toBundle()
                 )
             }
-            is Destination.DetailsScreen -> {
+            is FlowDestinations.DetailsScreen -> {
                 navController.navigate(
                     R.id.movieDetailsFragment,
-                    MovieDetailsFragmentArgs(destination.movieId).toBundle()
+                    MovieDetailsFragmentArgs(flowDestination.movieId).toBundle()
                 )
             }
         }

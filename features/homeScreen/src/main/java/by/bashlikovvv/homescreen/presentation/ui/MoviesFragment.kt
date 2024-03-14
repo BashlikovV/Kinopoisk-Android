@@ -10,7 +10,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import by.bashlikovvv.core.base.BaseFragment
-import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.domain.model.FlowDestinations
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.dp
 import by.bashlikovvv.core.ext.launchMain
@@ -54,12 +54,12 @@ class MoviesFragment : BaseFragment<FragmentMoviesBinding>() {
     private val adapter = MoviesListAdapter(
         clickListener = object : MoviesListAdapter.MoviesListAdapterClickListener {
             override fun notifyMovieClicked(movie: Movie) {
-                viewModel.navigateToFlow(Destination.DetailsScreen(movie.id))
+                viewModel.navigateToFlow(FlowDestinations.DetailsScreen(movie.id))
             }
 
             override fun notifyMoreClicked(categoryMore: CategoryMore) {
                 viewModel.navigateToFlow(
-                    Destination.MoreScreen(
+                    FlowDestinations.MoreScreenFlow(
                         viewModel.getGenreOrCollectionRequestNameByResId(categoryMore.categoryName)
                     )
                 )

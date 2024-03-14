@@ -8,6 +8,7 @@
         android:id="@+id/homeScreenFragment"
         android:name="by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment"
         android:label="HomeScreenFragment" />
+
     <fragment
         android:id="@+id/bookmarksFragment"
         android:name="by.bashlikovvv.bookmarksscreen.presentation.ui.BookmarksFragment"

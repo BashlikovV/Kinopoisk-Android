@@ -9,11 +9,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import by.bashlikovvv.core.base.BaseFragment
-import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.domain.model.FlowDestinations
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.ext.launchIO
 import by.bashlikovvv.core.ext.launchMain
-import by.bashlikovvv.core.ext.navigateToDestination
+import by.bashlikovvv.core.ext.navigateToFlow
 import by.bashlikovvv.morescreen.databinding.FragmentMoreBinding
 import by.bashlikovvv.morescreen.di.MoreScreenComponentProvider
 import by.bashlikovvv.morescreen.presentation.ui.adapter.MoviesListAdapter
@@ -36,7 +36,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
         MoviesListAdapter(
             onClickListener = object : MoviesListAdapter.MoviesListAdapterClickListener {
                 override fun notifyMovieClicked(movie: Movie) {
-                    viewModel.navigateToFlow(Destination.DetailsScreen(movie.id))
+                    viewModel.navigateToFlow(FlowDestinations.DetailsScreen(movie.id))
                 }
             }
         )
@@ -75,8 +75,8 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
     }
 
     private fun collectViewModelStates() {
-        viewModel.navigationFlowLiveEvent.observe(viewLifecycleOwner) {
-            navigateToDestination(it)
+        viewModel.navigationFlowLiveEventDestinations.observe(viewLifecycleOwner) {
+            navigateToFlow(it)
         }
         launchIO(
             safeAction = {

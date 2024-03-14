@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import by.bashlikovvv.core.base.BaseFragment
 import by.bashlikovvv.core.ext.dp
 import by.bashlikovvv.core.ext.launchMain
-import by.bashlikovvv.core.ext.navigateToDestination
+import by.bashlikovvv.core.ext.navigateToFlow
 import by.bashlikovvv.homescreen.R
 import by.bashlikovvv.homescreen.databinding.FragmentHomeScreenBinding
 import by.bashlikovvv.homescreen.di.HomeScreenComponentProvider
@@ -169,8 +169,8 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
             },
             exceptionHandler = viewModel.exceptionsHandler
         )
-        viewModel.navigationFlowLiveEvent.observe(viewLifecycleOwner) { destination ->
-            navigateToDestination(destination)
+        viewModel.navigationFlowLiveEventDestinations.observe(viewLifecycleOwner) { destination ->
+            navigateToFlow(destination)
         }
         viewModel.navigateToLiveEvent.observe(viewLifecycleOwner) { homeFlowDestination ->
 
