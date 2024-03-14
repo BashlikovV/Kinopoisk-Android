@@ -36,7 +36,7 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>() {
     private val adapter = BookmarksListAdapter(
         onCLickListener = object : BookmarksListAdapter.BookmarksListAdapterClickListener {
             override fun notifyBookmarkClicked(movie: Movie) {
-                viewModel.navigateToDestination(Destination.MovieDetailsScreen(movie.id))
+                viewModel.navigateToFlow(Destination.DetailsScreen(movie.id))
             }
 
             override fun notifyDeleteBookmarkClicked(movie: Movie) {
@@ -122,7 +122,7 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>() {
             },
             exceptionHandler = viewModel.exceptionsHandler
         )
-        viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
+        viewModel.navigationFlowLiveEvent.observe(viewLifecycleOwner) { destination ->
             navigateToDestination(destination)
         }
         launchMain(

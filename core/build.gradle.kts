@@ -53,4 +53,7 @@ dependencies {
     implementation(Dependencies.Com.Google.Dagger.daggerAndroidSupport)
 
     implementation(Dependencies.AndroidX.Paging.pagingRuntime)
+
+    // Navigation
+    implementation(Dependencies.AndroidX.Navigation.navigationFragmentKTX)
 }

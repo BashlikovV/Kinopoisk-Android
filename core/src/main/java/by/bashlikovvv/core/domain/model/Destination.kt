@@ -9,7 +9,7 @@ sealed class Destination : Parcelable {
     data object HomeScreen : Destination()
 
     @Parcelize
-    data class MovieDetailsScreen(val movieId: Long) : Destination()
+    data class DetailsScreen(val movieId: Long) : Destination()
 
     @Parcelize
     data class MoreScreen(val categoryName: String) : Destination()

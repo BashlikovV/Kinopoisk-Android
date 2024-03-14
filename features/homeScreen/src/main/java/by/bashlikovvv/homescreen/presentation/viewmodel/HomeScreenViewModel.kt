@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import by.bashlikovvv.core.base.BaseViewModel
 import by.bashlikovvv.core.base.SingleLiveEvent
 import by.bashlikovvv.core.domain.model.Destination
+import by.bashlikovvv.core.domain.model.HomeFlowDestinations
 import by.bashlikovvv.core.domain.model.Movie
 import by.bashlikovvv.core.domain.model.ParsedException
 import by.bashlikovvv.core.domain.usecase.AddBookmarkUseCase
@@ -89,8 +90,11 @@ class HomeScreenViewModel(
     private var _navigateToCategoryLiveEvent = SingleLiveEvent<Category>()
     val navigateToCategoryLiveEvent: LiveData<Category> = _navigateToCategoryLiveEvent
 
-    private var _navigationDestinationLiveEvent = SingleLiveEvent<Destination>()
-    val navigationDestinationLiveEvent: LiveData<Destination> = _navigationDestinationLiveEvent
+    private var _navigationFlowLiveEvent = SingleLiveEvent<Destination>()
+    val navigationFlowLiveEvent: LiveData<Destination> = _navigationFlowLiveEvent
+
+    private var _navigateToLiveEvent = SingleLiveEvent<HomeFlowDestinations>()
+    val navigateToLiveEvent: LiveData<HomeFlowDestinations> = _navigateToLiveEvent
 
     init {
         makeMoviesData()
@@ -166,8 +170,12 @@ class HomeScreenViewModel(
     )
 
     // Navigate between fragments at main activity
-    fun navigateToDestination(destination: Destination) {
-        _navigationDestinationLiveEvent.postValue(destination)
+    fun navigateToFlow(destination: Destination) {
+        _navigationFlowLiveEvent.postValue(destination)
+    }
+
+    fun navigateTo(homeFlowDestinations: HomeFlowDestinations) {
+        _navigateToLiveEvent.postValue(homeFlowDestinations)
     }
 
     fun getGenreOrCollectionRequestNameByResId(@StringRes resId: Int): String {

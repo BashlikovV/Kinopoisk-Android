@@ -5,12 +5,10 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.findNavController
 import by.bashlikovvv.core.domain.model.Destination
 import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.core.ext.setFragmentNavigationListener
@@ -18,8 +16,8 @@ import by.bashlikovvv.kinopoisk_android.R
 import by.bashlikovvv.kinopoisk_android.databinding.ActivityMainBinding
 import by.bashlikovvv.kinopoisk_android.presentation.KinopoiskApplication
 import by.bashlikovvv.kinopoisk_android.presentation.viewmodel.MainActivityViewModel
-import by.bashlikovvv.morescreen.presentation.ui.MoreFragment
-import by.bashlikovvv.moviedetailsscreen.presentation.ui.MovieDetailsFragment
+import by.bashlikovvv.morescreen.presentation.ui.MoreFragmentArgs
+import by.bashlikovvv.moviedetailsscreen.presentation.ui.MovieDetailsFragmentArgs
 import dagger.Lazy
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
@@ -32,12 +30,8 @@ class MainActivity : AppCompatActivity() {
         viewModelFactory.get()
     }
 
-    private val navController: NavController by lazy(LazyThreadSafetyMode.NONE) {
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.mainActivityFragmentContainer) as NavHostFragment
-
-        navHostFragment.navController
-    }
+    private val navController: NavController
+        get() = findNavController(R.id.mainActivityFragmentContainer)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +44,6 @@ class MainActivity : AppCompatActivity() {
         addOnPreDrawListener()
         collectViewModelStates()
         setFragmentNavigationListener()
-        NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
     }
 
     private fun addOnPreDrawListener() {
@@ -95,18 +88,18 @@ class MainActivity : AppCompatActivity() {
     private fun fragmentNavigationListener(destination: Destination) {
         when(destination) {
             is Destination.HomeScreen -> {
-                navController.navigate(R.id.homeScreenFragment)
-            }
-            is Destination.MovieDetailsScreen -> {
-                navController.navigate(
-                    R.id.movieDetailsFragment,
-                    bundleOf(MovieDetailsFragment.KEY_MOVIE_ID to destination.movieId)
-                )
+                navController.navigate(R.id.homeFlowFragment)
             }
             is Destination.MoreScreen -> {
                 navController.navigate(
-                    R.id.moreFragment,
-                    bundleOf(MoreFragment.KEY_CATEGORY_NAME to destination.categoryName)
+                    R.id.moreFlowFragment,
+                    MoreFragmentArgs(destination.categoryName).toBundle()
+                )
+            }
+            is Destination.DetailsScreen -> {
+                navController.navigate(
+                    R.id.movieDetailsFragment,
+                    MovieDetailsFragmentArgs(destination.movieId).toBundle()
                 )
             }
         }

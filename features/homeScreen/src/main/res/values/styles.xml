@@ -25,4 +25,8 @@
         <item name="android:textColor">@color/category_item_text_color</item>
     </style>
 
+    <style name="bottom_nav_bar_active_indicator_style" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/nav_bar_item_indicator_color</item>
+    </style>
+
 </resources>

@@ -1,4 +1,4 @@
-package by.bashlikovvv.kinopoisk_android.presentation.view
+package by.bashlikovvv.homescreen.presentation.view
 
 import android.animation.ValueAnimator
 import android.app.Activity
@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.forEach
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
-import by.bashlikovvv.kinopoisk_android.R
+import by.bashlikovvv.homescreen.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.math.abs
 

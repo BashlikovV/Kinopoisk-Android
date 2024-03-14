@@ -3,6 +3,7 @@ package by.bashlikovvv.core.ext
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import by.bashlikovvv.core.base.BaseFlowFragment
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -104,4 +105,8 @@ inline fun Fragment.launchEmpty(
     return lifecycleScope.launch(exceptionHandler + EmptyCoroutineContext) {
         safeAction.invoke()
     }
+}
+
+inline fun <reified FL : BaseFlowFragment> Fragment.flowFragment(): FL {
+    return parentFragment?.parentFragment as? BaseFlowFragment as FL
 }

@@ -29,8 +29,8 @@ object Versions {
             const val fragmentKTX = "1.6.1"
         }
         object Navigation {
-            const val navigationFragmentKTX = "2.7.4"
-            const val navigationUiKTX = "2.7.4"
+            const val navigationFragmentKTX = "2.7.7"
+            const val navigationUiKTX = "2.7.7"
         }
         object Room {
             const val roomKTX = "2.5.2"

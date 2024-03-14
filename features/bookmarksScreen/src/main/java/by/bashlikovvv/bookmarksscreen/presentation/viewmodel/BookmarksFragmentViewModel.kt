@@ -67,8 +67,8 @@ class BookmarksFragmentViewModel @Inject constructor(
     private var _bookmarksFlow: Flow<List<Movie>>
     val bookmarksFlow get() = _bookmarksFlow
 
-    private var _navigationDestinationLiveEvent = SingleLiveEvent<Destination>()
-    val navigationDestinationLiveEvent: LiveData<Destination> = _navigationDestinationLiveEvent
+    private var _navigationFlowLiveEvent = SingleLiveEvent<Destination>()
+    val navigationFlowLiveEvent: LiveData<Destination> = _navigationFlowLiveEvent
 
     init {
         loadBookmarks()
@@ -89,8 +89,8 @@ class BookmarksFragmentViewModel @Inject constructor(
         )
     }
 
-    fun navigateToDestination(destination: Destination) {
-        _navigationDestinationLiveEvent.postValue(destination)
+    fun navigateToFlow(destination: Destination) {
+        _navigationFlowLiveEvent.postValue(destination)
     }
 
     fun removeBookmark(movie: Movie) = launchIO(

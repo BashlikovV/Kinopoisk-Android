@@ -50,13 +50,13 @@ class MoreFragmentViewModel(
     )
     val exceptionsFlow = _exceptionsFlow.asSharedFlow()
 
-    private var _navigationDestinationLiveEvent = SingleLiveEvent<Destination>()
-    val navigationDestinationLiveEvent: LiveData<Destination> = _navigationDestinationLiveEvent
+    private var _navigationFlowLiveEvent = SingleLiveEvent<Destination>()
+    val navigationFlowLiveEvent: LiveData<Destination> = _navigationFlowLiveEvent
 
     private var _searchBy = MutableStateFlow("")
 
-    fun navigateToDestination(destination: Destination) {
-        _navigationDestinationLiveEvent.postValue(destination)
+    fun navigateToFlow(destination: Destination) {
+        _navigationFlowLiveEvent.postValue(destination)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

@@ -2,8 +2,4 @@
 <resources>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="nav_bar_item_not_selected">#FFA1A1A1</color>
-    <color name="nav_bar_item_selected">#FFFFFFFF</color>
-    <color name="indicator_selected">#FFFF5500</color>
-
 </resources>

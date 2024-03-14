@@ -35,7 +35,7 @@ class AllMoviesFragment : BaseFragment<FragmentAllMoviesBinding>() {
     private val adapter = AllMoviesListAdapter(
         onClickListener = object : AllMoviesListAdapter.AllMoviesListAdapterClickListener {
             override fun notifyMovieClicked(movie: Movie) {
-                viewModel.navigateToDestination(Destination.MovieDetailsScreen(movie.id))
+                viewModel.navigateToFlow(Destination.DetailsScreen(movie.id))
             }
 
             override fun notifyBookmarkClicked(movie: Movie) {

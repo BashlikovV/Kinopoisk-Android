@@ -22,4 +22,7 @@
     <string name="documentaries">Documentaries</string>
     <string name="navigate_to_category">Navigate to category</string>
     <string name="show_more">Show more</string>
+
+    <string name="home">Home</string>
+    <string name="bookmarks">Bookmarks</string>
 </resources>

@@ -38,7 +38,8 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
         viewModelFactory.get()
     }
 
-    private lateinit var navController: NavController
+    private val navController: NavController
+        get() = getHomeNavController()
 
     private val categoriesAdapter: CategoriesListAdapter = CategoriesListAdapter { category, position ->
         categoriesCenterSnapHelper.scrollTo(position, true)
@@ -82,7 +83,6 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        navController = getNavController()
         setUpCategoriesRecyclerView()
         setUpSwipeRefreshLayout()
         collectViewModelStates(categoriesAdapter)
@@ -169,12 +169,15 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
             },
             exceptionHandler = viewModel.exceptionsHandler
         )
-        viewModel.navigationDestinationLiveEvent.observe(viewLifecycleOwner) { destination ->
+        viewModel.navigationFlowLiveEvent.observe(viewLifecycleOwner) { destination ->
             navigateToDestination(destination)
+        }
+        viewModel.navigateToLiveEvent.observe(viewLifecycleOwner) { homeFlowDestination ->
+
         }
     }
 
-    private fun getNavController(): NavController {
+    private fun getHomeNavController(): NavController {
         val navHostFragment = childFragmentManager
             .findFragmentById(R.id.homeScreenFragmentContainer) as NavHostFragment
 

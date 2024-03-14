@@ -2,22 +2,27 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/app_navigation"
-    app:startDestination="@id/homeScreenFragment">
+    app:startDestination="@id/homeFlowFragment">
 
     <fragment
-        android:id="@+id/homeScreenFragment"
-        android:name="by.bashlikovvv.homescreen.presentation.ui.HomeScreenFragment"
-        android:label="HomeScreenFragment" />
+        android:id="@+id/homeFlowFragment"
+        android:name="by.bashlikovvv.kinopoisk_android.presentation.flows.HomeFlowFragment"
+        android:label="HomeFlowFragment" />
+
+    <fragment
+        android:id="@+id/moreFlowFragment"
+        android:name="by.bashlikovvv.kinopoisk_android.presentation.flows.MoreFlowFragment"
+        android:label="MoreFlowFragment" />
+
     <dialog
         android:id="@+id/movieDetailsFragment"
         android:name="by.bashlikovvv.moviedetailsscreen.presentation.ui.MovieDetailsFragment"
-        android:label="MovieDetailsFragment" />
-    <fragment
-        android:id="@+id/bookmarksFragment"
-        android:name="by.bashlikovvv.bookmarksscreen.presentation.ui.BookmarksFragment"
-        android:label="BookmarksFragment" />
-    <dialog
-        android:id="@+id/moreFragment"
-        android:name="by.bashlikovvv.morescreen.presentation.ui.MoreFragment"
-        android:label="MoreFragment" />
+        android:label="MovieDetailsFragment" >
+
+        <argument
+            android:name="movieId"
+            app:argType="long" />
+
+    </dialog>
+
 </navigation>

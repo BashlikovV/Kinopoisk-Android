@@ -54,11 +54,11 @@ class MoviesFragment : BaseFragment<FragmentMoviesBinding>() {
     private val adapter = MoviesListAdapter(
         clickListener = object : MoviesListAdapter.MoviesListAdapterClickListener {
             override fun notifyMovieClicked(movie: Movie) {
-                viewModel.navigateToDestination(Destination.MovieDetailsScreen(movie.id))
+                viewModel.navigateToFlow(Destination.DetailsScreen(movie.id))
             }
 
             override fun notifyMoreClicked(categoryMore: CategoryMore) {
-                viewModel.navigateToDestination(
+                viewModel.navigateToFlow(
                     Destination.MoreScreen(
                         viewModel.getGenreOrCollectionRequestNameByResId(categoryMore.categoryName)
                     )
