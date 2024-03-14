@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
+    kotlin("kapt")
 }
 
 android {
@@ -86,10 +86,10 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
-    arguments {
-        arg("dagger.fastInit", "enabled")
+//    arguments {
+//        arg("dagger.fastInit", "enabled")
 //
-        arg("dagger.fullBindingGraphValidation", "WARNING")
-        arg("dagger.fullBindingGraphValidation", "ERROR")
-    }
+//        arg("dagger.fullBindingGraphValidation", "WARNING")
+//        arg("dagger.fullBindingGraphValidation", "ERROR")
+//    }
 }
