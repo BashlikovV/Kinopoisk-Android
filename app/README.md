@@ -23,6 +23,9 @@
       the base class for maintaining global application state. This class creates dependency graph
       and
       provides features components;
+    - ### [flows package](../app/src/main/java/by/bashlikovvv/kinopoisk_android/presentation/flows) (contains fragments that perform the activity function):
+        - [HomeFlowFragment](../app/src/main/java/by/bashlikovvv/kinopoisk_android/presentation/flows/HomeFlowFragment.kt),
+        [MoreFlowFragment](../app/src/main/java/by/bashlikovvv/kinopoisk_android/presentation/flows/MoreFlowFragment.kt) - flow fragments;
     - ### [ui package](../app/src/main/java/by/bashlikovvv/kinopoisk_android/presentation/ui) (contains classes responsible for ui configuration and interaction with user):
         - [MainActivity](../app/src/main/java/by/bashlikovvv/kinopoisk_android/presentation/ui/MainActivity.kt) -
           the entry point at the application. This class configures splash screen, navigation
