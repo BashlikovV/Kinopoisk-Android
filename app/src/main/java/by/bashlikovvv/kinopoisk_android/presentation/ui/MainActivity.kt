@@ -15,8 +15,8 @@ import by.bashlikovvv.core.ext.setFragmentNavigationListener
 import by.bashlikovvv.kinopoisk_android.R
 import by.bashlikovvv.kinopoisk_android.databinding.ActivityMainBinding
 import by.bashlikovvv.kinopoisk_android.presentation.KinopoiskApplication
+import by.bashlikovvv.kinopoisk_android.presentation.flows.MoreFlowFragmentArgs
 import by.bashlikovvv.kinopoisk_android.presentation.viewmodel.MainActivityViewModel
-import by.bashlikovvv.morescreen.presentation.ui.MoreFragmentArgs
 import by.bashlikovvv.moviedetailsscreen.presentation.ui.MovieDetailsFragmentArgs
 import dagger.Lazy
 import kotlinx.coroutines.flow.collectLatest
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
             is FlowDestinations.MoreScreenFlow -> {
                 navController.navigate(
                     R.id.moreFlowFragment,
-                    MoreFragmentArgs(flowDestination.categoryName).toBundle()
+                    MoreFlowFragmentArgs(flowDestination.categoryName).toBundle()
                 )
             }
             is FlowDestinations.DetailsScreen -> {

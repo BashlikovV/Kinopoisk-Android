@@ -20,18 +20,15 @@ class MovieDetailsFragment : BaseBottomSheetDialogFragment<FragmentMovieDetailsB
 
     @Inject internal lateinit var viewModel: MovieDetailsScreenViewModel
 
-    private var movieId: Long? = null
+    private val movieId: Long? by lazy {
+        requireArguments().getLong(KEY_MOVIE_ID)
+    }
 
     override fun onAttach(context: Context) {
         (requireContext().applicationContext as MovieDetailsScreenComponentProvider)
             .provideMovieDetailsScreenComponent()
             .inject(this)
         super.onAttach(context)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        movieId = requireArguments().getLong(KEY_MOVIE_ID)
     }
 
     override fun setupViewBinding(
@@ -97,7 +94,7 @@ class MovieDetailsFragment : BaseBottomSheetDialogFragment<FragmentMovieDetailsB
     }
 
     companion object {
-        const val KEY_MOVIE_ID = "KEY_MOVIE_ID"
+        const val KEY_MOVIE_ID = "movieId"
     }
 
 }

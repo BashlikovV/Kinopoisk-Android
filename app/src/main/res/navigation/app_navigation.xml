@@ -15,7 +15,14 @@
         android:id="@+id/moreFlowFragment"
         android:name="by.bashlikovvv.kinopoisk_android.presentation.flows.MoreFlowFragment"
         android:label="MoreFlowFragment"
-        tools:layout="@layout/flow_fragment"/>
+        tools:layout="@layout/flow_fragment" >
+
+        <argument
+            android:name="categoryName"
+            app:argType="string"
+            app:nullable="true"/>
+
+    </fragment>
 
     <dialog
         android:id="@+id/movieDetailsFragment"

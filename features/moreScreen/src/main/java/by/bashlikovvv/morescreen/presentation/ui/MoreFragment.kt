@@ -11,6 +11,7 @@ import androidx.lifecycle.flowWithLifecycle
 import by.bashlikovvv.core.base.BaseFragment
 import by.bashlikovvv.core.domain.model.FlowDestinations
 import by.bashlikovvv.core.domain.model.Movie
+import by.bashlikovvv.core.ext.flowFragmentArgs
 import by.bashlikovvv.core.ext.launchIO
 import by.bashlikovvv.core.ext.launchMain
 import by.bashlikovvv.core.ext.navigateToFlow
@@ -24,7 +25,9 @@ import javax.inject.Inject
 
 class MoreFragment : BaseFragment<FragmentMoreBinding>() {
 
-    private var categoryName: String? = null
+    private val categoryName: String? by lazy {
+        flowFragmentArgs()?.getString(KEY_CATEGORY_NAME)
+    }
 
     @Inject internal lateinit var viewModelFactory: Lazy<MoreFragmentViewModel.Factory>
 
@@ -47,11 +50,6 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
             .provideMoreScreenComponent()
             .inject(this)
         super.onAttach(context)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        categoryName = requireArguments().getString(KEY_CATEGORY_NAME)
     }
 
     override fun setupViewBinding(
@@ -126,7 +124,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
 
     companion object {
 
-        const val KEY_CATEGORY_NAME: String = "key_category_name"
+        const val KEY_CATEGORY_NAME: String = "categoryName"
 
     }
 }

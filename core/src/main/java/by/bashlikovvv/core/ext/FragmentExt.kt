@@ -1,6 +1,7 @@
 @file:Suppress("UNUSED")
 package by.bashlikovvv.core.ext
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import by.bashlikovvv.core.base.BaseFlowFragment
@@ -109,4 +110,8 @@ inline fun Fragment.launchEmpty(
 
 inline fun <reified FL : BaseFlowFragment> Fragment.flowFragment(): FL {
     return parentFragment?.parentFragment as? BaseFlowFragment as FL
+}
+
+fun Fragment.flowFragmentArgs(): Bundle? {
+    return (parentFragment?.parentFragment as? BaseFlowFragment)?.flowArgs()
 }
