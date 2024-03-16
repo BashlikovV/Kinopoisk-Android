@@ -1,11 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    repositories {
-        google()
-    }
-    dependencies {
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.AndroidX.Navigation.navigationFragmentKTX}")
-    }
+//    repositories {
+//        google()
+//    }
+//    dependencies {
+//        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.AndroidX.Navigation.navigationFragmentKTX}")
+//    }
 }
 plugins {
     id("com.android.application") version "8.2.0" apply false
